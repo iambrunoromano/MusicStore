@@ -11,6 +11,7 @@ public class CustomerBean extends WebUserBean{
 	private String address;
 	private String paymentCard;
 	private String billingAddress;
+	private String mail;
 	
 	public CustomerBean() {}
 	
@@ -44,6 +45,15 @@ public class CustomerBean extends WebUserBean{
 	public void setBillingAddress(String billingAddress) {
 		this.billingAddress = billingAddress;
 	}
+	
+	public String getMail() {
+		return mail;
+	}
+
+	public void setMail(String mail) {
+		this.mail = mail;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

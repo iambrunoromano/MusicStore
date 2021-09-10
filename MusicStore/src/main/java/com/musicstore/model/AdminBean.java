@@ -9,6 +9,7 @@ public class AdminBean extends WebUserBean{
 	private String name;
 	private String surname;
 	private int phoneNumber;
+	private String mail;
 	
 	public AdminBean() {}
 	
@@ -31,6 +32,14 @@ public class AdminBean extends WebUserBean{
 		this.phoneNumber = phoneNumber;
 	}
 	
+	public String getMail() {
+		return mail;
+	}
+
+	public void setMail(String mail) {
+		this.mail = mail;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

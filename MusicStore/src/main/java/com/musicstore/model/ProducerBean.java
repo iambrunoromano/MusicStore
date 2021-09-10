@@ -6,6 +6,7 @@ import com.musicstore.model.WebUserBean;
 
 public class ProducerBean extends WebUserBean{
 
+	private String mail;
 	private String name;
 	private String address;
 	
@@ -23,6 +24,15 @@ public class ProducerBean extends WebUserBean{
 	public void setAddress(String address) {
 		this.address = address;
 	}
+	
+	public String getMail() {
+		return mail;
+	}
+
+	public void setMail(String mail) {
+		this.mail = mail;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
