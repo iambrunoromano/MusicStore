@@ -4,6 +4,12 @@ import java.util.Objects;
 
 import com.musicstore.model.WebUserBean;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class ProducerBean extends WebUserBean{
 
 	private String mail;
