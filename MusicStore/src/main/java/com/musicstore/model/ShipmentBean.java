@@ -6,44 +6,67 @@ import java.util.Objects;
 public class ShipmentBean {
 	
 	private int id;
-	private Timestamp shipmentDate;
+	private Timestamp shipDate;
 	private Timestamp arriveDate;
 	private String shipAddress;
 	private double total;
+	private int idOrder;
+	
+	public ShipmentBean() {}
+
 	public int getId() {
 		return id;
 	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
-	public Timestamp getShipmentDate() {
-		return shipmentDate;
+
+	public Timestamp getShipDate() {
+		return shipDate;
 	}
-	public void setShipmentDate(Timestamp shipmentDate) {
-		this.shipmentDate = shipmentDate;
+
+	public void setShipDate(Timestamp shipDate) {
+		this.shipDate = shipDate;
 	}
+
 	public Timestamp getArriveDate() {
 		return arriveDate;
 	}
+
 	public void setArriveDate(Timestamp arriveDate) {
 		this.arriveDate = arriveDate;
 	}
+
 	public String getShipAddress() {
 		return shipAddress;
 	}
+
 	public void setShipAddress(String shipAddress) {
 		this.shipAddress = shipAddress;
 	}
+
 	public double getTotal() {
 		return total;
 	}
+
 	public void setTotal(double total) {
 		this.total = total;
 	}
+
+	public int getIdOrder() {
+		return idOrder;
+	}
+
+	public void setIdOrder(int idOrder) {
+		this.idOrder = idOrder;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(arriveDate, id, shipAddress, shipmentDate, total);
+		return Objects.hash(arriveDate, id, idOrder, shipAddress, shipDate, total);
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -53,14 +76,17 @@ public class ShipmentBean {
 		if (getClass() != obj.getClass())
 			return false;
 		ShipmentBean other = (ShipmentBean) obj;
-		return Objects.equals(arriveDate, other.arriveDate) && id == other.id
-				&& Objects.equals(shipAddress, other.shipAddress) && Objects.equals(shipmentDate, other.shipmentDate)
+		return Objects.equals(arriveDate, other.arriveDate) && id == other.id && idOrder == other.idOrder
+				&& Objects.equals(shipAddress, other.shipAddress) && Objects.equals(shipDate, other.shipDate)
 				&& Double.doubleToLongBits(total) == Double.doubleToLongBits(other.total);
 	}
+
 	@Override
 	public String toString() {
-		return "ShipmentBean [id=" + id + ", shipmentDate=" + shipmentDate + ", arriveDate=" + arriveDate
-				+ ", shipAddress=" + shipAddress + ", total=" + total + "]";
-	}	
+		return "ShipmentBean [id=" + id + ", shipDate=" + shipDate + ", arriveDate=" + arriveDate + ", shipAddress="
+				+ shipAddress + ", total=" + total + ", idOrder=" + idOrder + "]";
+	}
+	
+	
 
 }
