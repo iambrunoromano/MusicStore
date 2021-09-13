@@ -37,9 +37,10 @@ public class ProducerBean extends WebUserBean{
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + Objects.hash(address, name);
+		result = prime * result + Objects.hash(address, mail, name);
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -49,11 +50,14 @@ public class ProducerBean extends WebUserBean{
 		if (getClass() != obj.getClass())
 			return false;
 		ProducerBean other = (ProducerBean) obj;
-		return Objects.equals(address, other.address) && Objects.equals(name, other.name);
+		return Objects.equals(address, other.address) && Objects.equals(mail, other.mail)
+				&& Objects.equals(name, other.name);
 	}
+
 	@Override
 	public String toString() {
-		return "ProducerBean [name=" + name + ", address=" + address + "]";
+		return "ProducerBean [mail=" + mail + ", name=" + name + ", address=" + address + "]";
 	}
+
 	
 }
