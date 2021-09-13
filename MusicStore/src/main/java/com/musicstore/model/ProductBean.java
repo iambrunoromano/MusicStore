@@ -8,6 +8,7 @@ public class ProductBean {
 	private String name;
 	private double price;
 	private int quantity;
+	private String producer;
 	private int category;
 	
 	public ProductBean() {}
@@ -44,6 +45,14 @@ public class ProductBean {
 		this.quantity = quantity;
 	}
 
+	public String getProducer() {
+		return producer;
+	}
+
+	public void setProducer(String producer) {
+		this.producer = producer;
+	}
+
 	public int getCategory() {
 		return category;
 	}
@@ -54,7 +63,7 @@ public class ProductBean {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, name, price, quantity);
+		return Objects.hash(category, id, name, price, producer, quantity);
 	}
 
 	@Override
@@ -66,13 +75,16 @@ public class ProductBean {
 		if (getClass() != obj.getClass())
 			return false;
 		ProductBean other = (ProductBean) obj;
-		return id == other.id && Objects.equals(name, other.name)
-				&& Double.doubleToLongBits(price) == Double.doubleToLongBits(other.price) && quantity == other.quantity;
+		return category == other.category && id == other.id && Objects.equals(name, other.name)
+				&& Double.doubleToLongBits(price) == Double.doubleToLongBits(other.price)
+				&& Objects.equals(producer, other.producer) && quantity == other.quantity;
 	}
 
 	@Override
 	public String toString() {
-		return "ProductBean [id=" + id + ", name=" + name + ", price=" + price + ", quantity=" + quantity + "]";
+		return "ProductBean [id=" + id + ", name=" + name + ", price=" + price + ", quantity=" + quantity
+				+ ", producer=" + producer + ", category=" + category + "]";
 	}
+
 	
 }
