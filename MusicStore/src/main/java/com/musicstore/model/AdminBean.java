@@ -6,10 +6,10 @@ import com.musicstore.model.WebUserBean;
 
 public class AdminBean extends WebUserBean{
 
+	private String mail;
 	private String name;
 	private String surname;
 	private int phoneNumber;
-	private String mail;
 	
 	public AdminBean() {}
 	
