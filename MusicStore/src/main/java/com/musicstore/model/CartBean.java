@@ -3,6 +3,9 @@ package com.musicstore.model;
 import java.sql.Timestamp;
 import java.util.Objects;
 
+import javax.persistence.Entity;
+
+@Entity
 public class CartBean {
 
 	private int productId;
