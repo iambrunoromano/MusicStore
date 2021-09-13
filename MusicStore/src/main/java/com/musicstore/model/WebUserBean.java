@@ -2,9 +2,18 @@ package com.musicstore.model;
 
 import java.util.Objects;
 
-public class WebUserBean {
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
+@Entity
+public class WebUserBean {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String mail;
+	
 	private String password;
 	
 	public WebUserBean() {}
