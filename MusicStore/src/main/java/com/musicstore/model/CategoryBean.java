@@ -6,6 +6,7 @@ public class CategoryBean {
 
 	private int id;
 	private String name;
+	private int parent;
 	
 	public CategoryBean() {}
 
@@ -25,9 +26,17 @@ public class CategoryBean {
 		this.name = name;
 	}
 
+	public int getParent() {
+		return parent;
+	}
+
+	public void setParent(int parent) {
+		this.parent = parent;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, name);
+		return Objects.hash(id, name, parent);
 	}
 
 	@Override
@@ -39,12 +48,12 @@ public class CategoryBean {
 		if (getClass() != obj.getClass())
 			return false;
 		CategoryBean other = (CategoryBean) obj;
-		return id == other.id && Objects.equals(name, other.name);
+		return id == other.id && Objects.equals(name, other.name) && parent == other.parent;
 	}
 
 	@Override
 	public String toString() {
-		return "CategoryBean [id=" + id + ", name=" + name + "]";
+		return "CategoryBean [id=" + id + ", name=" + name + ", parent=" + parent + "]";
 	}
 	
 }
