@@ -44,9 +44,10 @@ public class AdminBean extends WebUserBean{
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + Objects.hash(name, phoneNumber, surname);
+		result = prime * result + Objects.hash(mail, name, phoneNumber, surname);
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -56,12 +57,15 @@ public class AdminBean extends WebUserBean{
 		if (getClass() != obj.getClass())
 			return false;
 		AdminBean other = (AdminBean) obj;
-		return Objects.equals(name, other.name) && phoneNumber == other.phoneNumber
+		return Objects.equals(mail, other.mail) && Objects.equals(name, other.name) && phoneNumber == other.phoneNumber
 				&& Objects.equals(surname, other.surname);
 	}
-	
+
 	@Override
 	public String toString() {
-		return "AdminBean [name=" + name + ", surname=" + surname + ", phoneNumber=" + phoneNumber + "]";
+		return "AdminBean [mail=" + mail + ", name=" + name + ", surname=" + surname + ", phoneNumber=" + phoneNumber
+				+ "]";
 	}
+
+	
 }
