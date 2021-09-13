@@ -9,6 +9,8 @@ public class CartBean {
 	private String mail;
 	private Timestamp date;
 	
+	public CartBean() {}
+	
 	public int getProductId() {
 		return productId;
 	}
