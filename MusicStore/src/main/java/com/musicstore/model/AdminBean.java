@@ -4,6 +4,9 @@ import java.util.Objects;
 
 import com.musicstore.model.WebUserBean;
 
+import javax.persistence.Entity;
+
+@Entity
 public class AdminBean extends WebUserBean{
 
 	private String mail;
