@@ -12,6 +12,10 @@ import javax.persistence.OneToOne;
 @Entity
 public class CartBean {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	
 	private int productId;
 	private String mail;
 	private Timestamp date;
