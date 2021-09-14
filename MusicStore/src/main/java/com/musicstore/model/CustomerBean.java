@@ -2,15 +2,13 @@ package com.musicstore.model;
 
 import java.util.Objects;
 
-import com.musicstore.model.WebUserBean;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class CustomerBean extends WebUserBean{
+public class CustomerBean {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +16,6 @@ public class CustomerBean extends WebUserBean{
 	
 	private String name;
 	private String surname;
-	private String address;
 	private String paymentCard;
 	private String billingAddress;
 	
@@ -35,12 +32,6 @@ public class CustomerBean extends WebUserBean{
 	}
 	public void setSurname(String surname) {
 		this.surname = surname;
-	}
-	public String getAddress() {
-		return address;
-	}
-	public void setAddress(String address) {
-		this.address = address;
 	}
 	public String getPaymentCard() {
 		return paymentCard;
@@ -67,7 +58,7 @@ public class CustomerBean extends WebUserBean{
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + Objects.hash(address, billingAddress, mail, name, paymentCard, surname);
+		result = prime * result + Objects.hash(billingAddress, mail, name, paymentCard, surname);
 		return result;
 	}
 
@@ -80,14 +71,14 @@ public class CustomerBean extends WebUserBean{
 		if (getClass() != obj.getClass())
 			return false;
 		CustomerBean other = (CustomerBean) obj;
-		return Objects.equals(address, other.address) && Objects.equals(billingAddress, other.billingAddress)
+		return Objects.equals(billingAddress, other.billingAddress)
 				&& Objects.equals(mail, other.mail) && Objects.equals(name, other.name)
 				&& Objects.equals(paymentCard, other.paymentCard) && Objects.equals(surname, other.surname);
 	}
 
 	@Override
 	public String toString() {
-		return "CustomerBean [mail=" + mail + ", name=" + name + ", surname=" + surname + ", address=" + address
+		return "CustomerBean [mail=" + mail + ", name=" + name + ", surname=" + surname
 				+ ", paymentCard=" + paymentCard + ", billingAddress=" + billingAddress + "]";
 	}
 	

@@ -2,15 +2,13 @@ package com.musicstore.model;
 
 import java.util.Objects;
 
-import com.musicstore.model.WebUserBean;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class ProducerBean extends WebUserBean{
+public class ProducerBean {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
