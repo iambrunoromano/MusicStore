@@ -24,7 +24,7 @@ public class DbProducerService {
 		return ProducerRepository.findAll();
 	}
 	
-	public Optional<ProducerBean> getById(int id){
+	public Optional<ProducerBean> getById(String id){
 		return ProducerRepository.findById(id);
 	}
 	
@@ -32,7 +32,7 @@ public class DbProducerService {
 		return ProducerRepository.save(p);
 	}
 	
-	public Optional<ProducerBean> update(int id,ProducerBean p) {
+	public Optional<ProducerBean> update(String id,ProducerBean p) {
 			Optional<ProducerBean> foundProducer = ProducerRepository.findById(id);
 			if(foundProducer.isEmpty()) {
 				return Optional.empty();
@@ -45,7 +45,7 @@ public class DbProducerService {
 			return foundProducer;
 		}
 
-	public boolean delete(int id) {
+	public boolean delete(String id) {
 		Optional<ProducerBean> foundProducer = ProducerRepository.findById(id);
 		if(foundProducer.isEmpty()) {
 			return false;

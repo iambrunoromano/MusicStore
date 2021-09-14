@@ -11,7 +11,6 @@ import javax.persistence.Id;
 public class ProducerBean {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String mail;
 	
 	private String name;

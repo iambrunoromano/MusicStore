@@ -31,7 +31,7 @@ public class ProducerRestController {
 	}
 	
 	@RequestMapping("/musicstore/api/producer/{id}")
-	public ProducerBean getById(@PathVariable int id){
+	public ProducerBean getById(@PathVariable String id){
 		Optional<ProducerBean> producer = producerService.getById(id);
 		if(producer.isEmpty()){
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "item not found");
@@ -45,7 +45,7 @@ public class ProducerRestController {
 	}
 	
 	@RequestMapping(value  ="/musicstore/api/producer/{id}", method = RequestMethod.PUT)
-	public ProducerBean update(@PathVariable int id, @RequestBody ProducerBean p) {
+	public ProducerBean update(@PathVariable String id, @RequestBody ProducerBean p) {
 		
 		Optional<ProducerBean> updatedProducer= producerService.update(id, p);
 		if (updatedProducer.isEmpty())
@@ -56,7 +56,7 @@ public class ProducerRestController {
 	}
 	
 	@RequestMapping(value  ="/musicstore/api/producer/{id}", method = RequestMethod.DELETE)
-	public void delete(@PathVariable int id) {
+	public void delete(@PathVariable String id) {
 		Boolean isDeleted = producerService.delete(id);
 		if (isDeleted==false)
 		{
