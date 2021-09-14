@@ -72,8 +72,3 @@ total NUMERIC(10,2) NOT NULL,
 id_order INT NOT NULL,
 FOREIGN KEY (id_order) REFERENCES order_bean(id)
 );
-
-INSERT INTO category_bean(name, parent) VALUES ('GENERAL',1), ('MUSICAL INSTRUMENT', 1), ('MUSIC SHEET', 1);
-INSERT INTO web_user_bean VALUES ('testmail', 'testpassword');
-INSERT INTO producer_bean VALUES ('testmail','PRODUCER_1','PRODUCER_ADDRESS_1');
-INSERT INTO product_bean(name,price,quantity,producer,category) VALUES ('PRODUCT_1',1.0,1,'testmail',1), ('PRODUCT_2',2.0,2,'testmail',2), ('PRODUCT_3',3.0,3,'testmail',3) ;
