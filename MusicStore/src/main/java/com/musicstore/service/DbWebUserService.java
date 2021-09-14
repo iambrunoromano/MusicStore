@@ -24,7 +24,7 @@ public class DbWebUserService {
 		return WebUserRepository.findAll();
 	}
 	
-	public Optional<WebUserBean> getById(int id){
+	public Optional<WebUserBean> getById(String id){
 		return WebUserRepository.findById(id);
 	}
 	
@@ -32,7 +32,7 @@ public class DbWebUserService {
 		return WebUserRepository.save(p);
 	}
 	
-	public Optional<WebUserBean> update(int id,WebUserBean p) {
+	public Optional<WebUserBean> update(String id,WebUserBean p) {
 			Optional<WebUserBean> foundWebUser = WebUserRepository.findById(id);
 			if(foundWebUser.isEmpty()) {
 				return Optional.empty();
@@ -45,7 +45,7 @@ public class DbWebUserService {
 			return foundWebUser;
 		}
 
-	public boolean delete(int id) {
+	public boolean delete(String id) {
 		Optional<WebUserBean> foundWebUser = WebUserRepository.findById(id);
 		if(foundWebUser.isEmpty()) {
 			return false;

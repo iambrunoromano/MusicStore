@@ -31,7 +31,7 @@ public class WebUserRestController {
 	}
 	
 	@RequestMapping("/musicstore/api/webuser/{id}")
-	public WebUserBean getById(@PathVariable int id){
+	public WebUserBean getById(@PathVariable String id){
 		Optional<WebUserBean> webuser = webuserService.getById(id);
 		if(webuser.isEmpty()){
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "item not found");
@@ -45,7 +45,7 @@ public class WebUserRestController {
 	}
 	
 	@RequestMapping(value  ="/musicstore/api/webuser/{id}", method = RequestMethod.PUT)
-	public WebUserBean update(@PathVariable int id, @RequestBody WebUserBean p) {
+	public WebUserBean update(@PathVariable String id, @RequestBody WebUserBean p) {
 		
 		Optional<WebUserBean> updatedWebUser= webuserService.update(id, p);
 		if (updatedWebUser.isEmpty())
@@ -56,7 +56,7 @@ public class WebUserRestController {
 	}
 	
 	@RequestMapping(value  ="/musicstore/api/webuser/{id}", method = RequestMethod.DELETE)
-	public void delete(@PathVariable int id) {
+	public void delete(@PathVariable String id) {
 		Boolean isDeleted = webuserService.delete(id);
 		if (isDeleted==false)
 		{

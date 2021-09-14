@@ -14,7 +14,6 @@ import javax.persistence.JoinColumn;
 public class WebUserBean {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String mail;
 	
 	private String password;
