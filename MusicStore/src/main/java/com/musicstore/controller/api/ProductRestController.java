@@ -12,75 +12,56 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.server.ResponseStatusException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.musicstore.model.ProductBean;
 import com.musicstore.service.DbProductService;
 
 @RestController
 public class ProductRestController {
 	
+	@Autowired
 	private DbProductService productService; 
-	private List<ProductBean> list;
 	
-	public ProductRestController() {
-		list = new ArrayList<ProductBean>();
-
-		list.add(new ProductBean(1,"nome",10.0,2,"produttore",1));
-		list.add(new ProductBean(2,"nome",10.0,2,"produttore",1));
-		list.add(new ProductBean(3,"nome",10.0,2,"produttore",1));
-	}
+	public ProductRestController() {}
 	
 	@RequestMapping("/musicstore/api/product")
 	public Iterable<ProductBean> getAll(){
-		return list;
+		return productService.getAll();
 	}
 	
 	@RequestMapping("/musicstore/api/product/{id}")
 	public ProductBean getById(@PathVariable int id){
-		Optional<ProductBean> product = list.stream().filter(item->item.getId() == id).findFirst();
-		
+		Optional<ProductBean> product = productService.getById(id);
 		if(product.isEmpty()){
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "item not found");
 		}
-		
 		return product.get();
 	}
 
 	@RequestMapping(value  ="/musicstore/api/product", method = RequestMethod.POST)
 	public ProductBean create(@RequestBody ProductBean p) {
-		return p;//productService.create(p);
+		return productService.create(p);
 	}
 	
 	@RequestMapping(value  ="/musicstore/api/product/{id}", method = RequestMethod.PUT)
 	public ProductBean update(@PathVariable int id, @RequestBody ProductBean p) {
 		
-		Optional<ProductBean> product = list.stream().filter(item->item.getId() == id).findFirst();
-		
-		if (product.isEmpty())
+		Optional<ProductBean> updatedProduct= productService.update(id, p);
+		if (updatedProduct.isEmpty())
 		{
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "item not found");
 		}
-
-		product.get().setName(p.getName());
-		product.get().setPrice(p.getPrice());
-		product.get().setQuantity(p.getQuantity());
-		product.get().setProducer(p.getProducer());
-		product.get().setCategory(p.getCategory());
-		
-		return product.get();
+		return updatedProduct.get();
 	}
 	
 	@RequestMapping(value  ="/musicstore/api/product/{id}", method = RequestMethod.DELETE)
-	public void update(@PathVariable int id) {
-		Optional<ProductBean> product = list.stream().filter(item->item.getId() == id).findFirst();
-		
-//		Boolean isDeleted = photoService.delete(id);
-		
-		if (product.isEmpty())
+	public void delete(@PathVariable int id) {
+		Boolean isDeleted = productService.delete(id);
+		if (isDeleted==false)
 		{
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "item not found");
 		}
-		
-		list.remove(product.get());
 	}
 
 }

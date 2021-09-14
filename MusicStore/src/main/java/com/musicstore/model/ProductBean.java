@@ -1,9 +1,8 @@
 package com.musicstore.model;
 
 import java.util.Objects;
-
-
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,8 +19,17 @@ public class ProductBean {
 	private int quantity;
 	private String producer;
 	private int category;
-	
+
 	public ProductBean() {}
+	
+	public ProductBean(int id, String name, double price, int quantity, String producer, int category) {
+		this.id= id;
+		this.name = name;
+		this.price = price;
+		this.quantity = quantity;
+		this.producer = producer;
+		this.category = category;
+	}
 
 	public int getId() {
 		return id;
@@ -70,6 +78,14 @@ public class ProductBean {
 	public void setCategory(int category) {
 		this.category = category;
 	}
+	
+	public void update(ProductBean pb) {
+		this.name = pb.getName();
+		this.price = pb.getPrice();
+		this.quantity = pb.getQuantity();
+		this.producer = pb.getProducer();
+		this.category = pb.getCategory();
+	} 
 
 	@Override
 	public int hashCode() {
