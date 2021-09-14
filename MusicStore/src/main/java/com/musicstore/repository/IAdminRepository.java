@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.musicstore.model.AdminBean;
 
 @Repository
-public interface IAdminRepository extends CrudRepository<AdminBean, Integer>{
+public interface IAdminRepository extends CrudRepository<AdminBean, String>{
 }

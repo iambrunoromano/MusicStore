@@ -31,7 +31,7 @@ public class AdminRestController {
 	}
 	
 	@RequestMapping("/musicstore/api/admin/{id}")
-	public AdminBean getById(@PathVariable int id){
+	public AdminBean getById(@PathVariable String id){
 		Optional<AdminBean> admin = adminService.getById(id);
 		if(admin.isEmpty()){
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "item not found");
@@ -45,7 +45,7 @@ public class AdminRestController {
 	}
 	
 	@RequestMapping(value  ="/musicstore/api/admin/{id}", method = RequestMethod.PUT)
-	public AdminBean update(@PathVariable int id, @RequestBody AdminBean p) {
+	public AdminBean update(@PathVariable String id, @RequestBody AdminBean p) {
 		
 		Optional<AdminBean> updatedAdmin= adminService.update(id, p);
 		if (updatedAdmin.isEmpty())
@@ -56,7 +56,7 @@ public class AdminRestController {
 	}
 	
 	@RequestMapping(value  ="/musicstore/api/admin/{id}", method = RequestMethod.DELETE)
-	public void delete(@PathVariable int id) {
+	public void delete(@PathVariable String id) {
 		Boolean isDeleted = adminService.delete(id);
 		if (isDeleted==false)
 		{

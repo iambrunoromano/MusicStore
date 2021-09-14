@@ -11,7 +11,6 @@ import javax.persistence.Id;
 public class AdminBean {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String mail;
 	
 	private String name;

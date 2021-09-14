@@ -13,18 +13,19 @@ import org.springframework.http.HttpStatus;
 
 import com.musicstore.repository.IAdminRepository;
 import com.musicstore.model.AdminBean;
+import com.musicstore.service.DbWebUserService;
 
 @Service
 public class DbAdminService {
 	
 	@Autowired
-	private IAdminRepository AdminRepository; 
+	private IAdminRepository AdminRepository;  
 	
 	public Iterable<AdminBean> getAll(){
 		return AdminRepository.findAll();
 	}
 	
-	public Optional<AdminBean> getById(int id){
+	public Optional<AdminBean> getById(String id){
 		return AdminRepository.findById(id);
 	}
 	
@@ -32,7 +33,7 @@ public class DbAdminService {
 		return AdminRepository.save(p);
 	}
 	
-	public Optional<AdminBean> update(int id,AdminBean p) {
+	public Optional<AdminBean> update(String id,AdminBean p) {
 			Optional<AdminBean> foundAdmin = AdminRepository.findById(id);
 			if(foundAdmin.isEmpty()) {
 				return Optional.empty();
@@ -46,7 +47,7 @@ public class DbAdminService {
 			return foundAdmin;
 		}
 
-	public boolean delete(int id) {
+	public boolean delete(String id) {
 		Optional<AdminBean> foundAdmin = AdminRepository.findById(id);
 		if(foundAdmin.isEmpty()) {
 			return false;
