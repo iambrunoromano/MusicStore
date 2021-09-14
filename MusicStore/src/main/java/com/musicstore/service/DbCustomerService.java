@@ -24,7 +24,7 @@ public class DbCustomerService {
 		return CustomerRepository.findAll();
 	}
 	
-	public Optional<CustomerBean> getById(int id){
+	public Optional<CustomerBean> getById(String id){
 		return CustomerRepository.findById(id);
 	}
 	
@@ -32,7 +32,7 @@ public class DbCustomerService {
 		return CustomerRepository.save(p);
 	}
 	
-	public Optional<CustomerBean> update(int id,CustomerBean p) {
+	public Optional<CustomerBean> update(String id,CustomerBean p) {
 			Optional<CustomerBean> foundCustomer = CustomerRepository.findById(id);
 			if(foundCustomer.isEmpty()) {
 				return Optional.empty();
@@ -40,7 +40,6 @@ public class DbCustomerService {
 			
 			foundCustomer.get().setName(p.getName());
 			foundCustomer.get().setSurname(p.getSurname());
-			foundCustomer.get().setAddress(p.getAddress());
 			foundCustomer.get().setPaymentCard(p.getPaymentCard());
 			foundCustomer.get().setBillingAddress(p.getBillingAddress());
 			
@@ -48,7 +47,7 @@ public class DbCustomerService {
 			return foundCustomer;
 		}
 
-	public boolean delete(int id) {
+	public boolean delete(String id) {
 		Optional<CustomerBean> foundCustomer = CustomerRepository.findById(id);
 		if(foundCustomer.isEmpty()) {
 			return false;

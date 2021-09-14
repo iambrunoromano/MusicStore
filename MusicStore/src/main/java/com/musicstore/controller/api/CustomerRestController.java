@@ -31,7 +31,7 @@ public class CustomerRestController {
 	}
 	
 	@RequestMapping("/musicstore/api/customer/{id}")
-	public CustomerBean getById(@PathVariable int id){
+	public CustomerBean getById(@PathVariable String id){
 		Optional<CustomerBean> customer = customerService.getById(id);
 		if(customer.isEmpty()){
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "item not found");
@@ -45,7 +45,7 @@ public class CustomerRestController {
 	}
 	
 	@RequestMapping(value  ="/musicstore/api/customer/{id}", method = RequestMethod.PUT)
-	public CustomerBean update(@PathVariable int id, @RequestBody CustomerBean p) {
+	public CustomerBean update(@PathVariable String id, @RequestBody CustomerBean p) {
 		
 		Optional<CustomerBean> updatedCustomer= customerService.update(id, p);
 		if (updatedCustomer.isEmpty())
@@ -56,7 +56,7 @@ public class CustomerRestController {
 	}
 	
 	@RequestMapping(value  ="/musicstore/api/customer/{id}", method = RequestMethod.DELETE)
-	public void delete(@PathVariable int id) {
+	public void delete(@PathVariable String id) {
 		Boolean isDeleted = customerService.delete(id);
 		if (isDeleted==false)
 		{
