@@ -12,7 +12,10 @@ import javax.persistence.Id;
 @Entity
 public class CustomerBean extends WebUserBean{
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String mail;
+	
 	private String name;
 	private String surname;
 	private String address;

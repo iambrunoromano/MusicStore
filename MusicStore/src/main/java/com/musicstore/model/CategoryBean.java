@@ -10,7 +10,6 @@ import javax.persistence.Id;
 @Entity
 public class CategoryBean {
 
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;

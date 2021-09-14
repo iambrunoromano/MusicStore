@@ -12,7 +12,10 @@ import javax.persistence.Id;
 @Entity
 public class ProducerBean extends WebUserBean{
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String mail;
+	
 	private String name;
 	private String address;
 	
