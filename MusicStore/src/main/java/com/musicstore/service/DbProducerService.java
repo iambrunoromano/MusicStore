@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 import com.musicstore.repository.IProducerRepository;
+import com.musicstore.model.AdminBean;
 import com.musicstore.model.ProducerBean;
+import com.musicstore.model.WebUserBean;
 
 @Service
 public class DbProducerService {
@@ -51,6 +53,14 @@ public class DbProducerService {
 			return false;
 		}
 		ProducerRepository.delete(foundProducer.get());
+		return false;
+	}
+	
+	public boolean isProducer(WebUserBean wub) {
+		Optional<ProducerBean> producerFound = this.getById(wub.getMail());
+		if(!producerFound.isEmpty())
+			if(producerFound.get().getMail().equals(wub.getMail()))
+				return true;
 		return false;
 	}
 }
