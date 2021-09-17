@@ -27,9 +27,6 @@ public class AdminRestController {
 	
 	@Autowired
 	private DbAdminService adminService;
-
-	@Autowired
-	private WebUserRestController webuserRestController;
 	
 	public AdminRestController() {}
 	
@@ -76,8 +73,7 @@ public class AdminRestController {
 	}
 	
 	@RequestMapping(value  ="/musicstore/api/admin/{id}", method = RequestMethod.DELETE)
-	public void delete(@PathVariable String id, @RequestBody Map<String,String> map) {
-		WebUserBean b = Utility.webuserDeMap(map);
+	public void delete(@PathVariable String id, @RequestBody WebUserBean b) {
 		if(!adminService.isAdmin(b)){
 			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
 		}
