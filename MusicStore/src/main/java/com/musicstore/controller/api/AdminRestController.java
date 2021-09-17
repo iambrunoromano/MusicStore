@@ -33,17 +33,9 @@ public class AdminRestController {
 	
 	public AdminRestController() {}
 	
-	private boolean isAdmin(WebUserBean wub) {
-		Optional<AdminBean> adminFound = adminService.getById(wub.getMail());
-		if(!adminFound.isEmpty())
-			if(adminFound.get().getMail().equals(wub.getMail()))
-				return true;
-		return false;
-	}
-	
 	@RequestMapping("/musicstore/api/admin")
 	public Iterable<AdminBean> getAll(@RequestBody WebUserBean b){
-		if(!isAdmin(b))
+		if(!adminService.isAdmin(b))
 		{
 			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
 		}
@@ -52,7 +44,7 @@ public class AdminRestController {
 	
 	@RequestMapping("/musicstore/api/admin/{id}")
 	public AdminBean getById(@PathVariable String id,@RequestBody WebUserBean b){
-		if(!isAdmin(b)){
+		if(!adminService.isAdmin(b)){
 			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
 		}
 		return adminService.getById(id).get();
@@ -62,7 +54,7 @@ public class AdminRestController {
 	public AdminBean create(@RequestBody Map<String, Map<String,String>> map) {
 		AdminBean ab = Utility.adminDeMap(map.get("topost"));
 		WebUserBean b = Utility.webuserDeMap(map.get("authorized"));
-		if(!isAdmin(b)){
+		if(!adminService.isAdmin(b)){
 			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
 		}
 		return adminService.create(ab);
@@ -72,7 +64,7 @@ public class AdminRestController {
 	public AdminBean update(@PathVariable String id,@RequestBody Map<String, Map<String,String>> map) {
 		AdminBean ab = Utility.adminDeMap(map.get("toput"));
 		WebUserBean b = Utility.webuserDeMap(map.get("authorized"));
-		if(!isAdmin(b)){
+		if(!adminService.isAdmin(b)){
 			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
 		}
 		Optional<AdminBean> updatedAdmin= adminService.update(id, ab);
@@ -86,7 +78,7 @@ public class AdminRestController {
 	@RequestMapping(value  ="/musicstore/api/admin/{id}", method = RequestMethod.DELETE)
 	public void delete(@PathVariable String id, @RequestBody Map<String,String> map) {
 		WebUserBean b = Utility.webuserDeMap(map);
-		if(!isAdmin(b)){
+		if(!adminService.isAdmin(b)){
 			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
 		}
 		Boolean isDeleted = adminService.delete(id);
