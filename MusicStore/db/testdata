@@ -1,9 +1,9 @@
 INSERT INTO admin_bean(mail, name, surname, phone_number) VALUES ('testmail','testadminname','testadminsurname',0123456789);
 INSERT INTO cart_bean(product_id, mail, date) VALUES (1,'testmail',now());
-INSERT INTO category_bean(name, parent) VALUES ('GENERAL',1), ('MUSICAL INSTRUMENT', 1), ('MUSIC SHEET', 1);
+INSERT INTO category_bean(name, parent,imgurl) VALUES ('GENERAL',1,'testlink'), ('MUSICAL INSTRUMENT', 1,'testlink'), ('MUSIC SHEET', 1,'testlink');
 INSERT INTO customer_bean(mail, name, surname, payment_card, billing_address) VALUES ('testmail', 'customername', 'customersurname', 1234123412341234,'60th Avanue');
 INSERT INTO order_bean(mail, date, total) VALUES ('testmail', now(), 100.00);
-INSERT INTO web_user_bean VALUES ('testmail', 'testpassword');
+INSERT INTO web_user_bean VALUES ('testmail', 'testpassword','testlink');
 INSERT INTO producer_bean VALUES ('testmail','PRODUCER_1','PRODUCER_ADDRESS_1');
 INSERT INTO product_bean(name,price,quantity,producer,category) VALUES ('PRODUCT_1',1.0,1,'testmail',1), ('PRODUCT_2',2.0,2,'testmail',2), ('PRODUCT_3',3.0,3,'testmail',3) ;
-INSERT INTO shipment_bean(ship_date,arrive_date,ship_address,total,id_order) VALUES (now(), '2021-12-31 23:59:59', '60th Avanue', 100.00,1) ;
+INSERT INTO shipment_bean(ship_date,arrive_date,ship_address,total,id_order) VALUES (now(), '2021-12-31 23:59:59', '60th Avanue', 100.00,2) ;
