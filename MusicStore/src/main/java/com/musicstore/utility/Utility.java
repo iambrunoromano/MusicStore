@@ -1,14 +1,11 @@
 package com.musicstore.utility;
 
-import org.springframework.stereotype.Component;
-
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import java.util.Map;
-import java.util.Optional;
 
 import com.musicstore.model.AdminBean;
 import com.musicstore.model.CartBean;
@@ -20,10 +17,12 @@ import com.musicstore.model.ProductBean;
 import com.musicstore.model.ShipmentBean;
 import com.musicstore.model.WebUserBean;
 
+import java.time.OffsetDateTime;
+
 public abstract class Utility {
 	
 	private static Timestamp stringtoDate(String s) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		try {
 			Date date = dateFormat.parse(s);
 			return new Timestamp(date.getTime());
