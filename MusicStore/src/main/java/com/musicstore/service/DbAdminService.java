@@ -15,12 +15,16 @@ import com.musicstore.repository.IAdminRepository;
 import com.musicstore.model.AdminBean;
 import com.musicstore.model.WebUserBean;
 import com.musicstore.service.DbWebUserService;
+import com.musicstore.service.DbWebUserService;
 
 @Service
 public class DbAdminService {
 	
 	@Autowired
 	private IAdminRepository AdminRepository;  
+	
+	@Autowired
+	private DbWebUserService webuserService;
 	
 	public Iterable<AdminBean> getAll(){
 		return AdminRepository.findAll();
@@ -59,7 +63,7 @@ public class DbAdminService {
 	
 	public boolean isAdmin(WebUserBean wub) {
 		Optional<AdminBean> adminFound = this.getById(wub.getMail());
-		if(!adminFound.isEmpty())
+		if(webuserService.isWebUser(wub) && !adminFound.isEmpty())
 			if(adminFound.get().getMail().equals(wub.getMail()))
 				return true;
 		return false;
