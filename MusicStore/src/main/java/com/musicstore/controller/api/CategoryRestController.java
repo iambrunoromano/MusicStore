@@ -38,11 +38,7 @@ public class CategoryRestController {
 	public CategoryRestController() {}
 	
 	@RequestMapping("/musicstore/api/category")
-	public Iterable<CategoryBean> getAll(@RequestBody WebUserBean b){
-		if(!adminService.isAdmin(b))
-		{
-			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
-		}
+	public Iterable<CategoryBean> getAll(){
 		return categoryService.getAll();
 	}
 	
