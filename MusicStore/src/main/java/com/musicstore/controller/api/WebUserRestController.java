@@ -1,6 +1,7 @@
 package com.musicstore.controller.api;
 
 import java.util.List;
+import java.util.Map;
 import java.util.ArrayList; 
 import java.util.Optional;
 
@@ -14,11 +15,17 @@ import org.springframework.web.server.ResponseStatusException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.musicstore.model.ProducerBean;
 import com.musicstore.model.WebUserBean;
+import com.musicstore.service.DbAdminService;
 import com.musicstore.service.DbWebUserService;
+import com.musicstore.utility.Utility;
 
 @RestController
 public class WebUserRestController {
+
+	@Autowired
+	private DbAdminService adminService; 
 	
 	@Autowired
 	private DbWebUserService webuserService; 
@@ -26,17 +33,20 @@ public class WebUserRestController {
 	public WebUserRestController() {}
 	
 	@RequestMapping("/musicstore/api/webuser")
-	public Iterable<WebUserBean> getAll(){
+	public Iterable<WebUserBean> getAll(@RequestBody WebUserBean b){
+		if(!adminService.isAdmin(b))
+		{
+			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
+		}
 		return webuserService.getAll();
 	}
 	
 	@RequestMapping("/musicstore/api/webuser/{id}")
-	public WebUserBean getById(@PathVariable String id){
-		Optional<WebUserBean> webuser = webuserService.getById(id);
-		if(webuser.isEmpty()){
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "item not found");
+	public WebUserBean getById(@PathVariable String id,@RequestBody WebUserBean b){
+		if(!adminService.isAdmin(b) && !webuserService.isWebUser(b)){
+			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
 		}
-		return webuser.get();
+		return webuserService.getById(id).get();
 	}
 
 	@RequestMapping(value  ="/musicstore/api/webuser", method = RequestMethod.POST)
@@ -45,9 +55,15 @@ public class WebUserRestController {
 	}
 	
 	@RequestMapping(value  ="/musicstore/api/webuser/{id}", method = RequestMethod.PUT)
-	public WebUserBean update(@PathVariable String id, @RequestBody WebUserBean p) {
-		
-		Optional<WebUserBean> updatedWebUser= webuserService.update(id, p);
+	public WebUserBean update(@PathVariable String id,@RequestBody Map<String, Map<String,String>> map) {
+		WebUserBean wub = Utility.webuserDeMap(map.get("toput"));
+		WebUserBean b = Utility.webuserDeMap(map.get("authorized"));
+		if(!adminService.isAdmin(b)){
+			if(!webuserService.isWebUser(b) || !b.getMail().equals(wub.getMail())){
+				throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an authorized user");
+			}
+		}
+		Optional<WebUserBean> updatedWebUser= webuserService.update(id, wub);
 		if (updatedWebUser.isEmpty())
 		{
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "item not found");
@@ -56,7 +72,12 @@ public class WebUserRestController {
 	}
 	
 	@RequestMapping(value  ="/musicstore/api/webuser/{id}", method = RequestMethod.DELETE)
-	public void delete(@PathVariable String id) {
+	public void delete(@PathVariable String id, @RequestBody WebUserBean b) {
+		if(!adminService.isAdmin(b)){
+			if(!webuserService.isWebUser(b) || !b.getMail().equals(webuserService.getById(id).get().getMail())){
+				throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
+			}
+		}
 		Boolean isDeleted = webuserService.delete(id);
 		if (isDeleted==false)
 		{
