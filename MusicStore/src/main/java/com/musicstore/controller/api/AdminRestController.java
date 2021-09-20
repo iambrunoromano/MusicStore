@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.musicstore.model.AdminBean;
 import com.musicstore.model.WebUserBean;
 import com.musicstore.service.DbAdminService;
+import com.musicstore.service.DbWebUserService;
 import com.musicstore.controller.api.WebUserRestController;
 import com.musicstore.utility.Utility;
 
@@ -27,6 +28,9 @@ public class AdminRestController {
 	
 	@Autowired
 	private DbAdminService adminService;
+	
+	@Autowired
+	private DbWebUserService webuserService;
 	
 	public AdminRestController() {}
 	
@@ -41,7 +45,7 @@ public class AdminRestController {
 	
 	@RequestMapping("/musicstore/api/admin/{id}")
 	public AdminBean getById(@PathVariable String id,@RequestBody WebUserBean b){
-		if(!adminService.isAdmin(b)){
+		if(!adminService.isAdmin(b) && !webuserService.isWebUser(b)){
 			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
 		}
 		return adminService.getById(id).get();
