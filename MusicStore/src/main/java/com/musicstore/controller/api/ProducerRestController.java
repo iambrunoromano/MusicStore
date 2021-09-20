@@ -48,7 +48,7 @@ public class ProducerRestController {
 	
 	@RequestMapping("/musicstore/api/producer/{id}")
 	public ProducerBean getById(@PathVariable String id,@RequestBody WebUserBean b){
-		if(!adminService.isAdmin(b)){
+		if(!adminService.isAdmin(b) && !(webuserService.isWebUser(b) && b.getMail().equals(id))){
 			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
 		}
 		return producerService.getById(id).get();

@@ -48,7 +48,7 @@ public class CustomerRestController {
 	
 	@RequestMapping("/musicstore/api/customer/{id}")
 	public CustomerBean getById(@PathVariable String id,@RequestBody WebUserBean b){
-		if(!adminService.isAdmin(b)){
+		if(!adminService.isAdmin(b) && !(webuserService.isWebUser(b) && b.getMail().equals(id))){
 			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
 		}
 		return customerService.getById(id).get();
