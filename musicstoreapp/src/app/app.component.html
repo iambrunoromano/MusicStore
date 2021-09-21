@@ -1,5 +1,8 @@
-<h1>API Trial</h1>
-<button (click)="getCustomers()"> API Call </button>
-<div *ngFor="let customer of customers | async">
-  {{ customer | json }}
+<h1>API Test</h1>
+<button (click)="getCategories()"> Categories </button>
+<button (click)="getByIdCategory()"> Category </button>
+<div>
+{{ category.id | json}}
+{{ category.name | json}}
+{{ category.parent | json}}
 </div>
