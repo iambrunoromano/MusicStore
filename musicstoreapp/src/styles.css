@@ -1,1 +1,119 @@
-/* You can add global styles to this file, and also import other style files */
+/*COLOR PALETTE:
+#2B2E4A - BLACKISH
+#E84545 - LIGHT red
+#903749 - DARK red
+#53354A - BROWN
+#AEAEAE - GREY
+*/
+
+body {
+height: 125vh;
+margin-top: 80px;
+padding: 0;
+margin: 0;
+background-size: cover;
+font-family: sans-serif;
+
+display: flex;
+flex-direction: column;
+min-height: 100vh;
+}
+
+header {
+background-color: #2B2E4A;
+position: fixed;
+left: 0;
+right: 0;
+top: 0;
+height: 60px;
+display: flex;
+align-items: center;
+box-shadow: 0 0 10px 0 black;
+}
+
+header nav {
+  margin: auto;
+  min-width: 455px;
+}
+header * {
+display: inline;
+}
+header li {
+margin: 20px;
+}
+header li a {
+color: AEAEAE;
+text-decoration: none;
+}
+
+* a{
+  font-family: 'Open Sans', sans-serif;
+  font-size: 120%;
+  color : #BDBDBD;
+}
+
+a.brand{
+  font-family: 'Monaco', sans-serif;
+  font-size: 170%;
+}
+
+a:hover{
+  color: white;
+  transition: 0.3s ease-out;
+  text-shadow: 2px 2px 5px black;
+}
+
+footer{
+  color:white;
+  margin-top:auto;
+  position: relative;
+  bottom:0px;
+  padding:0;
+  background-color: #2B2E4A;
+  height: 150px;
+  align-items: center;
+}
+
+footer.container{
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 50%;
+}
+
+.container{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin: 0 auto;
+}
+
+.col{
+  display: flex;
+  flex-direction: column;
+  margin-right: 4rem;
+}
+
+.col p{
+  color : #979aaa;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.col a{
+  font-size: 80%;
+  color: #AEAEAE;
+  text-decoration: none;
+  margin-top: 3px;
+  margin-bottom: 2px;
+}
+
+.col a:hover{
+  color: white;
+  transition: 0.3s ease-out;
+  text-shadow: 2px 2px 5px black;
+}
+
+.social-menu ul{
+  position:absolute;
+  color:white;
+}
