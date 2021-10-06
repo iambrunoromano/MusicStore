@@ -29,6 +29,7 @@ height: 60px;
 display: flex;
 align-items: center;
 box-shadow: 0 0 10px 0 black;
+z-index: 1;
 }
 
 header nav {
@@ -116,4 +117,66 @@ footer.container{
 .social-menu ul{
   position:absolute;
   color:white;
+}
+
+* .main-section{
+  position:relative;
+  margin-top: 20vh;
+  margin-bottom: 70px;
+  padding-top: 75px;
+}
+
+.collapsible{
+  background-color: #53354A;
+  color: white;
+  width: 60%;
+  cursor: pointer;
+  padding : 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 120%;
+}
+
+.collapsible:hover{
+  background-color: #903749;
+}
+
+.coll-content{
+  padding: 0 18px;
+  display: none;
+  overflow:hidden;
+  background-color: #AEAEAE;
+}
+
+.main-section{
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #AEAEAE;
+  width: 1000px;
+  margin: auto;
+}
+
+.cardcontainer.card{
+  /*display:flex;
+  flex-direction: row;*/
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+
+}
+
+.card{
+  border-radius: 15px;
+  background: #2B2E4A;
+  padding : 10px;
+  margin: 10px;
+  width:300px;
+  height: 400px;
+}
+
+img{
+    border-radius: 10px;
+    max-width: 100%;
+    max-height: 100%;
 }

@@ -17,16 +17,48 @@
     </nav>
   </header>
 
+  <div class="main-section">
+    <p>Horizontal scrolling category cards:</p>
+    <div class="cardcontainer" *ngFor = "let item of categories">
+      <div class="card">
+          <img src="https://i.imgur.com/oYiTqum.jpg" class="card__image" alt="" />
+          <p>Id : {{item.id}}</p>
+          <p>Name : {{item.name}}</p>
+          <p>Parent : {{item.parent}}</p>
+      </div>
+    </div>
 
-  <div class  ="text">Navbar : Shopname | Product Categories (Dropdown menu) | All Products | Search | Login(new card overlapping)/Username(dropdown that differs if he is admin, producer or customer [<=Orders & shipment (New card)])</div>
-  <div class  ="text">Show horizontally scrolling cards for new products</div>
-  <div class  ="text">Show all products on leftside</div>
-  <div class  ="text">Show all categories on leftside</div>
-  <div class  ="text">Show popular producers on leftside</div>
-  <div class  ="text">Show cart (if not logged as session attr, otherwise fetch from database) on rightside</div>
+    <p>Table to remind you to implement horizontal scrolling product cards:</p>
+    <table border="1">
+      <tr>
+        <td>Id</td>
+        <td>Name</td>
+        <td>Price</td>
+        <td>Quantity</td>
+        <td>Producer</td>
+        <td>Category</td>
+      </tr>
+      <tr *ngFor = "let item of products">
+        <td>{{item.id}}</td>
+        <td>{{item.name}}</td>
+        <td>{{item.price}}</td>
+        <td>{{item.quantity}}</td>
+        <td>{{item.producer}}</td>
+        <td>{{item.category}}</td>
+      </tr>
+    </table>
+
+    <div class  ="text">Login(new card overlapping)/Username(dropdown that differs if he is admin, producer or customer [<=Orders & shipment (New card)])</div>
+    <div class  ="text">Show horizontally scrolling cards for new products</div>
+    <div class  ="text">Show all products on leftside</div>
+    <div class  ="text">Show all categories on leftside</div>
+    <div class  ="text">Show popular producers on leftside</div>
+    <div class  ="text">Show cart (if not logged as session attr, otherwise fetch from database) on rightside</div>
+  </div>
 
   <div class  ="text">Footer : Col 1 : [Terms & Conditions, Privacy] | Col 2 : [About Us, Contacts] | Col 3 : Share it on Facebook ,Instagram, Mail | Col 4 : GitHub link to the creator</div>
   <button (click)="getCategories()"> Categories </button>
+  <button class="bottone" (click)="getCategories()"> BOTTONE </button>
   <button (click)="getByIdCategory()"> Category </button>
 
   <footer>
@@ -58,5 +90,20 @@
   </footer>
 
 
+  <script>
+  var coll = document.getElementsByClassName("collapsible");
+  var i ;
+  for(i=0;i<coll.length;i++){
+    coll[i].addEventListener("click", function(){
+      this.classList.toggle("active");
+      var content = this.nextElementSibling;
+      if(content.style.display === "block"){
+        content.style.display = "none";
+      } else{
+        content.style.display = "block";
+      }
+    })
+  }
+  </script>
 </body>
 </html>
