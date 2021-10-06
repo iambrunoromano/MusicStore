@@ -44,13 +44,13 @@ margin: 20px;
 }
 header li a {
 color: AEAEAE;
-text-decoration: none;
 }
 
 * a{
   font-family: 'Open Sans', sans-serif;
   font-size: 120%;
   color : #BDBDBD;
+  text-decoration: none;
 }
 
 a.brand{
@@ -103,7 +103,6 @@ footer.container{
 .col a{
   font-size: 80%;
   color: #AEAEAE;
-  text-decoration: none;
   margin-top: 3px;
   margin-bottom: 2px;
 }
@@ -207,4 +206,28 @@ img{
     border-radius: 10px;
     max-width: 100%;
     max-height: 100%;
+}
+
+button{
+  width: 300px;
+  height: 50px;
+  background: #903749;
+  border-radius: 10px;
+}
+
+button a{
+  font-size: 150%;
+}
+
+button:hover{
+  box-shadow: 0 0 11px black;
+  background: #ac4257;
+}
+
+button:hover *{
+  color: white;
+}
+
+.card button{
+  margin-top: 10px;
 }
