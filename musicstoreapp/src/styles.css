@@ -158,15 +158,29 @@ footer.container{
   margin: auto;
 }
 
-.cardcontainer.card{
-  /*display:flex;
-  flex-direction: row;*/
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+.cardcontainer{
+  width: 400px;
+  height: 1400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transform: rotate(-90deg);
+  transform-origin: right top;
+  transform:rotate(-90deg) translateY(-900px);
+  /*PREVIOUS*/
+  /*display: inline-block;
+  max-width: 100%;
+  grid-template-columns: auto auto auto;
+  padding: 5px;*/
+}
 
+.slice{
+  margin-right: 0px;
+  padding: 350px 0 0 0;
 }
 
 .card{
+  transform: rotate(90deg);
+  transform-origin: right top;
   border-radius: 15px;
   background: #2B2E4A;
   padding : 10px;
