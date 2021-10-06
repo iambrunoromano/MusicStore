@@ -18,11 +18,13 @@
   </header>
 
   <div class="main-section">
-
     <p>Horizontal scrolling category cards:</p>
     <div class="cardcontainer slice" id="category" >
       <div class="card" *ngFor = "let item of categories">
           <img src="https://cdn.pixabay.com/photo/2013/11/28/10/36/road-220058_960_720.jpg" class="card__image" alt="" />
+          <button class="bottone">
+            <a href="#">Explore</a>
+          </button>
           <p>Id : {{item.id}}</p>
           <p>Name : {{item.name}}</p>
           <p>Parent : {{item.parent}}</p>
@@ -32,6 +34,9 @@
       <div class="cardcontainer slice" id="product">
         <div class="card" *ngFor = "let item of products">
             <img src="https://cdn.pixabay.com/photo/2017/06/26/08/13/mockup-2443050_960_720.jpg" class="card__image" alt="" />
+            <button class="bottone">
+              <a href="#">Add to cart</a>
+            </button>
             <p>Id : {{item.id}}</p>
             <p>Name : {{item.name}}</p>
             <p>Price : {{item.price}}</p>
@@ -51,7 +56,6 @@
 
   <div class  ="text">Footer : Col 1 : [Terms & Conditions, Privacy] | Col 2 : [About Us, Contacts] | Col 3 : Share it on Facebook ,Instagram, Mail | Col 4 : GitHub link to the creator</div>
   <button (click)="getCategories()"> Categories </button>
-  <button class="bottone" (click)="getCategories()"> BOTTONE </button>
   <button (click)="getByIdCategory()"> Category </button>
 
   <footer>
@@ -81,22 +85,5 @@
 
     </div>
   </footer>
-
-
-  <script>
-  var coll = document.getElementsByClassName("collapsible");
-  var i ;
-  for(i=0;i<coll.length;i++){
-    coll[i].addEventListener("click", function(){
-      this.classList.toggle("active");
-      var content = this.nextElementSibling;
-      if(content.style.display === "block"){
-        content.style.display = "none";
-      } else{
-        content.style.display = "block";
-      }
-    })
-  }
-  </script>
 </body>
 </html>
