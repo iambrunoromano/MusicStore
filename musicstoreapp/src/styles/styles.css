@@ -60,11 +60,6 @@ min-height: 100vh;
   white-space: nowrap;
 }
 
-.card button{
-  margin: auto 10px;
-  width:200px;
-}
-
 .show {
   display: block;
 }
