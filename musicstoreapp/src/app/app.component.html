@@ -19,34 +19,27 @@
 
   <div class="main-section">
     <p>Horizontal scrolling category cards:</p>
-    <div class="cardcontainer" *ngFor = "let item of categories">
+    <div class="cardcontainer" id="category" *ngFor = "let item of categories">
       <div class="card">
-          <img src="https://i.imgur.com/oYiTqum.jpg" class="card__image" alt="" />
+          <img src="https://cdn.pixabay.com/photo/2013/11/28/10/36/road-220058_960_720.jpg" class="card__image" alt="" />
           <p>Id : {{item.id}}</p>
           <p>Name : {{item.name}}</p>
           <p>Parent : {{item.parent}}</p>
       </div>
     </div>
 
-    <p>Table to remind you to implement horizontal scrolling product cards:</p>
-    <table border="1">
-      <tr>
-        <td>Id</td>
-        <td>Name</td>
-        <td>Price</td>
-        <td>Quantity</td>
-        <td>Producer</td>
-        <td>Category</td>
-      </tr>
-      <tr *ngFor = "let item of products">
-        <td>{{item.id}}</td>
-        <td>{{item.name}}</td>
-        <td>{{item.price}}</td>
-        <td>{{item.quantity}}</td>
-        <td>{{item.producer}}</td>
-        <td>{{item.category}}</td>
-      </tr>
-    </table>
+    <p>Horizontal scrolling product cards:</p>
+    <div class="cardcontainer" id="product" *ngFor = "let item of products">
+      <div class="card">
+          <img src="https://cdn.pixabay.com/photo/2017/06/26/08/13/mockup-2443050_960_720.jpg" class="card__image" alt="" />
+          <p>Id : {{item.id}}</p>
+          <p>Name : {{item.name}}</p>
+          <p>Price : {{item.price}}</p>
+          <p>Quantity : {{item.quantity}}</p>
+          <p>Producer : {{item.producer}}</p>
+          <p>Category : {{item.category}}</p>
+      </div>
+    </div>
 
     <div class  ="text">Login(new card overlapping)/Username(dropdown that differs if he is admin, producer or customer [<=Orders & shipment (New card)])</div>
     <div class  ="text">Show horizontally scrolling cards for new products</div>
