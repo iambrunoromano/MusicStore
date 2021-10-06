@@ -15,3 +15,11 @@ a:hover{
   transition: 0.3s ease-out;
   text-shadow: 2px 2px 5px black;
 }
+
+.title{
+  font-family: 'Open Sans', sans-serif;
+  font-size: 200%;
+  color : #2B2E4A;
+  font-weight: bold;
+  text-decoration: none;
+}
