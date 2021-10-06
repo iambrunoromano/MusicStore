@@ -18,29 +18,29 @@
   </header>
 
   <div class="main-section">
+
     <p>Horizontal scrolling category cards:</p>
-    <div class="cardcontainer" id="category" *ngFor = "let item of categories">
-      <div class="card">
+    <div class="cardcontainer slice" id="category" >
+      <div class="card" *ngFor = "let item of categories">
           <img src="https://cdn.pixabay.com/photo/2013/11/28/10/36/road-220058_960_720.jpg" class="card__image" alt="" />
           <p>Id : {{item.id}}</p>
           <p>Name : {{item.name}}</p>
           <p>Parent : {{item.parent}}</p>
       </div>
     </div>
-
     <p>Horizontal scrolling product cards:</p>
-    <div class="cardcontainer" id="product" *ngFor = "let item of products">
-      <div class="card">
-          <img src="https://cdn.pixabay.com/photo/2017/06/26/08/13/mockup-2443050_960_720.jpg" class="card__image" alt="" />
-          <p>Id : {{item.id}}</p>
-          <p>Name : {{item.name}}</p>
-          <p>Price : {{item.price}}</p>
-          <p>Quantity : {{item.quantity}}</p>
-          <p>Producer : {{item.producer}}</p>
-          <p>Category : {{item.category}}</p>
+      <div class="cardcontainer slice" id="product">
+        <div class="card" *ngFor = "let item of products">
+            <img src="https://cdn.pixabay.com/photo/2017/06/26/08/13/mockup-2443050_960_720.jpg" class="card__image" alt="" />
+            <p>Id : {{item.id}}</p>
+            <p>Name : {{item.name}}</p>
+            <p>Price : {{item.price}}</p>
+            <p>Quantity : {{item.quantity}}</p>
+            <p>Producer : {{item.producer}}</p>
+            <p>Category : {{item.category}}</p>
+        </div>
       </div>
-    </div>
-
+    <br>
     <div class  ="text">Login(new card overlapping)/Username(dropdown that differs if he is admin, producer or customer [<=Orders & shipment (New card)])</div>
     <div class  ="text">Show horizontally scrolling cards for new products</div>
     <div class  ="text">Show all products on leftside</div>
