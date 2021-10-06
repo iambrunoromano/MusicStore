@@ -1,0 +1,19 @@
+button{
+  width: 300px;
+  height: 50px;
+  background: black /*#903749*/;
+  border-radius: 10px;
+}
+
+button a{
+  font-size: 150%;
+}
+
+button:hover{
+  box-shadow: 0 0 11px black;
+  background: #ac4257;
+}
+
+button:hover *{
+  color: white;
+}
