@@ -231,3 +231,11 @@ button:hover *{
 .card button{
   margin-top: 10px;
 }
+
+.show {
+  display: block;
+}
+
+#content{
+  display: none;
+}
