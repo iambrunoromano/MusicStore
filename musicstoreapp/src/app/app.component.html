@@ -9,15 +9,71 @@
     <nav>
       <li><a class="brand" href="#"> MusicStore </a></li>
       <ul>
-        <li><a href="#"> Product Categories </a></li>
-        <li><a href="#"> All Products </a></li>
-        <li><a href="#"> Search </a></li>
-        <li><a href="#"> Login/Username </a></li>
+        <li>
+          <a class="categories" id="trigger" onclick="myFunction()" href="#">Product Categories</a>
+          <div class="categories" id="content">
+            <li *ngFor = "let item of categories" href="#PutLinkProductsCardGridHere">{{item.name}}</li>
+          </div>
+        </li>
+        <li>
+          <a class="products" id="trigger" onclick="myFunction()" href="#">All Products</a>
+          <div class="products" id="content">
+            <li *ngFor = "let item of products" href="#PutLinkFullScreenProductCardHere">{{item.name}}</li>
+          </div>
+        </li>
+        <li>
+          <a class="search" id="trigger" onclick="myFunction()" href="#">Search</a>
+          <div class="search" id="content">
+            <form>
+              <input  id="keyword"
+                      placeholder="Type Here"
+                      required>
+              <input  type="submit"
+                      id="submit"
+                      value="Search">
+            </form>
+          </div>
+        </li>
+        <li>
+          <a class="login" id="trigger" onclick="myFunction()" href="#">Log In</a>
+          <div class="login" id="content">
+            <form>
+              <fieldset id="inputs">
+                <input  id="username"
+                        type="email"
+                        name="Email"
+                        placeholder="Your email address"
+                        required>
+                <input  id="password"
+                        type="password"
+                        name="Password"
+                        placeholder="Password"
+                        required>
+              </fieldset>
+              <fieldset id="actions">
+                <input  type="submit"
+                        id="submit"
+                        value="Log in">
+                <label>
+                  <input  type="checkbox"
+                          checked="checked">
+                  Keep me signed in
+                </label>
+              </fieldset>
+            </form>
+          </div>
+        </li>
       </ul>
     </nav>
   </header>
 
   <div class="main-section">
+    <p>0. Dropdown tutorial:  https://www.w3schools.com/howto/howto_js_dropdown.asp</p>
+    <p>Horizontal scrolling for :</p>
+    <p>1. Best seller products (Query DB on sold number)</p>
+    <p>2. "You may like also..." with ML simple model</p>
+    <p>3. Best producers (Query DB on sold number)</p>
+    <p>4. Recently seen (Query DB on new table that tracks the seen prods) </p>
     <p>Horizontal scrolling category cards:</p>
     <div class="cardcontainer slice" id="category" >
       <div class="card" *ngFor = "let item of categories">
@@ -48,9 +104,7 @@
     <br>
     <div class  ="text">Login(new card overlapping)/Username(dropdown that differs if he is admin, producer or customer [<=Orders & shipment (New card)])</div>
     <div class  ="text">Show horizontally scrolling cards for new products</div>
-    <div class  ="text">Show all products on leftside</div>
-    <div class  ="text">Show all categories on leftside</div>
-    <div class  ="text">Show popular producers on leftside</div>
+
     <div class  ="text">Show cart (if not logged as session attr, otherwise fetch from database) on rightside</div>
   </div>
 
@@ -85,5 +139,26 @@
 
     </div>
   </footer>
+  <script>
+  function myFunction() {
+    alert('I work');
+    document.getElementById("login-content").classList.toggle("show");
+  }
+
+  // Close the dropdown if the user clicks outside of it
+  window.onclick = function(event) {
+    if (!event.target.matches('.dropbtn')) {
+      var dropdowns = document.getElementsByClassName("dropdown-content");
+      var i;
+      for (i = 0; i < dropdowns.length; i++) {
+        var openDropdown = dropdowns[i];
+        if (openDropdown.classList.contains('show')) {
+          openDropdown.classList.remove('show');
+        }
+      }
+    }
+  }
+  </script>
+
 </body>
 </html>
