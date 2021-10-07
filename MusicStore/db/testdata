@@ -1,9 +1,35 @@
 INSERT INTO admin_bean(mail, name, surname, phone_number) VALUES ('testmail','testadminname','testadminsurname',0123456789);
 INSERT INTO cart_bean(product_id, mail, date) VALUES (1,'testmail',now());
+
 INSERT INTO category_bean(name, parent,imgurl) VALUES ('GENERAL',1,'testlink'), ('MUSICAL INSTRUMENT', 1,'testlink'), ('MUSIC SHEET', 1,'testlink');
+UPDATE category_bean SET name='All',parent=1,imgurl='../assets/img/categories/general.jpg' WHERE id=1;
+UPDATE category_bean SET name='Musical Instruments',parent=1,imgurl='../assets/img/categories/musicalinstruments.jpg' WHERE id=2;
+UPDATE category_bean SET name='Music Sheet',parent=1,imgurl='../assets/img/categories/sheet.png' WHERE id=3;
+UPDATE category_bean SET name='Records',parent=1,imgurl='../assets/img/categories/records.jpg' WHERE id=5;
+INSERT INTO category_bean(name, parent,imgurl) VALUES ('Players',1,'../assets/img/categories/players.jpg');
+
 INSERT INTO customer_bean(mail, name, surname, payment_card, billing_address) VALUES ('testmail', 'customername', 'customersurname', 1234123412341234,'60th Avanue');
 INSERT INTO order_bean(mail, date, total) VALUES ('testmail', now(), 100.00);
+
 INSERT INTO web_user_bean VALUES ('testmail', 'testpassword','testlink');
+INSERT INTO web_user_bean VALUES ('jessica@mail.com', 'jessicapassword','../assets/img/users/jessica.jpg');
+INSERT INTO web_user_bean VALUES ('joanna@mail.com', 'joannapassword','../assets/img/users/joanna.jpg');
+INSERT INTO web_user_bean VALUES ('lola@mail.com', 'lolapassword','../assets/img/users/lola.jpg');
+INSERT INTO web_user_bean VALUES ('midas@mail.com', 'midaspassword','../assets/img/users/midas.jpg');
+INSERT INTO web_user_bean VALUES ('mika@mail.com', 'mikapassword','../assets/img/users/mika.jpg');
+INSERT INTO web_user_bean VALUES ('seth@mail.com', 'sethpassword','../assets/img/users/seth.jpg');
+
 INSERT INTO producer_bean VALUES ('testmail','PRODUCER_1','PRODUCER_ADDRESS_1');
+
 INSERT INTO product_bean(name,price,quantity,producer,category) VALUES ('PRODUCT_1',1.0,1,'testmail',1), ('PRODUCT_2',2.0,2,'testmail',2), ('PRODUCT_3',3.0,3,'testmail',3) ;
+UPDATE product_bean SET name='Piano',price=1000.0,quantity=4,producer='testmail',category=2,imgurl='../assets/img/products/oldpiano.jpg' WHERE id=1;
+UPDATE product_bean SET name='Bass [Black]',price=500.0,quantity=15,producer='testmail',category=2,imgurl='../assets/img/products/blackbass.jpg' WHERE id=2;
+UPDATE product_bean SET name='Bass [Cream]',price=500.0,quantity=34,producer='testmail',category=2,imgurl='../assets/img/products/creambass.jpg' WHERE id=3;
+UPDATE product_bean SET name='Classic Guitar',price=500.0,quantity=10,producer='testmail',category=2,imgurl='../assets/img/products/classicguitar.jpg' WHERE id=4;
+UPDATE product_bean SET name='White Guitar',price=700.0,quantity=2,producer='testmail',category=2,imgurl='../assets/img/products/whiteguitar.jpg' WHERE id=5;
+UPDATE product_bean SET name='Electric Guitar',price=900.0,quantity=1,producer='testmail',category=2,imgurl='../assets/img/products/electricguitar.jpg' WHERE id=6;
+UPDATE product_bean SET name='Synth',price=2000.0,quantity=4,producer='testmail',category=2,imgurl='../assets/img/products/synth.jpg' WHERE id=7;
+INSERT INTO product_bean(name,price,quantity,producer,category,imgurl) VALUES ('Synth',2000.0,4,'testmail', 2, '../assets/img/products/synth.jpg');
+
+
 INSERT INTO shipment_bean(ship_date,arrive_date,ship_address,total,id_order) VALUES (now(), '2021-12-31 23:59:59', '60th Avanue', 100.00,2) ;
