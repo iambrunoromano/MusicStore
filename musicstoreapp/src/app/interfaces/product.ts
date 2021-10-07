@@ -5,4 +5,5 @@ export interface Product{
   quantity : number;
   producer : string;
   category : number;
+  imgurl: string;
 }
