@@ -9,7 +9,7 @@
       <li><a class="brand" href="#"> MusicStore </a></li>
       <ul>
         <li>
-          <a class="categories" id="trigger" onclick="myFunction()" href="#">Product Categories</a>
+          <a class="categories" id="trigger" >Product Categories</a>
           <div class="categories" id="content">
             <li *ngFor = "let item of categories" href="#PutLinkProductsCardGridHere">{{item.name}}</li>
           </div>
@@ -67,6 +67,8 @@
   </header>
 
   <div class="main-section">
+
+    <p  style="color:red">-1. Aggiungere a tutti i model che hanno imgurl in database l'attr su Java e su interfaces ts</p>
     <p>0. Dropdown tutorial:  https://www.w3schools.com/howto/howto_js_dropdown.asp</p>
     <p>Horizontal scrolling for :</p>
     <p>1. Best seller products (Query DB on sold number)</p>
@@ -76,35 +78,37 @@
     <p>5. Login(new card overlapping)/Username(dropdown that differs if he is admin, producer or customer [<=Orders & shipment (New card)])</p>
     <p>6. Show cart (if not logged as session attr, otherwise fetch from database) on rightside</p>
 
+    <div class="title">Products</div>
+    <div class="horizontal-slider">
+      <div class="slider-container">
+        <div class="card" id="product" *ngFor = "let item of products">
+          <img src={{item.imgurl}} class="card__image" alt="" />
+          <button>
+            <a href="#">Add to cart</a>
+          </button>
+          <p>{{item.name}}</p>
+          <p>{{item.price}} €</p>
+          <p>Stock : {{item.quantity}}</p>
+          <p>Producer : {{item.producer}}</p>
+          <p>Category : {{item.category}}</p>
+        </div>
+      </div>
+    </div>
 
     <div class="title">Categories</div>
     <div class="horizontal-slider">
       <div class="slider-container">
         <div class="card" id="category" *ngFor = "let item of categories">
-          <img src="https://cdn.pixabay.com/photo/2013/11/28/10/36/road-220058_960_720.jpg" class="card__image" alt="" />
+          <img src={{item.imgurl}} class="card__image" alt="" />
             <button>
               <a href="#">{{item.name}}</a>
             </button>
         </div>
       </div>
     </div>
-    <div class="title">Products</div>
-    <div class="horizontal-slider">
-      <div class="slider-container">
-        <div class="card" id="product" *ngFor = "let item of products">
-          <img src="https://cdn.pixabay.com/photo/2013/11/28/10/36/road-220058_960_720.jpg" class="card__image" alt="" />
-          <button>
-            <a href="#">Add to cart</a>
-          </button>
-          <p>Id : {{item.id}}</p>
-          <p>Name : {{item.name}}</p>
-          <p>Price : {{item.price}}</p>
-          <p>Quantity : {{item.quantity}}</p>
-          <p>Producer : {{item.producer}}</p>
-          <p>Category : {{item.category}}</p>
-        </div>
-      </div>
-    </div>
+
+    <p>Free images site: https://unsplash.com/</p>
+
     <br>
   </div>
   <footer>
@@ -134,26 +138,5 @@
 
     </div>
   </footer>
-  <script>
-  function myFunction() {
-    alert('I work');
-    document.getElementById("login-content").classList.toggle("show");
-  }
-
-  // Close the dropdown if the user clicks outside of it
-  window.onclick = function(event) {
-    if (!event.target.matches('.dropbtn')) {
-      var dropdowns = document.getElementsByClassName("dropdown-content");
-      var i;
-      for (i = 0; i < dropdowns.length; i++) {
-        var openDropdown = dropdowns[i];
-        if (openDropdown.classList.contains('show')) {
-          openDropdown.classList.remove('show');
-        }
-      }
-    }
-  }
-  </script>
-
-</body>
+  </body>
 </html>
