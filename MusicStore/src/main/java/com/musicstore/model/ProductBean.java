@@ -19,16 +19,18 @@ public class ProductBean {
 	private int quantity;
 	private String producer;
 	private int category;
+	private String imgurl;
 
 	public ProductBean() {}
 	
-	public ProductBean(int id, String name, double price, int quantity, String producer, int category) {
+	public ProductBean(int id, String name, double price, int quantity, String producer, int category, String imgurl) {
 		this.id= id;
 		this.name = name;
 		this.price = price;
 		this.quantity = quantity;
 		this.producer = producer;
 		this.category = category;
+		this.imgurl = imgurl;
 	}
 
 	public int getId() {
@@ -79,17 +81,26 @@ public class ProductBean {
 		this.category = category;
 	}
 	
+	public String getImgurl() {
+		return imgurl;
+	}
+
+	public void setImgurl(String imgurl) {
+		this.imgurl = imgurl;
+	}
+
 	public void update(ProductBean pb) {
 		this.name = pb.getName();
 		this.price = pb.getPrice();
 		this.quantity = pb.getQuantity();
 		this.producer = pb.getProducer();
 		this.category = pb.getCategory();
-	} 
+		this.imgurl = pb.getImgurl();
+	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(category, id, name, price, producer, quantity);
+		return Objects.hash(category, id, imgurl, name, price, producer, quantity);
 	}
 
 	@Override
@@ -101,7 +112,8 @@ public class ProductBean {
 		if (getClass() != obj.getClass())
 			return false;
 		ProductBean other = (ProductBean) obj;
-		return category == other.category && id == other.id && Objects.equals(name, other.name)
+		return category == other.category && id == other.id && Objects.equals(imgurl, other.imgurl)
+				&& Objects.equals(name, other.name)
 				&& Double.doubleToLongBits(price) == Double.doubleToLongBits(other.price)
 				&& Objects.equals(producer, other.producer) && quantity == other.quantity;
 	}
@@ -109,8 +121,7 @@ public class ProductBean {
 	@Override
 	public String toString() {
 		return "ProductBean [id=" + id + ", name=" + name + ", price=" + price + ", quantity=" + quantity
-				+ ", producer=" + producer + ", category=" + category + "]";
-	}
+				+ ", producer=" + producer + ", category=" + category + ", imgurl=" + imgurl + "]";
+	} 
 
-	
 }

@@ -15,8 +15,8 @@ public class WebUserBean {
 	
 	@Id
 	private String mail;
-	
 	private String password;
+	private String imgurl;	
 	
 	public WebUserBean() {}
 	
@@ -32,10 +32,20 @@ public class WebUserBean {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	public String getImgurl() {
+		return imgurl;
+	}
+
+	public void setImgurl(String imgurl) {
+		this.imgurl = imgurl;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(mail, password);
+		return Objects.hash(imgurl, mail, password);
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -45,11 +55,14 @@ public class WebUserBean {
 		if (getClass() != obj.getClass())
 			return false;
 		WebUserBean other = (WebUserBean) obj;
-		return Objects.equals(mail, other.mail) && Objects.equals(password, other.password);
+		return Objects.equals(imgurl, other.imgurl) && Objects.equals(mail, other.mail)
+				&& Objects.equals(password, other.password);
 	}
+
 	@Override
 	public String toString() {
-		return "WebUserBean [mail=" + mail + ", password=" + password + "]";
+		return "WebUserBean [mail=" + mail + ", password=" + password + ", imgurl=" + imgurl + "]";
 	}
+	
 	
 }

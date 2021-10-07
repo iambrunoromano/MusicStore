@@ -16,6 +16,7 @@ public class CategoryBean {
 	
 	private String name;
 	private int parent;
+	private String imgurl;
 	
 	public CategoryBean() {}
 
@@ -43,9 +44,17 @@ public class CategoryBean {
 		this.parent = parent;
 	}
 
+	public String getImgurl() {
+		return imgurl;
+	}
+
+	public void setImgurl(String imgurl) {
+		this.imgurl = imgurl;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, name, parent);
+		return Objects.hash(id, imgurl, name, parent);
 	}
 
 	@Override
@@ -57,12 +66,13 @@ public class CategoryBean {
 		if (getClass() != obj.getClass())
 			return false;
 		CategoryBean other = (CategoryBean) obj;
-		return id == other.id && Objects.equals(name, other.name) && parent == other.parent;
+		return id == other.id && Objects.equals(imgurl, other.imgurl) && Objects.equals(name, other.name)
+				&& parent == other.parent;
 	}
 
 	@Override
 	public String toString() {
-		return "CategoryBean [id=" + id + ", name=" + name + ", parent=" + parent + "]";
+		return "CategoryBean [id=" + id + ", name=" + name + ", parent=" + parent + ", imgurl=" + imgurl + "]";
 	}
 	
 }
