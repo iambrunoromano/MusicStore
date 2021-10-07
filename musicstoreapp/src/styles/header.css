@@ -1,5 +1,5 @@
 header {
-background-color: #2B2E4A;
+background-color: black;
 position: fixed;
 left: 0;
 right: 0;
@@ -22,5 +22,5 @@ header li {
 margin: 20px;
 }
 header li a {
-color: AEAEAE;
+color: grey;
 }

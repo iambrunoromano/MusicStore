@@ -4,7 +4,7 @@ footer{
   position: relative;
   bottom:0px;
   padding:0;
-  background-color: #2B2E4A;
+  background-color: black;
   height: 150px;
   align-items: center;
 }
@@ -36,7 +36,7 @@ footer.container{
 
 .col a{
   font-size: 80%;
-  color: #AEAEAE;
+  color: grey;
   margin-top: 3px;
   margin-bottom: 2px;
 }

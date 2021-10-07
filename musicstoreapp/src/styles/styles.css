@@ -1,10 +1,9 @@
-/*COLOR PALETTE:
-#2B2E4A - BLACKISH
-#E84545 - LIGHT red
-#903749 - DARK red
-#53354A - BROWN
-#AEAEAE - GREY
-*/
+/*COLOR PALETTE VARS:*/
+$clr-black :#2B2E4A;
+$clr-red :#E84545;
+$clr-dark-red :#903749;
+$clr-brown :#53354A;
+$clr-grey :#AEAEAE;
 
 body {
 height: 125vh;
@@ -31,7 +30,7 @@ min-height: 100vh;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: #AEAEAE;
+  color: grey;
   width: 1000px;
   margin: auto;
 }
