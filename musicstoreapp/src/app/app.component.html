@@ -9,19 +9,19 @@
       <li><a class="brand" href="#"> MusicStore </a></li>
       <ul>
         <li>
-          <a class="categories" id="trigger" >Product Categories</a>
+          <input class="categories" id="trigger" type="button" value="Product Categories" (click)="doDropdown()">
           <div class="categories" id="content">
             <li *ngFor = "let item of categories" href="#PutLinkProductsCardGridHere">{{item.name}}</li>
           </div>
         </li>
         <li>
-          <a class="products" id="trigger" onclick="myFunction()" href="#">All Products</a>
+          <input class="products" id="trigger" type="button" value="All Products" (click)="doDropdown()">
           <div class="products" id="content">
             <li *ngFor = "let item of products" href="#PutLinkFullScreenProductCardHere">{{item.name}}</li>
           </div>
         </li>
         <li>
-          <a class="search" id="trigger" onclick="myFunction()" href="#">Search</a>
+          <input class="search" id="trigger" type="value" value="Search" (click)="doDropdown()">
           <div class="search" id="content">
             <form>
               <input  id="keyword"
@@ -33,7 +33,7 @@
           </div>
         </li>
         <li>
-          <a class="login" id="trigger" onclick="myFunction()" href="#">Log In</a>
+          <input class="products" id="trigger" type="button" value="Log In" (click)="doDropdown()">
           <div class="login" id="content">
             <form>
               <fieldset id="inputs">
@@ -67,7 +67,10 @@
 
   <div class="main-section">
 
-    <p  style="color:red">-1. Aggiungere a tutti i model che hanno imgurl in database l'attr su Java e su interfaces ts</p>
+    <div>
+      <input type="button" value="Call Function" (click)="doDropdown()">
+    </div>
+
     <p>0. Dropdown tutorial:  https://www.w3schools.com/howto/howto_js_dropdown.asp</p>
     <p>Horizontal scrolling for :</p>
     <p>1. Best seller products (Query DB on sold number)</p>
