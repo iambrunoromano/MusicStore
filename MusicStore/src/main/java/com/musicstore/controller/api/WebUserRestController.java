@@ -20,6 +20,7 @@ import com.musicstore.model.WebUserBean;
 import com.musicstore.service.DbAdminService;
 import com.musicstore.service.DbWebUserService;
 import com.musicstore.utility.Utility;
+import com.musicstore.utility.LoggedIn;
 
 @RestController
 public class WebUserRestController {
@@ -47,6 +48,19 @@ public class WebUserRestController {
 			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
 		}
 		return webuserService.getById(id).get();
+	}
+	
+	@RequestMapping("/musicstore/api/webuserlogin")
+	public LoggedIn login(@RequestBody WebUserBean b){
+		LoggedIn logged = new LoggedIn();
+		if(b.getMail().equals(webuserService.getById(b.getMail()).get().getMail()) && 
+				b.getPassword().equals(webuserService.getById(b.getMail()).get().getPassword())){
+			logged.setLogstatus(true);
+		}
+		else {
+			logged.setLogstatus(false);
+		}
+		return logged;
 	}
 
 	@RequestMapping(value  ="/musicstore/api/webuser", method = RequestMethod.POST)
