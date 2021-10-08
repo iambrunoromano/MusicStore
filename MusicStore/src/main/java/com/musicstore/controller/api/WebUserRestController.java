@@ -63,6 +63,19 @@ public class WebUserRestController {
 		return logged;
 	}
 
+	@RequestMapping("/musicstore/api/webuserlogout")
+	public LoggedIn logout(@RequestBody WebUserBean b){
+		LoggedIn logged = new LoggedIn();
+		if(b.getMail().equals(webuserService.getById(b.getMail()).get().getMail()) && 
+				b.getPassword().equals(webuserService.getById(b.getMail()).get().getPassword())){
+			logged.setLogstatus(false);
+		}
+		else {
+			logged.setLogstatus(true);
+		}
+		return logged;
+	}
+	
 	@RequestMapping(value  ="/musicstore/api/webuser", method = RequestMethod.POST)
 	public WebUserBean create(@RequestBody WebUserBean p) {
 		return webuserService.create(p);
