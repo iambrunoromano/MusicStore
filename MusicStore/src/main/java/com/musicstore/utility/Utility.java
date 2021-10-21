@@ -95,6 +95,7 @@ public abstract class Utility {
 		b.setQuantity(Integer.parseInt(map.get("quantity")));
 		b.setProducer(map.get("producer"));
 		b.setCategory(Integer.parseInt(map.get("category")));
+		b.setImgurl(map.get("imgurl"));
 		return b; 
 	}
 	
