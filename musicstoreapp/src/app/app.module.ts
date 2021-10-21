@@ -6,9 +6,16 @@ import { AppComponent } from './app.component';
 
 import { HttpClientModule } from '@angular/common/http';
 
+import { ProductComponent } from './product/product.component';
+import { CategoryComponent } from './category/category.component';
+import { HomeComponent } from './home/home.component';
+
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ProductComponent,
+    CategoryComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
