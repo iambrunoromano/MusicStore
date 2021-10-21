@@ -70,7 +70,7 @@ public class WebUserRestController {
 				b.getPassword().equals(webuserService.getById(b.getMail()).get().getPassword())){
 			logged.setLogstatus(false);
 		}
-		else {
+		else { 
 			logged.setLogstatus(true);
 		}
 		return logged;
