@@ -9,8 +9,10 @@
       <li><a class="brand" href="#"> MusicStore </a></li>
       <ul>
         <div class="dropdown">
+          <a routerLink = "/categories">Categories</a>
         </div>
         <div class="dropdown">
+          <a routerLink = "/products">Products</a>
         </div>
         <li>
           <input type="search" name="Search" placeholder="Search" required>
@@ -51,6 +53,8 @@
 
   <div class="main-section">
 
+    <router-outlet></router-outlet>
+
     <p>Login call on button press</p>
 
     <p>Style forms</p>
@@ -65,35 +69,6 @@
     <p>4. Recently seen (Query DB on new table that tracks the seen prods) </p>
     <p>5. Login(new card overlapping)/Username(dropdown that differs if he is admin, producer or customer [<=Orders & shipment (New card)])</p>
     <p>6. Show cart (if not logged as session attr, otherwise fetch from database) on rightside</p>
-
-    <div class="title">Products</div>
-    <div class="horizontal-slider">
-      <div class="slider-container">
-        <div class="card" id="product" *ngFor = "let item of products">
-          <img src={{item.imgurl}} class="card__image" alt="" />
-          <button>
-            <a href="#">Add to cart</a>
-          </button>
-          <p>{{item.name}}</p>
-          <p>{{item.price}} €</p>
-          <p>Stock : {{item.quantity}}</p>
-          <p>Producer : {{item.producer}}</p>
-          <p>Category : {{item.category}}</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="title">Categories</div>
-    <div class="horizontal-slider">
-      <div class="slider-container">
-        <div class="card" id="category" *ngFor = "let item of categories">
-          <img src={{item.imgurl}} class="card__image" alt="" />
-            <button>
-              <a href="#">{{item.name}}</a>
-            </button>
-        </div>
-      </div>
-    </div>
 
     <p>Free images site: https://unsplash.com/</p>
 
