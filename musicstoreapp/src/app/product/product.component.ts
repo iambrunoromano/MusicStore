@@ -30,7 +30,6 @@ export class ProductComponent implements OnInit {
     this.productService.getAllProducts().subscribe(
       (response: Product[]) => {
         this.products = response;
-        console.log(this.products)
       },
       (error: HttpErrorResponse) => {
         alert(error.message);

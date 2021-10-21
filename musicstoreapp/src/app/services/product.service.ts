@@ -5,6 +5,7 @@ import { HttpHeaders } from '@angular/common/http';
 
 import { Product } from '../interfaces/product';
 import { Body } from '../interfaces/body';
+import { WebUser } from '../interfaces/webuser';
 
 import { environment } from 'src/environments/environment';
 
@@ -37,10 +38,8 @@ export class ProductService{
     return this.http.put<Product>(this.root_url + 'product/' + body.topost.id, body);
   }
 
-  public deleteProduct(body: Body): Observable<void>{
-    const options = {
-      /*headers: new HttpHeaders({}),*/
-      body: body};
-    return this.http.delete<void>(this.root_url + 'product/' + body.topost.id,options);
+  public deleteProduct(id: number, webuser: WebUser): Observable<void>{
+    const options = {body: webuser};
+    return this.http.delete<void>(this.root_url + 'product/' + id,options);
   }
 }

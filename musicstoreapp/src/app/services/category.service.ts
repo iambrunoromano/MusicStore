@@ -5,6 +5,7 @@ import { HttpHeaders } from '@angular/common/http';
 
 import { Category } from '../interfaces/category';
 import { WebUser } from '../interfaces/webuser';
+import { Body } from '../interfaces/body';
 
 import { environment } from 'src/environments/environment';
 
@@ -25,20 +26,20 @@ export class CategoryService{
     return this.http.get<Category[]>(this.root_url + 'category');
   }
 
-  public getByIdCategory(): Observable<Category>{
-    return this.http.get<Category>(this.root_url + 'category/' + 3);
+  public getByIdCategory(id: number): Observable<Category>{
+    return this.http.get<Category>(this.root_url + 'category/' + id);
   }
 
-  /**public createCategory(category : Category): Observable<Category>{
-    return this.http.post(this.root_url + 'category', category,httpOptions);
+  public createCategory(body: Body): Observable<Category>{
+    return this.http.post<Category>(this.root_url + 'category', body);
   }
 
-  public updateCategory(id : number, category : Category): Observable<Category>{
-    return this.http.put<Category>(this.root_url + 'category/' + id, category);
+  public updateCategory(body: Body): Observable<Category>{
+    return this.http.put<Category>(this.root_url + 'category/' + body.topost.id, body);
   }
 
-  public deleteCategory(id : number, webuser : WebUser): void{
-    this.http.delete(this.root_url + 'category/' + id);
-  }**/
-
+  public deleteCategory(id: number, webuser: WebUser): Observable<void>{
+    const options = {body: webuser};
+    return this.http.delete<void>(this.root_url + 'category/' + id,options);
+  }
 }
