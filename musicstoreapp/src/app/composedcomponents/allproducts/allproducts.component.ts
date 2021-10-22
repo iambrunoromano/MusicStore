@@ -10,23 +10,22 @@ import { ProductService } from '../../services/product.service';
   providedIn : 'root'
 })
 @Component({
-  selector: 'app-product',
-  templateUrl: './product.component.html',
-  styleUrls: ['./product.component.css']
+  selector: 'app-allproducts',
+  templateUrl: './allproducts.component.html',
+  styleUrls: ['./allproducts.component.css']
 })
-export class ProductComponent implements OnInit {
+export class AllproductsComponent implements OnInit {
 
   public products: Product[] = [];
-  public product = <Product>{ };
 
   constructor(private productService : ProductService) {
-    /*this.getProducts();*/
+    this.getProducts();
   }
 
   ngOnInit(): void {
   }
 
-  /*public getProducts(): void{
+  public getProducts(): void{
     this.productService.getAllProducts().subscribe(
       (response: Product[]) => {
         this.products = response;
@@ -35,16 +34,5 @@ export class ProductComponent implements OnInit {
         alert(error.message);
       }
     )
-  }*/
-
-  public getByIdProduct(id: number): void{
-    this.productService.getByIdProduct(id).subscribe(
-      (response: Product) => {
-        this.product = response;
-      },
-      (error : HttpErrorResponse) => {
-        alert(error.message);
-      }
-    );
   }
 }
