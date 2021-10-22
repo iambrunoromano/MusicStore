@@ -20,22 +20,10 @@ export class ProductComponent implements OnInit {
   public product = <Product>{ };
 
   constructor(private productService : ProductService) {
-    /*this.getProducts();*/
   }
 
   ngOnInit(): void {
   }
-
-  /*public getProducts(): void{
-    this.productService.getAllProducts().subscribe(
-      (response: Product[]) => {
-        this.products = response;
-      },
-      (error: HttpErrorResponse) => {
-        alert(error.message);
-      }
-    )
-  }*/
 
   public getByIdProduct(id: number): void{
     this.productService.getByIdProduct(id).subscribe(
