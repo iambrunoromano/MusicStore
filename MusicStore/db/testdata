@@ -33,3 +33,8 @@ INSERT INTO product_bean(name,price,quantity,producer,category,imgurl) VALUES ('
 
 
 INSERT INTO shipment_bean(ship_date,arrive_date,ship_address,total,id_order) VALUES (now(), '2021-12-31 23:59:59', '60th Avanue', 100.00,2) ;
+
+insert into soldprod values(1,'testmail',2);
+insert into soldprod values(2,'testmail',1);
+insert into soldprod values(3,'testmail2',4);
+insert into soldprod values(4,'testmail2',3);
