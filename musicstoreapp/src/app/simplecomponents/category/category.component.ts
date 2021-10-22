@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { Category } from '../interfaces/category';
-import { CategoryService } from '../services/category.service';
+import { Category } from '../../interfaces/category';
+import { CategoryService } from '../../services/category.service';
 
 @Injectable({
   providedIn : 'root'

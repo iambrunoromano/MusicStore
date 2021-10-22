@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { Product } from '../interfaces/product';
-import { ProductService } from '../services/product.service';
+import { Product } from '../../interfaces/product';
+import { ProductService } from '../../services/product.service';
 
 @Injectable({
   providedIn : 'root'
