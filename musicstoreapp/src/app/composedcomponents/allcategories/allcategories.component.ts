@@ -10,41 +10,31 @@ import { CategoryService } from '../../services/category.service';
   providedIn : 'root'
 })
 @Component({
-  selector: 'app-category',
-  templateUrl: './category.component.html',
-  styleUrls: ['./category.component.css']
+  selector: 'app-allcategories',
+  templateUrl: './allcategories.component.html',
+  styleUrls: ['./allcategories.component.css']
 })
-export class CategoryComponent implements OnInit {
+export class AllcategoriesComponent implements OnInit {
 
   public categories: Category[] = [];
-  public category = <Category>{ };
 
   constructor(private categoryService : CategoryService) {
-  /*this.getCategories();*/
+    this.getCategories();
   }
 
   ngOnInit(): void {
   }
 
-/*  public getCategories(): void{
+  public getCategories(): void{
     this.categoryService.getAllCategories().subscribe(
       (response: Category[]) => {
         this.categories = response;
-      },
-      (error : HttpErrorResponse) => {
-        alert(error.message);
-      }
-    );
-  }*/
-
-  public getByIdCategory(id: number): void{
-    this.categoryService.getByIdCategory(id).subscribe(
-      (response: Category) => {
-        this.category = response;
+        console.log(response);
       },
       (error : HttpErrorResponse) => {
         alert(error.message);
       }
     );
   }
+
 }
