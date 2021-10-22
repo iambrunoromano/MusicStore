@@ -75,3 +75,28 @@ total NUMERIC(10,2) NOT NULL,
 id_order INT NOT NULL,
 FOREIGN KEY (id_order) REFERENCES order_bean(id)
 );
+
+CREATE TABLE soldprod (
+productId INT,
+producerId VARCHAR(255) NOT NULL,
+soldQuantity INT NOT NULL,
+FOREIGN KEY (productId) REFERENCES product_bean(id),
+FOREIGN KEY (producerId) REFERENCES producer_bean(mail)
+);
+
+DELIMITER //
+CREATE PROCEDURE BestProducts()
+BEGIN
+	select productId from soldprod order by soldQuantity desc;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE BestProducers()
+BEGIN
+	select producerId from soldprod group by producerId order by sum(soldQuantity) desc;
+END //
+DELIMITER ;
+
+SHOW PROCEDURE STATUS WHERE Db = 'musicstore';
+DROP PROCEDURE BestProducers;
