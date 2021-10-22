@@ -87,14 +87,14 @@ FOREIGN KEY (producerId) REFERENCES producer_bean(mail)
 DELIMITER //
 CREATE PROCEDURE BestProducts()
 BEGIN
-	select productId from soldprod order by soldQuantity desc;
+	select id, name, price, quantity, producer, category, imgurl from product_bean as pb inner join (select productId, soldQuantity from soldprod) as ex on pb.id = ex.productId order by ex.soldQuantity desc;
 END //
 DELIMITER ;
 
 DELIMITER //
 CREATE PROCEDURE BestProducers()
 BEGIN
-	select producerId from soldprod group by producerId order by sum(soldQuantity) desc;
+	select mail, name, address  from producer_bean as pb inner join (select producerId, sum(soldQuantity) as sumsQ from soldprod group by producerId) as ex on pb.mail = ex.producerId order by sumsQ desc;
 END //
 DELIMITER ;
 
