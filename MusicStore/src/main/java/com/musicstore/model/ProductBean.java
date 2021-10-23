@@ -15,7 +15,19 @@ import javax.persistence.Id;
 import com.musicstore.pojos.BestProducts;
 
 @Entity
-@NamedStoredProcedureQueries({@NamedStoredProcedureQuery(name="productFirstProc", procedureName="BestProducts")})
+@SqlResultSetMapping(name="firstProcMapping", classes= {
+		@ConstructorResult(targetClass = BestProducts.class,
+						   columns = {
+								   @ColumnResult(name="id"),
+								   @ColumnResult(name="name"),
+								   @ColumnResult(name="price"),
+								   @ColumnResult(name="quantity"),
+								   @ColumnResult(name="producer"),
+								   @ColumnResult(name="category"),
+								   @ColumnResult(name="imgurl")
+						   })
+})
+@NamedStoredProcedureQueries({@NamedStoredProcedureQuery(name="productFirstProc", procedureName="BestProducts", resultSetMappings = {"firstProcMapping"})})
 public class ProductBean {
 
 	@Id
