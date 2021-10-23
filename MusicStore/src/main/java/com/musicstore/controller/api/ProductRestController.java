@@ -1,7 +1,7 @@
 package com.musicstore.controller.api;
 
-import java.util.List;
 import java.util.Map;
+import java.util.List;
 import java.util.ArrayList; 
 import java.util.Optional;
 
@@ -40,6 +40,11 @@ public class ProductRestController {
 	private DbProductService productService; 
 	
 	public ProductRestController() {}
+	
+	@RequestMapping("/musicstore/api/product/best")
+	public List<ProductBean> BestProducts(){
+		return productService.BestProducts();
+	}
 	
 	@RequestMapping("/musicstore/api/product")
 	public Iterable<ProductBean> getAll(){

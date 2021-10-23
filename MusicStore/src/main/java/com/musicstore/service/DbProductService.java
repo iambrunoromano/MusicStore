@@ -1,6 +1,5 @@
 package com.musicstore.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,11 +13,24 @@ import org.springframework.http.HttpStatus;
 import com.musicstore.repository.IProductRepository;
 import com.musicstore.model.ProductBean;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.StoredProcedureQuery;
+
 @Service
 public class DbProductService {
 	
 	@Autowired
 	private IProductRepository productRepository; 
+	
+	@PersistenceContext
+	private EntityManager em;
+		
+	public List<ProductBean> BestProducts(){
+		StoredProcedureQuery spq = em.createNamedStoredProcedureQuery("productFirstProc");
+		spq.execute();
+		return spq.getResultList();
+	}
 	
 	public Iterable<ProductBean> getAll(){
 		return productRepository.findAll();

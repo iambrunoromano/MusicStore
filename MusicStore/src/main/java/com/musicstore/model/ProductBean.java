@@ -2,12 +2,20 @@ package com.musicstore.model;
 
 import java.util.Objects;
 import javax.persistence.Entity;
+import javax.persistence.NamedStoredProcedureQueries;
+import javax.persistence.NamedStoredProcedureQuery;
+import javax.persistence.SqlResultSetMapping;
+import javax.persistence.ConstructorResult;
+import javax.persistence.ColumnResult;
 import javax.persistence.OneToOne;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.musicstore.pojos.BestProducts;
+
 @Entity
+@NamedStoredProcedureQueries({@NamedStoredProcedureQuery(name="productFirstProc", procedureName="BestProducts")})
 public class ProductBean {
 
 	@Id
