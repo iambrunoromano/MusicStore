@@ -15,24 +15,24 @@ import javax.persistence.Id;
 import com.musicstore.pojos.BestProducts;
 
 @Entity
-@SqlResultSetMapping(name="firstProcMapping", classes= {
+@SqlResultSetMapping(name="firstProductProcMapping", classes= {
 		@ConstructorResult(targetClass = BestProducts.class,
 						   columns = {
-								   @ColumnResult(name="id"),
-								   @ColumnResult(name="name"),
-								   @ColumnResult(name="price"),
-								   @ColumnResult(name="quantity"),
-								   @ColumnResult(name="producer"),
-								   @ColumnResult(name="category"),
-								   @ColumnResult(name="imgurl")
+								   @ColumnResult(name="id", type = Integer.class),
+								   @ColumnResult(name="name", type = String.class),
+								   @ColumnResult(name="price", type = Double.class),
+								   @ColumnResult(name="quantity", type = Integer.class),
+								   @ColumnResult(name="producer", type = String.class),
+								   @ColumnResult(name="category", type = Integer.class),
+								   @ColumnResult(name="imgurl", type = String.class)
 						   })
 })
-@NamedStoredProcedureQueries({@NamedStoredProcedureQuery(name="productFirstProc", procedureName="BestProducts", resultSetMappings = {"firstProcMapping"})})
+@NamedStoredProcedureQueries({@NamedStoredProcedureQuery(name="productFirstProc", procedureName="BestProducts", resultSetMappings = {"firstProductProcMapping"})})
 public class ProductBean {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private int  id;
 	
 	private String name;
 	private double price;

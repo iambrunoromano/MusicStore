@@ -1,19 +1,16 @@
 package com.musicstore.pojos;
 
-import java.math.BigInteger;
-import java.math.BigDecimal;
-
 public class BestProducts {
 	
-	public BigInteger id;
+	public Integer id;
 	public String name;
-	public BigDecimal price;
-	public BigInteger quantity;
+	public Double price;
+	public Integer quantity;
 	public String producer;
-	public BigInteger category;
+	public Integer category;
 	public String imgurl;
-	public BestProducts(BigInteger id, String name, BigDecimal price, BigInteger quantity, String producer,
-			BigInteger category, String imgurl) {
+	public BestProducts(Integer id, String name, Double price, Integer quantity, String producer,
+			Integer category, String imgurl) {
 		super();
 		this.id = id;
 		this.name = name;
