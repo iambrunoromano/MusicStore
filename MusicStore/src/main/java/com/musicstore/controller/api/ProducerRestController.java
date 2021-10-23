@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.musicstore.model.CustomerBean;
 import com.musicstore.model.ProducerBean;
+import com.musicstore.model.ProductBean;
 import com.musicstore.model.WebUserBean;
 import com.musicstore.service.DbAdminService;
 import com.musicstore.service.DbProducerService;
@@ -36,6 +37,11 @@ public class ProducerRestController {
 	private DbProducerService producerService; 
 	
 	public ProducerRestController() {}
+	
+	@RequestMapping("/musicstore/api/producer/best")
+	public List<ProducerBean> BestProducers(){
+		return producerService.BestProducers();
+	}
 	
 	@RequestMapping("/musicstore/api/producer")
 	public Iterable<ProducerBean> getAll(@RequestBody WebUserBean b){

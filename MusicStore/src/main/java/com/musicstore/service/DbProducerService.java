@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.StoredProcedureQuery;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +18,12 @@ import org.springframework.http.HttpStatus;
 import com.musicstore.repository.IProducerRepository;
 import com.musicstore.model.AdminBean;
 import com.musicstore.model.ProducerBean;
+import com.musicstore.model.ProductBean;
 import com.musicstore.model.WebUserBean;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.StoredProcedureQuery;
 
 @Service
 public class DbProducerService {
@@ -22,6 +31,14 @@ public class DbProducerService {
 	@Autowired
 	private IProducerRepository ProducerRepository; 
 	
+	@PersistenceContext
+	private EntityManager em;
+		
+	public List<ProducerBean> BestProducers(){
+		StoredProcedureQuery spq = em.createNamedStoredProcedureQuery("producerFirstProc");
+		spq.execute();
+		return spq.getResultList();
+	}
 	public Iterable<ProducerBean> getAll(){
 		return ProducerRepository.findAll();
 	}
