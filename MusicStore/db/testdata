@@ -38,3 +38,8 @@ insert into soldprod values(1,'testmail',2);
 insert into soldprod values(2,'testmail',1);
 insert into soldprod values(3,'testmail2',4);
 insert into soldprod values(4,'testmail2',3);
+
+INSERT INTO boughtitems VALUES ('testmail',1,2,1, 1000.00);
+INSERT INTO boughtitems VALUES ('testmail',2,2,1, 500.00);
+INSERT INTO boughtitems VALUES ('testmail',3,2,1, 500.00);
+UPDATE order_bean SET total=2000.00 where id=2;

@@ -100,3 +100,14 @@ DELIMITER ;
 
 SHOW PROCEDURE STATUS WHERE Db = 'musicstore';
 DROP PROCEDURE BestProducers;
+
+CREATE TABLE boughtitems(
+mail VARCHAR(255) NOT NULL,
+productId INT NOT NULL,
+orderId INT NOT NULL,
+quantity INT NOT NULL,
+price NUMERIC(10,2) NOT NULL,
+FOREIGN KEY (mail) REFERENCES web_user_bean(mail),
+FOREIGN KEY (productId) REFERENCES product_bean(id),
+FOREIGN KEY (orderId) REFERENCES order_bean(id)
+);	
