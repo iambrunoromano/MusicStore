@@ -52,6 +52,7 @@ FOREIGN KEY (category) REFERENCES category_bean(id)
 CREATE TABLE cart_bean(
 id INT PRIMARY KEY AUTO_INCREMENT,
 product_id INT NOT NULL,
+quantity INT NOT NULL,
 mail VARCHAR(255) NOT NULL,
 date DATETIME NOT NULL,
 FOREIGN KEY (product_id) REFERENCES product_bean(id),

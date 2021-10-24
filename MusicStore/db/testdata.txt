@@ -1,5 +1,5 @@
 INSERT INTO admin_bean(mail, name, surname, phone_number) VALUES ('testmail','testadminname','testadminsurname',0123456789);
-INSERT INTO cart_bean(product_id, mail, date) VALUES (1,'testmail',now());
+INSERT INTO cart_bean(product_id, quantity, mail, date) VALUES (1, 2,'testmail',now());
 
 INSERT INTO category_bean(name, parent,imgurl) VALUES ('GENERAL',1,'testlink'), ('MUSICAL INSTRUMENT', 1,'testlink'), ('MUSIC SHEET', 1,'testlink');
 UPDATE category_bean SET name='All',parent=1,imgurl='../assets/img/categories/general.jpg' WHERE id=1;
