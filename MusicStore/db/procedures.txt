@@ -1,0 +1,32 @@
+------------------------------BestProducts-----------------------
+DELIMITER //
+CREATE PROCEDURE BestProducts()
+BEGIN
+	select id, name, price, quantity, producer, category, imgurl from product_bean as pb inner join (select productId, soldQuantity from soldprod) as ex on pb.id = ex.productId order by ex.soldQuantity desc;
+END //
+DELIMITER ;
+------------------------------BestProducers-----------------------
+DELIMITER //
+CREATE PROCEDURE BestProducers()
+BEGIN
+	select mail, name, address  from producer_bean as pb inner join (select producerId, sum(soldQuantity) as sumsQ from soldprod group by producerId) as ex on pb.mail = ex.producerId order by sumsQ desc;
+END //
+DELIMITER ;
+-------------------------------CartToOrder------------------------
+DELIMITER //
+CREATE PROCEDURE CartToOrder(IN user_mail VARCHAR(255))
+BEGIN
+	DECLARE itemsprice NUMERIC(8,2) DEFAULT 0.0;
+	DECLARE lastorder INT DEFAULT 0;
+	DECLARE mailCart INT DEFAULT 0;
+	DECLARE product_idCart INT DEFAULT 0;
+	select sum(pb.price*subq.quantity) into itemsprice from product_bean as pb inner join (select * from cart_bean where mail=user_mail) as subq on pb.id=subq.product_id;
+	INSERT INTO order_bean(mail, date, total) VALUES ('testmail', now(), itemsprice);
+	SELECT max(id) into lastorder from order_bean;
+	INSERT INTO boughtitems SELECT mail,product_id,lastorder,quantity, (select price from product_bean as pb where pb.id=product_id) FROM cart_bean WHERE mail=user_mail;
+	DELETE FROM cart_bean WHERE mail=user_mail;
+END //
+DELIMITER ;
+	
+-------------------------------ShowProcedures------------------------
+SHOW PROCEDURE STATUS WHERE Db = 'musicstore';
