@@ -41,7 +41,7 @@ public class ShipmentRestController {
 	
 	public ShipmentRestController() {}
 	
-	@RequestMapping(value="/musicstore/api/shipment", method = RequestMethod.POST)
+	@RequestMapping(value="/musicstore/api/shipment/all", method = RequestMethod.POST)
 	public Iterable<ShipmentBean> getAll(@RequestBody WebUserBean b){
 		if(!adminService.isAdmin(b))
 		{

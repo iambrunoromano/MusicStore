@@ -39,7 +39,7 @@ public class OrderRestController{
 	
 	public OrderRestController() {}
 	
-	@RequestMapping(value="/musicstore/api/order", method = RequestMethod.POST)
+	@RequestMapping(value="/musicstore/api/order/all", method = RequestMethod.POST)
 	public Iterable<OrderBean> getAll(@RequestBody WebUserBean b){
 		if(!adminService.isAdmin(b))
 		{

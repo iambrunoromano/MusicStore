@@ -37,7 +37,7 @@ public class CategoryRestController {
 	
 	public CategoryRestController() {}
 	
-	@RequestMapping(value="/musicstore/api/category", method = RequestMethod.POST)
+	@RequestMapping(value="/musicstore/api/category/all", method = RequestMethod.POST)
 	public Iterable<CategoryBean> getAll(){
 		return categoryService.getAll();
 	}

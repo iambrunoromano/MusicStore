@@ -37,7 +37,7 @@ public class CartRestController {
 	
 	public CartRestController() {}
 	
-	@RequestMapping(value="/musicstore/api/cart", method = RequestMethod.POST)
+	@RequestMapping(value="/musicstore/api/cart/all", method = RequestMethod.POST)
 	public Iterable<CartBean> getAll(@RequestBody WebUserBean b){
 		if(!adminService.isAdmin(b))
 		{

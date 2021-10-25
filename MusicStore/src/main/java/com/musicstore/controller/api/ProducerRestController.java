@@ -43,7 +43,7 @@ public class ProducerRestController {
 		return producerService.BestProducers();
 	}
 	
-	@RequestMapping(value="/musicstore/api/producer", method = RequestMethod.POST)
+	@RequestMapping(value="/musicstore/api/producer/all", method = RequestMethod.POST)
 	public Iterable<ProducerBean> getAll(@RequestBody WebUserBean b){
 		if(!adminService.isAdmin(b))
 		{

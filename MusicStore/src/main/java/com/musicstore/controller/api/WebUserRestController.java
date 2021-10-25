@@ -33,7 +33,7 @@ public class WebUserRestController {
 	
 	public WebUserRestController() {}
 	
-	@RequestMapping(value="/musicstore/api/webuser", method = RequestMethod.POST)
+	@RequestMapping(value="/musicstore/api/webuser/all", method = RequestMethod.POST)
 	public Iterable<WebUserBean> getAll(@RequestBody WebUserBean b){
 		if(!adminService.isAdmin(b))
 		{

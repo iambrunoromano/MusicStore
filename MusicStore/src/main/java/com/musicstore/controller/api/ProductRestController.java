@@ -46,7 +46,7 @@ public class ProductRestController {
 		return productService.BestProducts();
 	}
 	
-	@RequestMapping("/musicstore/api/product")
+	@RequestMapping("/musicstore/api/product/all")
 	public Iterable<ProductBean> getAll(){
 		return productService.getAll();
 	}

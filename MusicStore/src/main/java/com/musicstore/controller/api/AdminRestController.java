@@ -34,7 +34,7 @@ public class AdminRestController {
 	
 	public AdminRestController() {}
 	
-	@RequestMapping(value="/musicstore/api/admin", method = RequestMethod.POST)
+	@RequestMapping(value="/musicstore/api/admin/all", method = RequestMethod.POST)
 	public Iterable<AdminBean> getAll(@RequestBody WebUserBean b){
 		if(!adminService.isAdmin(b))
 		{

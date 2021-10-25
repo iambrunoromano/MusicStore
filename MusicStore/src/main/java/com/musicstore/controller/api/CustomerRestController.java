@@ -37,7 +37,7 @@ public class CustomerRestController {
 	
 	public CustomerRestController() {}
 	
-	@RequestMapping(value="/musicstore/api/customer", method = RequestMethod.POST)
+	@RequestMapping(value="/musicstore/api/customer/all", method = RequestMethod.POST)
 	public Iterable<CustomerBean> getAll(@RequestBody WebUserBean b){
 		if(!adminService.isAdmin(b))
 		{
