@@ -41,7 +41,7 @@ public class ShipmentRestController {
 	
 	public ShipmentRestController() {}
 	
-	@RequestMapping("/musicstore/api/shipment")
+	@RequestMapping(value="/musicstore/api/shipment", method = RequestMethod.POST)
 	public Iterable<ShipmentBean> getAll(@RequestBody WebUserBean b){
 		if(!adminService.isAdmin(b))
 		{
@@ -50,7 +50,7 @@ public class ShipmentRestController {
 		return shipmentService.getAll();
 	}
 	
-	@RequestMapping("/musicstore/api/shipment/{id}")
+	@RequestMapping(value="/musicstore/api/shipment/{id}", method = RequestMethod.POST)
 	public ShipmentBean getById(@PathVariable int id,@RequestBody WebUserBean b){
 		ShipmentBean sb = shipmentService.getById(id).get();
 		if(!orderService.getById(sb.getIdOrder()).get().getMail().equals(b.getMail()) && !adminService.isAdmin(b) || !webuserService.isWebUser(b)){
@@ -59,7 +59,7 @@ public class ShipmentRestController {
 		return shipmentService.getById(id).get();
 	}
 
-	@RequestMapping(value  ="/musicstore/api/shipment", method = RequestMethod.POST)
+	@RequestMapping(value="/musicstore/api/shipment", method = RequestMethod.POST)
 	public ShipmentBean create(@RequestBody Map<String, Map<String,String>> map) {
 		ShipmentBean sb = Utility.shipmentDeMap(map.get("topost"));
 		WebUserBean b = Utility.webuserDeMap(map.get("authorized"));
@@ -71,7 +71,7 @@ public class ShipmentRestController {
 		return shipmentService.create(sb);
 	}
 	
-	@RequestMapping(value  ="/musicstore/api/shipment/{id}", method = RequestMethod.PUT)
+	@RequestMapping(value="/musicstore/api/shipment/{id}", method = RequestMethod.PUT)
 	public ShipmentBean update(@PathVariable int id, @RequestBody Map<String, Map<String,String>> map) {
 		ShipmentBean sb = Utility.shipmentDeMap(map.get("topost"));
 		WebUserBean b = Utility.webuserDeMap(map.get("authorized"));
@@ -88,7 +88,7 @@ public class ShipmentRestController {
 		return updatedShipment.get();
 	}
 	
-	@RequestMapping(value  ="/musicstore/api/shipment/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value="/musicstore/api/shipment/{id}", method = RequestMethod.DELETE)
 	public void delete(@PathVariable int id, @RequestBody WebUserBean b) {
 		if(!adminService.isAdmin(b)) {
 			if(!webuserService.isWebUser(b) || !b.getMail().equals(orderService.getById(shipmentService.getById(id).get().getIdOrder()).get().getMail())){

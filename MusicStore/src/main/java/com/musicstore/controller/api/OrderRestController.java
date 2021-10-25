@@ -39,7 +39,7 @@ public class OrderRestController{
 	
 	public OrderRestController() {}
 	
-	@RequestMapping("/musicstore/api/order")
+	@RequestMapping(value="/musicstore/api/order", method = RequestMethod.POST)
 	public Iterable<OrderBean> getAll(@RequestBody WebUserBean b){
 		if(!adminService.isAdmin(b))
 		{
@@ -48,7 +48,7 @@ public class OrderRestController{
 		return orderService.getAll();
 	}
 	
-	@RequestMapping("/musicstore/api/order/{id}")
+	@RequestMapping(value="/musicstore/api/order/{id}", method = RequestMethod.POST)
 	public OrderBean getById(@PathVariable int id,@RequestBody WebUserBean b){
 		if(!orderService.getById(id).get().getMail().equals(b.getMail()) && !adminService.isAdmin(b) || !webuserService.isWebUser(b)){
 			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");

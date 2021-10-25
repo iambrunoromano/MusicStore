@@ -37,7 +37,7 @@ public class CartRestController {
 	
 	public CartRestController() {}
 	
-	@RequestMapping("/musicstore/api/cart")
+	@RequestMapping(value="/musicstore/api/cart", method = RequestMethod.POST)
 	public Iterable<CartBean> getAll(@RequestBody WebUserBean b){
 		if(!adminService.isAdmin(b))
 		{
@@ -46,7 +46,7 @@ public class CartRestController {
 		return cartService.getAll();
 	}
 	
-	@RequestMapping("/musicstore/api/cart/{id}")
+	@RequestMapping(value="/musicstore/api/cart/{id}", method = RequestMethod.POST)
 	public CartBean getById(@PathVariable int id,@RequestBody WebUserBean b){
 		if(!cartService.getById(id).get().getMail().equals(b.getMail())){
 			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");

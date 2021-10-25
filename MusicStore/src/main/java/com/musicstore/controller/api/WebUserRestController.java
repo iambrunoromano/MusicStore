@@ -33,7 +33,7 @@ public class WebUserRestController {
 	
 	public WebUserRestController() {}
 	
-	@RequestMapping("/musicstore/api/webuser")
+	@RequestMapping(value="/musicstore/api/webuser", method = RequestMethod.POST)
 	public Iterable<WebUserBean> getAll(@RequestBody WebUserBean b){
 		if(!adminService.isAdmin(b))
 		{
@@ -42,7 +42,7 @@ public class WebUserRestController {
 		return webuserService.getAll();
 	}
 	
-	@RequestMapping("/musicstore/api/webuser/{id}")
+	@RequestMapping(value="/musicstore/api/webuser/{id}", method = RequestMethod.POST)
 	public WebUserBean getById(@PathVariable String id,@RequestBody WebUserBean b){
 		if(!adminService.isAdmin(b) && !webuserService.isWebUser(b)){
 			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
@@ -50,7 +50,7 @@ public class WebUserRestController {
 		return webuserService.getById(id).get();
 	}
 	
-	@RequestMapping("/musicstore/api/webuserlogin")
+	@RequestMapping(value="/musicstore/api/webuserlogin", method = RequestMethod.POST)
 	public LoggedIn login(@RequestBody WebUserBean b){
 		LoggedIn logged = new LoggedIn();
 		if(b.getMail().equals(webuserService.getById(b.getMail()).get().getMail()) && 
@@ -63,7 +63,7 @@ public class WebUserRestController {
 		return logged;
 	}
 
-	@RequestMapping("/musicstore/api/webuserlogout")
+	@RequestMapping(value="/musicstore/api/webuserlogout", method = RequestMethod.POST)
 	public LoggedIn logout(@RequestBody WebUserBean b){
 		LoggedIn logged = new LoggedIn();
 		if(b.getMail().equals(webuserService.getById(b.getMail()).get().getMail()) && 

@@ -37,7 +37,7 @@ public class CustomerRestController {
 	
 	public CustomerRestController() {}
 	
-	@RequestMapping("/musicstore/api/customer")
+	@RequestMapping(value="/musicstore/api/customer", method = RequestMethod.POST)
 	public Iterable<CustomerBean> getAll(@RequestBody WebUserBean b){
 		if(!adminService.isAdmin(b))
 		{
@@ -46,7 +46,7 @@ public class CustomerRestController {
 		return customerService.getAll();
 	}
 	
-	@RequestMapping("/musicstore/api/customer/{id}")
+	@RequestMapping(value="/musicstore/api/customer/{id}", method = RequestMethod.POST)
 	public CustomerBean getById(@PathVariable String id,@RequestBody WebUserBean b){
 		if(!adminService.isAdmin(b) && !(webuserService.isWebUser(b) && b.getMail().equals(id))){
 			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
@@ -54,12 +54,12 @@ public class CustomerRestController {
 		return customerService.getById(id).get();
 	}
 
-	@RequestMapping(value  ="/musicstore/api/customer", method = RequestMethod.POST)
+	@RequestMapping(value="/musicstore/api/customer", method = RequestMethod.POST)
 	public CustomerBean create(@RequestBody CustomerBean p) {
 		return customerService.create(p);
 	}
 	
-	@RequestMapping(value  ="/musicstore/api/customer/{id}", method = RequestMethod.PUT)
+	@RequestMapping(value="/musicstore/api/customer/{id}", method = RequestMethod.PUT)
 	public CustomerBean update(@PathVariable String id,@RequestBody Map<String, Map<String,String>> map) {
 		CustomerBean cb = Utility.customerDeMap(map.get("toput"));
 		WebUserBean b = Utility.webuserDeMap(map.get("authorized"));
@@ -76,7 +76,7 @@ public class CustomerRestController {
 		return updatedCustomer.get();
 	}
 	
-	@RequestMapping(value  ="/musicstore/api/customer/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value="/musicstore/api/customer/{id}", method = RequestMethod.DELETE)
 	public void delete(@PathVariable String id, @RequestBody WebUserBean b) {
 		if(!adminService.isAdmin(b)){
 			if(!webuserService.isWebUser(b) || !b.getMail().equals(customerService.getById(id).get().getMail())){

@@ -43,7 +43,7 @@ public class ProducerRestController {
 		return producerService.BestProducers();
 	}
 	
-	@RequestMapping("/musicstore/api/producer")
+	@RequestMapping(value="/musicstore/api/producer", method = RequestMethod.POST)
 	public Iterable<ProducerBean> getAll(@RequestBody WebUserBean b){
 		if(!adminService.isAdmin(b))
 		{
@@ -52,7 +52,7 @@ public class ProducerRestController {
 		return producerService.getAll();
 	}
 	
-	@RequestMapping("/musicstore/api/producer/{id}")
+	@RequestMapping(value="/musicstore/api/producer/{id}", method = RequestMethod.POST)
 	public ProducerBean getById(@PathVariable String id,@RequestBody WebUserBean b){
 		if(!adminService.isAdmin(b) && !(webuserService.isWebUser(b) && b.getMail().equals(id))){
 			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");

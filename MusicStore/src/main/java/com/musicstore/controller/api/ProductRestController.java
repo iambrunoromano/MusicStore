@@ -51,7 +51,7 @@ public class ProductRestController {
 		return productService.getAll();
 	}
 	
-	@RequestMapping("/musicstore/api/product/{id}")
+	@RequestMapping(value="/musicstore/api/product/{id}", method = RequestMethod.POST)
 	public ProductBean getById(@PathVariable int id){
 		Optional<ProductBean> product = productService.getById(id);
 		if(product.isEmpty()){
