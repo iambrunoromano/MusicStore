@@ -37,12 +37,12 @@ public class CategoryRestController {
 	
 	public CategoryRestController() {}
 	
-	@RequestMapping(value="/musicstore/api/category/all", method = RequestMethod.POST)
+	@RequestMapping("/musicstore/api/category/all")
 	public Iterable<CategoryBean> getAll(){
 		return categoryService.getAll();
 	}
 	
-	@RequestMapping(value="/musicstore/api/category/{id}", method = RequestMethod.POST)
+	@RequestMapping("/musicstore/api/category/{id}")
 	public CategoryBean getById(@PathVariable int id){
 		/*EVERYONE SHOULD BE ABLE TO GET INFOS ABOUT SPECIFIC CATEGORY*/
 		Optional<CategoryBean> category = categoryService.getById(id);
