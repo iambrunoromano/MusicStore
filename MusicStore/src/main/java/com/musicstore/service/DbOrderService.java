@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.StoredProcedureQuery;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,12 +17,22 @@ import org.springframework.http.HttpStatus;
 
 import com.musicstore.repository.IOrderRepository;
 import com.musicstore.model.OrderBean;
+import com.musicstore.model.ProductBean;
+import com.musicstore.model.WebUserBean;
+import com.musicstore.pojos.CartToOrderBI;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.StoredProcedureQuery;
 
 @Service
-public class DbOrderService {
+public class DbOrderService{
 	
 	@Autowired
 	private IOrderRepository OrderRepository; 
+
+	@PersistenceContext
+	private EntityManager em;
 	
 	public Iterable<OrderBean> getAll(){
 		return OrderRepository.findAll();
@@ -28,8 +42,11 @@ public class DbOrderService {
 		return OrderRepository.findById(id);
 	}
 	
-	public OrderBean create(OrderBean p) {
-		return OrderRepository.save(p);
+	public List<CartToOrderBI> create(WebUserBean b){
+		StoredProcedureQuery spq = em.createNamedStoredProcedureQuery("orderFirstProc");
+		spq.setParameter("user_mail", b.getMail());
+		spq.execute();
+		return spq.getResultList();
 	}
 	
 	public Optional<OrderBean> update(int id,OrderBean p) {

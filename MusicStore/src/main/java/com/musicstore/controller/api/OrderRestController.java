@@ -2,6 +2,7 @@ package com.musicstore.controller.api;
 
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.ArrayList; 
 import java.util.Optional;
 
@@ -18,13 +19,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.musicstore.model.CartBean;
 import com.musicstore.model.OrderBean;
 import com.musicstore.model.WebUserBean;
+import com.musicstore.pojos.CartToOrderBI;
 import com.musicstore.service.DbAdminService;
 import com.musicstore.service.DbOrderService;
 import com.musicstore.service.DbWebUserService;
 import com.musicstore.utility.Utility;
 
 @RestController
-public class OrderRestController {
+public class OrderRestController{
 
 	@Autowired
 	private DbAdminService adminService; 
@@ -55,15 +57,18 @@ public class OrderRestController {
 	}
 
 	@RequestMapping(value  ="/musicstore/api/order", method = RequestMethod.POST)
-	public OrderBean create(@RequestBody Map<String, Map<String,String>> map) {
-		OrderBean ob = Utility.orderDeMap(map.get("topost"));
-		WebUserBean b = Utility.webuserDeMap(map.get("authorized"));
+	public HashMap<String, Object> create(@RequestBody WebUserBean b) {
 		if(!adminService.isAdmin(b)) {
-			if(!webuserService.isWebUser(b) || !b.getMail().equals(ob.getMail())){
+			if(!webuserService.isWebUser(b)){
 				throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an authorized");
 			}
 		}
-		return orderService.create(ob);
+		List<CartToOrderBI> lbi = orderService.create(b);
+		OrderBean ob = this.getById(lbi.get(0).orderId, b);
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("order", ob);
+		map.put("boughtitems", lbi);
+		return map;			
 	}
 	
 	@RequestMapping(value  ="/musicstore/api/order/{id}", method = RequestMethod.PUT)

@@ -1,6 +1,6 @@
 package com.musicstore.pojos;
 
-public class CartToOrderBI {
+public class CartToOrderBI{
 
 	public String mail;
 	public Integer productId;
