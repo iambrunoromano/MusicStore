@@ -25,6 +25,9 @@ BEGIN
 	SELECT max(id) into lastorder from order_bean;
 	INSERT INTO boughtitems SELECT mail,product_id,lastorder,quantity, (select price from product_bean as pb where pb.id=product_id) FROM cart_bean WHERE mail=user_mail;
 	DELETE FROM cart_bean WHERE mail=user_mail;
+
+	SELECT * FROM order_bean WHERE id=lastorder;
+	SELECT * FROM boughtitems WHERE orderId=lastorder;
 END //
 DELIMITER ;
 	
