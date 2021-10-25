@@ -30,7 +30,7 @@ export class SearchComponent implements OnInit {
   }
 
   public getMatching(): void{
-    this.productService.getAllProducts().subscribe(
+    this.productService.getAll().subscribe(
       (responseprod: Product[]) => {
         this.products = responseprod;
       },
@@ -38,7 +38,7 @@ export class SearchComponent implements OnInit {
         alert(error.message);
       }
     )
-    this.categoryService.getAllCategories().subscribe(
+    this.categoryService.getAll().subscribe(
       (responsecat: Category[]) => {
         this.categories = responsecat;
       },

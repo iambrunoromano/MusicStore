@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
                         password:(<HTMLInputElement>document.getElementById("password"))?.value};
     /*let body: Body = {authorized: wu};
     console.log(body.authorized);*/
-    this.webuserService.Login(wu).subscribe(
+    this.webuserService.login(wu).subscribe(
       (response: LogStatus) => {
         this.logstatus = response;
         this.router.navigate(['/']);

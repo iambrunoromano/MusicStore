@@ -26,7 +26,7 @@ export class CategoryComponent implements OnInit {
   }
 
   public getByIdCategory(id: number): void{
-    this.categoryService.getByIdCategory(id).subscribe(
+    this.categoryService.getById(id).subscribe(
       (response: Category) => {
         this.category = response;
       },

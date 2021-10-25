@@ -25,8 +25,8 @@ export class ProductComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public getByIdProduct(id: number): void{
-    this.productService.getByIdProduct(id).subscribe(
+  public getById(id: number): void{
+    this.productService.getById(id).subscribe(
       (response: Product) => {
         this.product = response;
       },
