@@ -21,15 +21,15 @@ BEGIN
 	DECLARE mailCart INT DEFAULT 0;
 	DECLARE product_idCart INT DEFAULT 0;
 	select sum(pb.price*subq.quantity) into itemsprice from product_bean as pb inner join (select * from cart_bean where mail=user_mail) as subq on pb.id=subq.product_id;
-	INSERT INTO order_bean(mail, date, total) VALUES ('testmail', now(), itemsprice);
+	INSERT INTO order_bean(mail, date, total) VALUES (user_mail, now(), itemsprice);
 	SELECT max(id) into lastorder from order_bean;
 	INSERT INTO boughtitems SELECT mail,product_id,lastorder,quantity, (select price from product_bean as pb where pb.id=product_id) FROM cart_bean WHERE mail=user_mail;
 	DELETE FROM cart_bean WHERE mail=user_mail;
 
-	SELECT * FROM order_bean WHERE id=lastorder;
 	SELECT * FROM boughtitems WHERE orderId=lastorder;
 END //
 DELIMITER ;
 	
 -------------------------------ShowProcedures------------------------
 SHOW PROCEDURE STATUS WHERE Db = 'musicstore';
+------SELECT * FROM order_bean WHERE id=lastorder;-----
