@@ -3,12 +3,39 @@ package com.musicstore.model;
 import java.sql.Timestamp;
 import java.util.Objects;
 
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedStoredProcedureQueries;
+import javax.persistence.NamedStoredProcedureQuery;
+import javax.persistence.SqlResultSetMapping;
+
+import com.musicstore.pojos.CartToOrderO;
+import com.musicstore.pojos.CartToOrderBI;
+import java.sql.Date;
 
 @Entity
+@SqlResultSetMapping(name="firstOrderProdMapping", classes= {
+		@ConstructorResult(targetClass = CartToOrderO.class,
+						   columns = {
+								   @ColumnResult(name="id", type = Integer.class),
+								   @ColumnResult(name="mail", type = String.class),
+								   @ColumnResult(name="date", type = Date.class),
+								   @ColumnResult(name="total", type = Double.class)
+						   }),
+		@ConstructorResult(targetClass = CartToOrderBI.class,
+		   columns = {
+				   @ColumnResult(name="mail", type = String.class),
+				   @ColumnResult(name="productId", type = Integer.class),
+				   @ColumnResult(name="orderId", type = Integer.class),
+				   @ColumnResult(name="quantity", type = Integer.class),
+				   @ColumnResult(name="price", type = Double.class)
+		   })
+})
+@NamedStoredProcedureQueries({@NamedStoredProcedureQuery(name="orderFirstProc", procedureName="CartToOrder", resultSetMappings = {"firstOrderProdMapping"})})
 public class OrderBean {
 
 	@Id
