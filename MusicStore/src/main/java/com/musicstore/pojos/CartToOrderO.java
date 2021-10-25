@@ -4,12 +4,12 @@ import java.sql.Date;
 
 public class CartToOrderO {
 
-	public String id;
+	public Integer id;
 	public String mail;
 	public Date date;
 	public Double total;
 	
-	public CartToOrderO(String id, String mail, Date date, Double total) {
+	public CartToOrderO(Integer id, String mail, Date date, Double total) {
 		super();
 		this.id = id;
 		this.mail = mail;
