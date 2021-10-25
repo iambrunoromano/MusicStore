@@ -5,7 +5,6 @@ import { HttpHeaders } from '@angular/common/http';
 
 import { Product } from '../interfaces/product';
 import { Body } from '../interfaces/body';
-import { WebUser } from '../interfaces/webuser';
 
 import { environment } from 'src/environments/environment';
 
@@ -20,26 +19,32 @@ export class ProductService{
     })
   }
 
+  private addressAPI: string = "product";
+
   constructor(private http : HttpClient){}
 
-  public getAllProducts(): Observable<Product[]>{
-    return this.http.get<Product[]>(this.root_url + 'product');
+  public bestProducts(): Observable<Product[]>{
+    return this.http.get<Product[]>(this.root_url + this.addressAPI + '/best');
   }
 
-  public getByIdProduct(id: number): Observable<Product>{
-    return this.http.get<Product>(this.root_url + 'product/' + id);
+  public getAll(): Observable<Product[]>{
+    return this.http.get<Product[]>(this.root_url + this.addressAPI + '/all');
   }
 
-  public createProduct(body: Body): Observable<Product>{
-    return this.http.post<Product>(this.root_url + 'product', body);
+  public getById(id: number): Observable<Product>{
+    return this.http.get<Product>(this.root_url + this.addressAPI + '/' + id);
   }
 
-  public updateProduct(body: Body): Observable<Product>{
-    return this.http.put<Product>(this.root_url + 'product/' + body.topost.id, body);
+  public create(body: Body): Observable<Product>{
+    return this.http.post<Product>(this.root_url + this.addressAPI, body);
   }
 
-  public deleteProduct(id: number, webuser: WebUser): Observable<void>{
-    const options = {body: webuser};
-    return this.http.delete<void>(this.root_url + 'product/' + id,options);
+  public update(body: Body): Observable<Product>{
+    return this.http.put<Product>(this.root_url + this.addressAPI + '/' + body.topost.id, body);
+  }
+
+  public delete(body: Body): Observable<void>{
+    const options = {body: body.authorized};
+    return this.http.delete<void>(this.root_url + this.addressAPI + '/' +  body.topost.id,options);
   }
 }

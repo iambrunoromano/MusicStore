@@ -4,7 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
 import { Category } from '../interfaces/category';
-import { WebUser } from '../interfaces/webuser';
 import { Body } from '../interfaces/body';
 
 import { environment } from 'src/environments/environment';
@@ -20,26 +19,28 @@ export class CategoryService{
     })
   }
 
+  private addressAPI: string = "category";
+
   constructor(private http : HttpClient){}
 
-  public getAllCategories(): Observable<Category[]>{
-    return this.http.get<Category[]>(this.root_url + 'category');
+  public getAll(): Observable<Category[]>{
+    return this.http.get<Category[]>(this.root_url + this.addressAPI);
   }
 
-  public getByIdCategory(id: number): Observable<Category>{
-    return this.http.get<Category>(this.root_url + 'category/' + id);
+  public getById(id: number): Observable<Category>{
+    return this.http.get<Category>(this.root_url + this.addressAPI + '/' + id);
   }
 
-  public createCategory(body: Body): Observable<Category>{
-    return this.http.post<Category>(this.root_url + 'category', body);
+  public create(body: Body): Observable<Category>{
+    return this.http.post<Category>(this.root_url + this.addressAPI, body);
   }
 
-  public updateCategory(body: Body): Observable<Category>{
-    return this.http.put<Category>(this.root_url + 'category/' + body.topost.id, body);
+  public update(body: Body): Observable<Category>{
+    return this.http.put<Category>(this.root_url + this.addressAPI + '/' + body.topost.id, body);
   }
 
-  public deleteCategory(id: number, webuser: WebUser): Observable<void>{
-    const options = {body: webuser};
-    return this.http.delete<void>(this.root_url + 'category/' + id,options);
+  public delete(body: Body): Observable<void>{
+    const options = {body: body.authorized};
+    return this.http.delete<void>(this.root_url + this.addressAPI + '/' + body.topost.id,options);
   }
 }

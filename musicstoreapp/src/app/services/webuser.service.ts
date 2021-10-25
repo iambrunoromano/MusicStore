@@ -20,9 +20,36 @@ export class WebUserService{
     })
   }
 
+  private addressAPI: string = "webuser";
+
   constructor(private http : HttpClient){}
 
-  public Login(wu: WebUser): Observable<LogStatus>{
-    return this.http.post<LogStatus>(this.root_url + 'webuserlogin',wu);
+  public getAll(wu: WebUser): Observable<WebUser[]>{
+    return this.http.post<WebUser[]>(this.root_url + this.addressAPI + '/all',wu);
+  }
+
+  public getById(body: Body): Observable<WebUser>{
+    return this.http.post<WebUser>(this.root_url + this.addressAPI + '/' + body.topost.mail,body.authorized);
+  }
+
+  public login(wu: WebUser): Observable<LogStatus>{
+    return this.http.post<LogStatus>(this.root_url + this.addressAPI + 'login',wu);
+  }
+
+  public logout(wu: WebUser): Observable<LogStatus>{
+    return this.http.post<LogStatus>(this.root_url + this.addressAPI + 'logout',wu);
+  }
+
+  public create(body: Body): Observable<WebUser>{
+    return this.http.post<WebUser>(this.root_url + this.addressAPI,body);
+  }
+
+  public update(body: Body): Observable<WebUser>{
+    return this.http.put<WebUser>(this.root_url + this.addressAPI + '/' + body.topost.mail,body);
+  }
+
+  public delete(body: Body): Observable<void>{
+    const options = {body: body.authorized};
+    return this.http.delete<void>(this.root_url + this.addressAPI + '/' + body.topost.mail,options);
   }
 }
