@@ -24,7 +24,7 @@ export class CategoryService{
   constructor(private http : HttpClient){}
 
   public getAll(): Observable<Category[]>{
-    return this.http.get<Category[]>(this.root_url + this.addressAPI);
+    return this.http.get<Category[]>(this.root_url + this.addressAPI + '/all');
   }
 
   public getById(id: number): Observable<Category>{
