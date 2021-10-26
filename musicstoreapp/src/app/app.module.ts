@@ -16,6 +16,8 @@ import { HomeComponent } from './home/home.component';
 import { AllproductsComponent } from './composedcomponents/allproducts/allproducts.component';
 import { AllcategoriesComponent } from './composedcomponents/allcategories/allcategories.component';
 import { SearchComponent } from './composedcomponents/search/search.component';
+import { BestComponent } from './composedcomponents/best/best.component';
+import { ProducerComponent } from './composedcomponents/producer/producer.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { SearchComponent } from './composedcomponents/search/search.component';
     AllproductsComponent,
     AllcategoriesComponent,
     RegisterComponent,
-    SearchComponent
+    SearchComponent,
+    BestComponent,
+    ProducerComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +39,8 @@ import { SearchComponent } from './composedcomponents/search/search.component';
     HttpClientModule
   ],
   providers: [AllproductsComponent,
-              AllcategoriesComponent],
+              AllcategoriesComponent,
+              BestComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
