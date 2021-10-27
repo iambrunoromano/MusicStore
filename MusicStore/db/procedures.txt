@@ -32,4 +32,17 @@ DELIMITER ;
 	
 -------------------------------ShowProcedures------------------------
 SHOW PROCEDURE STATUS WHERE Db = 'musicstore';
-------SELECT * FROM order_bean WHERE id=lastorder;-----
+-------------------------------ProductsByProducer------------------------
+DELIMITER //
+CREATE PROCEDURE ProductsByProducer(IN producerMail VARCHAR(255))
+BEGIN
+	SELECT * FROM product_bean WHERE producer=producerMail;
+END //
+DELIMITER ;
+-------------------------------CategoryByProducer------------------------
+DELIMITER //
+CREATE PROCEDURE CategoryByProducer(IN producerMail VARCHAR(255))
+BEGIN
+	SELECT *  FROM category_bean WHERE id IN (SELECT DISTINCT(category) FROM product_bean WHERE producer=producerMail);
+END //
+DELIMITER ;
