@@ -46,3 +46,10 @@ BEGIN
 	SELECT *  FROM category_bean WHERE id IN (SELECT DISTINCT(category) FROM product_bean WHERE producer=producerMail);
 END //
 DELIMITER ;
+-------------------------------ProductsByCart------------------------------
+DELIMITER //
+CREATE PROCEDURE ProductsByCart(IN user_mail VARCHAR(255))
+BEGIN
+	SELECT * FROM product_bean WHERE id IN (SELECT product_id FROM cart_bean WHERE mail=user_mail);
+END //
+DELIMITER ;
