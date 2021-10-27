@@ -15,6 +15,7 @@ export class DataService{
 
   constructor(){
     this.initUserData();
+    this.setLogStatus(false);
   }
 
   public getUserData(): WebUser{
