@@ -1,10 +1,10 @@
 .horizontal-slider{
   display: block;
-  width: 130%;
+  width: 100%;
   overflow-x:scroll;
 }
 
-.slider-container{
+.horizontal-slider .slider-container{
   display: block;
   white-space:nowrap;
 }
