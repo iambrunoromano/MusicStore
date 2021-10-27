@@ -3,10 +3,13 @@ import { Injectable } from '@angular/core';
 
 import { HttpErrorResponse } from '@angular/common/http';
 
+import { WebUser } from '../../interfaces/webuser';
 import { Product } from '../../interfaces/product';
 import { ProductService } from '../../services/product.service';
 import { Producer } from '../../interfaces/producer';
 import { ProducerService } from '../../services/producer.service';
+import { CartService } from '../../services/cart.service';
+import { DataService } from '../../services/data.service';
 
 import { Router } from '@angular/router';
 
@@ -21,16 +24,25 @@ import { Router } from '@angular/router';
 export class BestComponent implements OnInit {
 
   public products: Product[] = [];
+  public productsCart: Product[] = [];
   public producers: Producer[] = [];
+  public logged: boolean;
 
   constructor(private productService : ProductService,
               private producerService : ProducerService,
+              private cartService : CartService,
+              private dataService : DataService,
               private router : Router) {
               this.getBestProducts();
               this.getBestProducers();
+              this.logged = false;
   }
 
   ngOnInit(): void {
+    this.logged = this.dataService.getLogStatus().logstatus;
+    if(this.logged){
+      this.getCart(this.dataService.getUserData());
+    }
   }
 
   public visitstore(mail: String): void{
@@ -52,6 +64,17 @@ export class BestComponent implements OnInit {
     this.producerService.bestProducers().subscribe(
       (response: Producer[]) => {
         this.producers = response;
+      },
+      (error : HttpErrorResponse) => {
+        alert(error.message);
+      }
+    );
+  }
+
+  public getCart(wu: WebUser): void{
+    this.cartService.ProductsByCart(wu).subscribe(
+      (response: Product[]) => {
+        this.productsCart = response;
       },
       (error : HttpErrorResponse) => {
         alert(error.message);
