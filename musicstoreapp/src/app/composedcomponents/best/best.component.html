@@ -5,8 +5,8 @@
       <div class="slider-container">
         <div class="card" id="product" *ngFor = "let item of products">
           <img src={{item.imgurl}} class="card__image" alt="" />
-          <button>
-            <a href="#">Add to cart</a>
+          <button (click)="addtocart(item)">
+            <a>Add to cart</a>
           </button>
           <p>{{item.name}}</p>
           <p>{{item.price}} €</p>
@@ -20,8 +20,8 @@
     <div class="horizontal-slider">
       <div class="slider-container">
         <div class="card" id="producer" *ngFor = "let item of producers">
-          <button>
-            <a (click)="visitstore(item.mail)">Visit {{item.name}} Store</a>
+          <button (click)="visitstore(item.mail)">
+            <a>Visit {{item.name}} Store</a>
           </button>
           <p>Contact : {{item.mail}} €</p>
           <p>Address : {{item.address}}</p>
@@ -39,7 +39,7 @@
           <img src={{item.imgurl}} class="card__image" alt="" />
           <p>{{item.name}}</p>
           <p>{{item.price}} €</p>
-          <p>Stock : {{item.quantity}}</p>
+          <p>Ordered : {{item.quantity}}</p>
           <p>Producer : {{item.producer}}</p>
           <p>Category : {{item.category}}</p>
         </div>
