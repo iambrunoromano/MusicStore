@@ -15,8 +15,9 @@ public class CartBean {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
-	private int productId;
+
+	private int product_id;
+	private int quantity;
 	private String mail;
 	private Timestamp date;
 	
@@ -28,11 +29,11 @@ public class CartBean {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getProductId() {
-		return productId;
+	public int getProduct_id() {
+		return product_id;
 	}
-	public void setProductId(int productId) {
-		this.productId = productId;
+	public void setProduct_id(int product_id) {
+		this.product_id = product_id;
 	}
 	public String getMail() {
 		return mail;
@@ -46,10 +47,20 @@ public class CartBean {
 	public void setDate(Timestamp date) {
 		this.date = date;
 	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(date, mail, productId);
+		return Objects.hash(date, id, mail, product_id, quantity);
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -59,11 +70,14 @@ public class CartBean {
 		if (getClass() != obj.getClass())
 			return false;
 		CartBean other = (CartBean) obj;
-		return Objects.equals(date, other.date) && Objects.equals(mail, other.mail) && productId == other.productId;
+		return Objects.equals(date, other.date) && id == other.id && Objects.equals(mail, other.mail)
+				&& product_id == other.product_id && quantity == other.quantity;
 	}
+
 	@Override
 	public String toString() {
-		return "CartBean [productId=" + productId + ", mail=" + mail + ", date=" + date + "]";
+		return "CartBean [id=" + id + ", product_id=" + product_id + ", quantity=" + quantity + ", mail=" + mail
+				+ ", date=" + date + "]";
 	}
 	
 }
