@@ -2,12 +2,37 @@ package com.musicstore.model;
 
 import java.util.Objects;
 
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedStoredProcedureQueries;
+import javax.persistence.NamedStoredProcedureQuery;
+import javax.persistence.ParameterMode;
+import javax.persistence.SqlResultSetMapping;
+import javax.persistence.StoredProcedureParameter;
+
+import com.musicstore.pojos.Categories;
 
 @Entity
+@SqlResultSetMapping(name="firstCategoryProcMapping", classes= {
+		@ConstructorResult(targetClass = Categories.class,
+						   columns = {
+								   @ColumnResult(name="id", type = Integer.class),
+								   @ColumnResult(name="name", type = String.class),
+								   @ColumnResult(name="parent", type = Integer.class),
+								   @ColumnResult(name="imgurl", type = String.class)
+						   })
+})
+@NamedStoredProcedureQueries({
+	@NamedStoredProcedureQuery(
+			name="categoryFirstProc", 
+			procedureName="CategoriesByProducer", 
+			parameters= {@StoredProcedureParameter(mode=ParameterMode.IN, name="producerMail", type=String.class)}, 
+			resultSetMappings = {"firstCategoryProcMapping"})
+	})
 public class CategoryBean {
 
 	@Id

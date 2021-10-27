@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.musicstore.model.CartBean;
 import com.musicstore.model.CategoryBean;
+import com.musicstore.model.ProductBean;
 import com.musicstore.model.WebUserBean;
 import com.musicstore.service.DbAdminService;
 import com.musicstore.service.DbCategoryService;
@@ -36,6 +37,11 @@ public class CategoryRestController {
 	private DbCategoryService categoryService; 
 	
 	public CategoryRestController() {}
+	
+	@RequestMapping("/musicstore/api/category/{mail}/categories")
+	public List<CategoryBean> CategoriesByProducer(@PathVariable String mail){
+		return categoryService.CategoriesByProducer(mail);
+	}
 	
 	@RequestMapping("/musicstore/api/category/all")
 	public Iterable<CategoryBean> getAll(){
