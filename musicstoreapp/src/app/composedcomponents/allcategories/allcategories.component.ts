@@ -6,6 +6,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Category } from '../../interfaces/category';
 import { CategoryService } from '../../services/category.service';
 
+import { Router } from '@angular/router';
+
 @Injectable({
   providedIn : 'root'
 })
@@ -18,11 +20,16 @@ export class AllcategoriesComponent implements OnInit {
 
   public categories: Category[] = [];
 
-  constructor(private categoryService : CategoryService) {
+  constructor(private categoryService : CategoryService,
+              private router : Router) {
     this.getCategories();
   }
 
   ngOnInit(): void {
+  }
+
+  public gotocategory(id: number): void{
+    this.router.navigate(['/category/' + id]);
   }
 
   public getCategories(): void{
