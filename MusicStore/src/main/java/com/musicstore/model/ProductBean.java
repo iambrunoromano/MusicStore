@@ -43,6 +43,11 @@ import com.musicstore.pojos.BestProducts;
 			name="productThirdProc", 
 			procedureName="ProductsByCart", 
 			parameters= {@StoredProcedureParameter(mode=ParameterMode.IN, name="user_mail", type=String.class)}, 
+			resultSetMappings = {"firstProductProcMapping"}),
+	@NamedStoredProcedureQuery(
+			name="productFourthProc", 
+			procedureName="ProductsByCategory", 
+			parameters= {@StoredProcedureParameter(mode=ParameterMode.IN, name="categoryId", type=Integer.class)}, 
 			resultSetMappings = {"firstProductProcMapping"})
 	})
 public class ProductBean {

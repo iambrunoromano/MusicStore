@@ -25,7 +25,14 @@ public class DbProductService {
 	
 	@PersistenceContext
 	private EntityManager em;
-		
+	
+	public List<ProductBean> ProductsByCategory(int id){
+		StoredProcedureQuery spq = em.createNamedStoredProcedureQuery("productFourthProc");
+		spq.setParameter("categoryId", id);
+		spq.execute();
+		return spq.getResultList();
+	}
+	
 	public List<ProductBean> ProductsByProducer(String mail){
 		StoredProcedureQuery spq = em.createNamedStoredProcedureQuery("productSecondProc");
 		spq.setParameter("producerMail", mail);
