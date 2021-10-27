@@ -40,8 +40,8 @@ export class WebUserService{
     return this.http.post<LogStatus>(this.root_url + this.addressAPI + 'logout',wu);
   }
 
-  public create(body: Body): Observable<WebUser>{
-    return this.http.post<WebUser>(this.root_url + this.addressAPI,body);
+  public create(wu: WebUser): Observable<WebUser>{
+    return this.http.post<WebUser>(this.root_url + this.addressAPI,wu);
   }
 
   public update(body: Body): Observable<WebUser>{

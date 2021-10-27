@@ -36,8 +36,8 @@ export class ProducerService{
       return this.http.post<Producer>(this.root_url + this.addressAPI + '/' + body.topost.mail,body.authorized);
     }
 
-    public create(body: Body): Observable<Producer>{
-      return this.http.post<Producer>(this.root_url + this.addressAPI,body.topost);
+    public create(producer: Producer): Observable<Producer>{
+      return this.http.post<Producer>(this.root_url + this.addressAPI,producer);
     }
 
     public update(body: Body): Observable<Producer>{

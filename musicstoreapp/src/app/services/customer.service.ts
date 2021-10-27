@@ -32,8 +32,8 @@ export class CustomerService{
       return this.http.post<Customer>(this.root_url + this.addressAPI + '/' + body.topost.mail,body.authorized);
     }
 
-    public create(body: Body): Observable<Customer>{
-      return this.http.post<Customer>(this.root_url + this.addressAPI,body.topost);
+    public create(customer: Customer): Observable<Customer>{
+      return this.http.post<Customer>(this.root_url + this.addressAPI,customer);
     }
 
     public update(body: Body): Observable<Customer>{
