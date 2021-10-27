@@ -5,9 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.NamedStoredProcedureQueries;
 import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.SqlResultSetMapping;
+import javax.persistence.StoredProcedureParameter;
 import javax.persistence.ConstructorResult;
 import javax.persistence.ColumnResult;
 import javax.persistence.OneToOne;
+import javax.persistence.ParameterMode;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,7 +29,17 @@ import com.musicstore.pojos.BestProducts;
 								   @ColumnResult(name="imgurl", type = String.class)
 						   })
 })
-@NamedStoredProcedureQueries({@NamedStoredProcedureQuery(name="productFirstProc", procedureName="BestProducts", resultSetMappings = {"firstProductProcMapping"})})
+@NamedStoredProcedureQueries({
+	@NamedStoredProcedureQuery(
+			name="productFirstProc", 
+			procedureName="BestProducts", 
+			resultSetMappings = {"firstProductProcMapping"}),
+	@NamedStoredProcedureQuery(
+			name="productSecondProc", 
+			procedureName="ProductsByProducer", 
+			parameters= {@StoredProcedureParameter(mode=ParameterMode.IN, name="producerMail", type=String.class)}, 
+			resultSetMappings = {"firstProductProcMapping"})
+	})
 public class ProductBean {
 
 	@Id

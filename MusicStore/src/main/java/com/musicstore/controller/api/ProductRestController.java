@@ -41,6 +41,11 @@ public class ProductRestController {
 	
 	public ProductRestController() {}
 	
+	@RequestMapping("/musicstore/api/product/{mail}/products")
+	public List<ProductBean> ProductsByProducer(@PathVariable String mail){
+		return productService.ProductsByProducer(mail);
+	}
+	
 	@RequestMapping("/musicstore/api/product/best")
 	public List<ProductBean> BestProducts(){
 		return productService.BestProducts();
