@@ -32,12 +32,17 @@
                 name="Address"
                 placeholder="Your address"
                 required>
-        <select name="customer-producer-selector">
+        <input  id="imgurl"
+                type="imgurl"
+                name="Img link"
+                placeholder="Link to Profile Img"
+                required>
+        <select id="customer-producer-selector">
           <option value="customer" selected="selected">Register me as Customer</option>
           <option value="producer">Register me as Producer</option>
         </select>
     </form>
-    <button routerLink = "/">
+    <button (click)="register()">
       <a>Register</a>
     </button>
   </div>
