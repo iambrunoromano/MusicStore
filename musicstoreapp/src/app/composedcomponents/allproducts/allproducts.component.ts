@@ -6,6 +6,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Product } from '../../interfaces/product';
 import { ProductService } from '../../services/product.service';
 
+import { Router } from '@angular/router';
+
 @Injectable({
   providedIn : 'root'
 })
@@ -17,12 +19,22 @@ import { ProductService } from '../../services/product.service';
 export class AllproductsComponent implements OnInit {
 
   public products: Product[] = [];
+  public chosencategory: String = '';
 
-  constructor(private productService : ProductService) {
+  constructor(private productService : ProductService,
+              private router: Router) {
     this.getProducts();
   }
 
   ngOnInit(): void {
+    if(this.router.url.startsWith("/category")){
+        this.products=[];
+        this.chosencategory = this.router.url.replace('category/','');
+        this.ProductsByCategory(this.chosencategory);
+    }
+    if(this.router.url.startsWith("/products")){
+        this.getProducts();
+    }
   }
 
   public getProducts(): void{
@@ -34,5 +46,16 @@ export class AllproductsComponent implements OnInit {
         alert(error.message);
       }
     )
+  }
+
+  public ProductsByCategory(id: String): void{
+    this.productService.ProductsByCategory(id).subscribe(
+      (response: Product[]) => {
+        this.products = response;
+      },
+      (error : HttpErrorResponse) => {
+        alert(error.message);
+      }
+    );
   }
 }
