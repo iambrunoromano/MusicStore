@@ -1,8 +1,14 @@
 import { Injectable } from '@angular/core';
 
+import { HttpErrorResponse } from '@angular/common/http';
+
+import { CartService } from '../services/cart.service';
+
 import { LogStatus } from '../interfaces/logstatus';
 import { Body } from '../interfaces/body';
 import { WebUser } from '../interfaces/webuser';
+import { Product } from '../interfaces/product';
+import { Cart } from '../interfaces/cart';
 
 @Injectable({
   providedIn : 'root'
@@ -13,7 +19,7 @@ export class DataService{
   private logStatus = <LogStatus>{ };
   private body = <Body>{ };
 
-  constructor(){
+  constructor(private cartService : CartService){
     this.initUserData();
     this.setLogStatus(false);
   }
@@ -44,5 +50,16 @@ export class DataService{
   public setToPostBody(obj: any): Body{
     this.body.topost = obj;
     return this.body;
+  }
+
+  public addtocart(product: Product): void{
+    let body : Body = {authorized : this.userData,
+                       topost : product}
+    this.cartService.create(body).subscribe(
+      (response: Cart) => {},
+      (error : HttpErrorResponse) => {
+        alert(error.message);
+      }
+    );
   }
 }
