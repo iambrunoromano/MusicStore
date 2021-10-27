@@ -57,7 +57,7 @@ public class DbCartService {
 				return Optional.empty();
 			}
 			
-			foundCart.get().setProductId(p.getProductId());
+			foundCart.get().setProduct_id(p.getProduct_id());
 			foundCart.get().setMail(p.getMail());
 			foundCart.get().setDate(p.getDate());
 			
