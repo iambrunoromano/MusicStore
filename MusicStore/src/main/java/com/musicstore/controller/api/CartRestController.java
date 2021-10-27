@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.musicstore.model.AdminBean;
 import com.musicstore.model.CartBean;
+import com.musicstore.model.ProductBean;
 import com.musicstore.model.WebUserBean;
 import com.musicstore.service.DbCartService;
 import com.musicstore.utility.Utility;
@@ -36,6 +37,14 @@ public class CartRestController {
 	private DbCartService cartService; 
 	
 	public CartRestController() {}
+	
+	@RequestMapping(value="/musicstore/api/cart/{mail}/products", method = RequestMethod.POST)
+	public List<ProductBean> ProductsByCart(@PathVariable String mail,@RequestBody WebUserBean b){
+		if(!webuserService.isWebUser(b) || !b.getMail().equals(mail)){
+			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Request not allowed");
+		}
+		return cartService.ProductsByCart(mail);
+	}
 	
 	@RequestMapping(value="/musicstore/api/cart/all", method = RequestMethod.POST)
 	public Iterable<CartBean> getAll(@RequestBody WebUserBean b){
