@@ -30,14 +30,13 @@ export class LoginComponent implements OnInit {
   public login(): void{
     let wu : WebUser = {mail:(<HTMLInputElement>document.getElementById("username"))?.value,
                         password:(<HTMLInputElement>document.getElementById("password"))?.value};
-    /*let body: Body = {authorized: wu};
-    console.log(body.authorized);*/
     this.webuserService.login(wu).subscribe(
       (response: LogStatus) => {
         this.logstatus = response;
         this.router.navigate(['/']);
       },
       (error : HttpErrorResponse) => {
+        alert(error.message);
         this.router.navigate(['/login']);
       }
     );
