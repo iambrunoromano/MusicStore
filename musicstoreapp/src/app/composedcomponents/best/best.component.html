@@ -20,7 +20,7 @@
     <div class="slider-container">
       <div class="card" id="producer" *ngFor = "let item of producers">
         <button>
-          <a href="#">Visit {{item.name}} Store</a>
+          <a (click)="visitstore(item.mail)">Visit {{item.name}} Store</a>
         </button>
         <p>Contact : {{item.mail}} €</p>
         <p>Address : {{item.address}}</p>

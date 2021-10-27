@@ -8,6 +8,8 @@ import { ProductService } from '../../services/product.service';
 import { Producer } from '../../interfaces/producer';
 import { ProducerService } from '../../services/producer.service';
 
+import { Router } from '@angular/router';
+
 @Injectable({
   providedIn : 'root'
 })
@@ -22,7 +24,8 @@ export class BestComponent implements OnInit {
   public producers: Producer[] = [];
 
   constructor(private productService : ProductService,
-              private producerService : ProducerService) {
+              private producerService : ProducerService,
+              private router : Router) {
               this.getBestProducts();
               this.getBestProducers();
   }
@@ -30,11 +33,14 @@ export class BestComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  public visitstore(mail: String): void{
+    this.router.navigate(['/producer/' + mail]);
+  }
+
   public getBestProducts(): void{
     this.productService.bestProducts().subscribe(
       (response: Product[]) => {
         this.products = response;
-        console.log(response);
       },
       (error : HttpErrorResponse) => {
         alert(error.message);
@@ -46,7 +52,6 @@ export class BestComponent implements OnInit {
     this.producerService.bestProducers().subscribe(
       (response: Producer[]) => {
         this.producers = response;
-        console.log(response);
       },
       (error : HttpErrorResponse) => {
         alert(error.message);

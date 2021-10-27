@@ -40,7 +40,8 @@ import { ProducerComponent } from './composedcomponents/producer/producer.compon
   ],
   providers: [AllproductsComponent,
               AllcategoriesComponent,
-              BestComponent],
+              BestComponent,
+              ProducerComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
