@@ -23,6 +23,10 @@ export class CategoryService{
 
   constructor(private http : HttpClient){}
 
+  public CategoriesByProducer(mail: String): Observable<Category[]>{
+    return this.http.get<Category[]>(this.root_url + this.addressAPI + '/' + mail + '/categories');
+  }
+
   public getAll(): Observable<Category[]>{
     return this.http.get<Category[]>(this.root_url + this.addressAPI + '/all');
   }

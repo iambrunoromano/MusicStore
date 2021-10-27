@@ -23,6 +23,10 @@ export class ProductService{
 
   constructor(private http : HttpClient){}
 
+  public ProductsByProducer(mail: String): Observable<Product[]>{
+    return this.http.get<Product[]>(this.root_url + this.addressAPI + '/' + mail + '/products');
+  }
+
   public bestProducts(): Observable<Product[]>{
     return this.http.get<Product[]>(this.root_url + this.addressAPI + '/best');
   }
