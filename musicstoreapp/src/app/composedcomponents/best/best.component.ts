@@ -82,4 +82,10 @@ export class BestComponent implements OnInit {
     );
   }
 
+  public addtocart(product: Product): void{
+    this.dataService.addtocart(product);
+    this.getCart(this.dataService.getUserData());
+    this.router.navigate(['']);
+  }
+
 }
