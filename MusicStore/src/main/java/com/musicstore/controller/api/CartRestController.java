@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.ArrayList; 
 import java.util.Optional;
 
+import java.util.Date;
+import java.sql.Timestamp;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -65,8 +68,14 @@ public class CartRestController {
 
 	@RequestMapping(value  ="/musicstore/api/cart", method = RequestMethod.POST)
 	public CartBean create(@RequestBody Map<String, Map<String,String>> map) {
-		CartBean cb = Utility.cartDeMap(map.get("topost"));
+		ProductBean p = Utility.productDeMap(map.get("topost"));
 		WebUserBean b = Utility.webuserDeMap(map.get("authorized"));
+		CartBean cb  = new CartBean();
+		cb.setId(0);
+		cb.setMail(b.getMail());
+		cb.setProduct_id(p.getId());
+		cb.setQuantity(p.getQuantity());
+		cb.setDate(new Timestamp(System.currentTimeMillis()));
 		if(!webuserService.isWebUser(b) || !b.getMail().equals(cb.getMail())){
 			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
 		}
