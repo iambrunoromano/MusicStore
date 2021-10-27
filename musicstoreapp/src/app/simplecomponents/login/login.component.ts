@@ -8,6 +8,7 @@ import { LogStatus } from '../../interfaces/logstatus';
 import { WebUser } from '../../interfaces/webuser';
 import { Body } from '../../interfaces/body';
 import { WebUserService } from '../../services/webuser.service';
+import { DataService } from '../../services/data.service';
 
 @Injectable({
   providedIn : 'root'
@@ -22,9 +23,12 @@ export class LoginComponent implements OnInit {
   public logstatus = <LogStatus>{ };
 
   constructor(private webuserService : WebUserService,
+              private dataService : DataService,
               private router : Router) { }
 
   ngOnInit(): void {
+    this.dataService.setLogStatus(false);
+    this.dataService.setUserData('','');
   }
 
   public login(): void{
@@ -33,6 +37,8 @@ export class LoginComponent implements OnInit {
     this.webuserService.login(wu).subscribe(
       (response: LogStatus) => {
         this.logstatus = response;
+        this.dataService.setUserData(wu.mail, wu.password);
+        this.dataService.setLogStatus(true);
         this.router.navigate(['/']);
       },
       (error : HttpErrorResponse) => {

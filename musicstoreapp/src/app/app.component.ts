@@ -1,10 +1,9 @@
 import { Component,OnInit } from '@angular/core';
 
-import { Inject } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { LogStatus } from './interfaces/logstatus';
+import { WebUser } from './interfaces/webuser';
 
-import { Dropdown } from '../scripts/dropdown';
-
+import { DataService } from './services/data.service';
 
 @Component({
   selector: 'app-root',
@@ -13,15 +12,13 @@ import { Dropdown } from '../scripts/dropdown';
 })
 export class AppComponent implements OnInit{
 
-  public dropdown = new Dropdown();
+  public userData = <WebUser>{ };
+  public logStatus = <LogStatus>{ };
 
-  constructor(@Inject(DOCUMENT) private document: Document){}
+  constructor(private dataService: DataService){}
 
   ngOnInit() {
+    this.userData = this.dataService.getUserData();
+    this.logStatus = this.dataService.getLogStatus();
   }
-
-  doDropdown(){
-    this.document = this.dropdown.funAlert(document);
-  }
-
 }
