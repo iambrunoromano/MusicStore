@@ -1,0 +1,9 @@
+.main-section{
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  color: grey;
+  width: 1000px;
+  margin: auto;
+}
