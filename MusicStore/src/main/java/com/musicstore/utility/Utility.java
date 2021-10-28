@@ -48,7 +48,7 @@ public abstract class Utility {
 		b.setId(Integer.parseInt(map.get("id")));
 		b.setDate(stringtoDate(map.get("date")));
 		b.setMail(map.get("mail"));
-		b.setProductId(Integer.parseInt(map.get("productId")));
+		b.setProduct_id(Integer.parseInt(map.get("productId")));
 		return b; 
 	}
 	
