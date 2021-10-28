@@ -50,7 +50,7 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE ProductsByCart(IN user_mail VARCHAR(255))
 BEGIN
-	SELECT id, name, price, quantity, producer, category, imgurl FROM product_bean AS pb INNER JOIN (SELECT product_id FROM cart_bean WHERE mail=user_mail) AS subq ON pb.id=subq.product_id;
+	SELECT pb.id, pb.name, pb.price, subq.quantity, pb.producer, pb.category, pb.imgurl FROM product_bean AS pb INNER JOIN (SELECT product_id,quantity FROM cart_bean WHERE mail=user_mail) AS subq ON pb.id=subq.product_id;
 END //
 DELIMITER ;
 -------------------------------ProductsByCategory------------------------------
