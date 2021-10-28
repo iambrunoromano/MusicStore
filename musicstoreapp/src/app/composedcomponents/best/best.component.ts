@@ -10,6 +10,7 @@ import { Producer } from '../../interfaces/producer';
 import { ProducerService } from '../../services/producer.service';
 import { CartService } from '../../services/cart.service';
 import { DataService } from '../../services/data.service';
+import { UtilityService } from '../../services/utility.service';
 
 import { Router } from '@angular/router';
 
@@ -32,6 +33,7 @@ export class BestComponent implements OnInit {
               private producerService : ProducerService,
               private cartService : CartService,
               private dataService : DataService,
+              private utilityService : UtilityService,
               private router : Router) {
               this.getBestProducts();
               this.getBestProducers();
@@ -43,6 +45,10 @@ export class BestComponent implements OnInit {
     if(this.logged){
       this.getCart(this.dataService.getUserData());
     }
+  }
+
+  public quantityArray(length: number): Array<number>{
+    return this.utilityService.quantityArray(length);
   }
 
   public visitstore(mail: String): void{

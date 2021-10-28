@@ -10,7 +10,11 @@
           </button>
           <p>{{item.name}}</p>
           <p>{{item.price}} €</p>
-          <p>Stock : {{item.quantity}}</p>
+          <p>Order : </p>
+          <select id="quantity-selector">
+            <option value="1" selected="selected">1</option>
+            <option *ngFor="let i of quantityArray(item.quantity)" value="i">{{i}}</option>
+          </select>
           <p>Producer : {{item.producer}}</p>
           <p>Category : {{item.category}}</p>
         </div>
