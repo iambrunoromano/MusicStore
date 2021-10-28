@@ -89,6 +89,7 @@ export class BestComponent implements OnInit {
   }
 
   public addtocart(product: Product): void{
+    product.quantity = <number><unknown>(<HTMLSelectElement>document.getElementById("quantity-selector"))?.value;
     this.dataService.addtocart(product);
     this.getCart(this.dataService.getUserData());
     this.router.navigate(['']);
