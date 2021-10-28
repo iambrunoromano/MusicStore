@@ -3,12 +3,14 @@ import { Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { CartService } from '../services/cart.service';
+import { OrderService } from '../services/order.service';
 
 import { LogStatus } from '../interfaces/logstatus';
 import { Body } from '../interfaces/body';
 import { WebUser } from '../interfaces/webuser';
 import { Product } from '../interfaces/product';
 import { Cart } from '../interfaces/cart';
+import { CartToOrder } from '../interfaces/carttoorder';
 
 @Injectable({
   providedIn : 'root'
@@ -18,8 +20,10 @@ export class DataService{
   private userData = <WebUser>{ };
   private logStatus = <LogStatus>{ };
   private body = <Body>{ };
+  private lastOrder : CartToOrder[] = [];
 
-  constructor(private cartService : CartService){
+  constructor(private cartService : CartService,
+              private orderService : OrderService){
     this.initUserData();
     this.setLogStatus(false);
   }
@@ -62,4 +66,20 @@ export class DataService{
       }
     );
   }
+
+  public gotoorder(): void{
+    this.orderService.create(this.userData).subscribe(
+      (response: CartToOrder[]) => {
+        this.lastOrder = response;
+      },
+      (error : HttpErrorResponse) => {
+        alert(error.message);
+      }
+    );
+  }
+
+  public getLastOrder(): CartToOrder[]{
+    return this.lastOrder;
+  }
+
 }
