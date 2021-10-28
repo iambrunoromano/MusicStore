@@ -4,7 +4,9 @@ import { Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { Product } from '../../interfaces/product';
+import { CartToOrder } from '../../interfaces/carttoorder';
 import { ProductService } from '../../services/product.service';
+import { DataService } from '../../services/data.service';
 
 import { Router } from '@angular/router';
 
@@ -19,9 +21,11 @@ import { Router } from '@angular/router';
 export class AllproductsComponent implements OnInit {
 
   public products: Product[] = [];
+  public orderedProducts: CartToOrder[] = [];
   public chosencategory: String = '';
 
   constructor(private productService : ProductService,
+              private dataService : DataService,
               private router: Router) {
     this.getProducts();
   }
@@ -34,6 +38,11 @@ export class AllproductsComponent implements OnInit {
     }
     if(this.router.url.startsWith("/products")){
         this.getProducts();
+    }
+    if(this.router.url.startsWith("/order")){
+        this.products=[];
+        this.orderedProducts = this.dataService.getLastOrder();
+        this.ProductsByOrder(this.orderedProducts);
     }
   }
 
@@ -58,4 +67,21 @@ export class AllproductsComponent implements OnInit {
       }
     );
   }
+
+  public ProductsByOrder(carttoorder: CartToOrder[]): void{
+    for(let item of carttoorder){
+      this.productService.getById(item.productId).subscribe(
+        (response: Product) => {
+          let orderedProduct : Product = response;
+          orderedProduct.price = item.price; /*You want to know how much you spent on that products, not how much it costs now*/
+          orderedProduct.quantity = item.quantity; /*You want to know how many products you ordered, not how many are in stock*/
+          this.products.push(orderedProduct);
+        },
+        (error : HttpErrorResponse) => {
+          alert(error.message);
+        }
+      );
+    }
+  }
+
 }
