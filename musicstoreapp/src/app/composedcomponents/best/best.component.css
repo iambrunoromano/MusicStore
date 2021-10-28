@@ -12,3 +12,14 @@
   width: 50%;
   text-align-last: right;
 }
+
+#order-button{
+  width: 80%;
+  margin: auto;
+}
+
+.button-container{
+  margin: auto;
+  width: 60%;
+  padding: 15px;
+}

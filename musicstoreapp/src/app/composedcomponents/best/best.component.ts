@@ -95,4 +95,9 @@ export class BestComponent implements OnInit {
     this.router.navigate(['']);
   }
 
+  public gotoorder(): void{
+    this.dataService.gotoorder();
+    this.router.navigate(['/order/']);
+  }
+
 }
