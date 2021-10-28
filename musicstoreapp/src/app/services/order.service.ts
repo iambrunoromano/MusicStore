@@ -6,6 +6,7 @@ import { HttpHeaders } from '@angular/common/http';
 import { Order } from '../interfaces/order';
 import { Body } from '../interfaces/body';
 import { WebUser } from '../interfaces/webuser';
+import { CartToOrder } from '../interfaces/carttoorder';
 
 import { environment } from 'src/environments/environment';
 
@@ -32,8 +33,8 @@ export class OrderService{
       return this.http.post<Order>(this.root_url + this.addressAPI + '/' + body.topost.id,body.authorized);
     }
 
-    public create(body: Body): Observable<Order>{
-      return this.http.post<Order>(this.root_url + this.addressAPI, body.authorized);
+    public create(wu: WebUser): Observable<CartToOrder[]>{
+      return this.http.post<CartToOrder[]>(this.root_url + this.addressAPI, wu);
     }
 
     public update(body: Body): Observable<Order>{
