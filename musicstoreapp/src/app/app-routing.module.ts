@@ -16,6 +16,7 @@ const routes: Routes = [
   {path: 'products', component: AllproductsComponent},
   {path: 'categories', component: AllcategoriesComponent},
   {path: 'category/:id', component: AllproductsComponent},
+  {path: 'order', component: AllproductsComponent},
   {path: 'search', component: SearchComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
