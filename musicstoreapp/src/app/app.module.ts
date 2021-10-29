@@ -10,6 +10,7 @@ import { ProductComponent } from './simplecomponents/product/product.component';
 import { CategoryComponent } from './simplecomponents/category/category.component';
 import { LoginComponent } from './simplecomponents/login/login.component';
 import { RegisterComponent } from './simplecomponents/register/register.component';
+import { OrderComponent } from './simplecomponents/order/order.component';
 
 import { HomeComponent } from './home/home.component';
 
@@ -31,7 +32,8 @@ import { ProducerComponent } from './composedcomponents/producer/producer.compon
     RegisterComponent,
     SearchComponent,
     BestComponent,
-    ProducerComponent
+    ProducerComponent,
+    OrderComponent
   ],
   imports: [
     BrowserModule,

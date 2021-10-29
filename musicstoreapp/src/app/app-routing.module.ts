@@ -10,13 +10,14 @@ import { ProducerComponent } from './composedcomponents/producer/producer.compon
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './simplecomponents/login/login.component';
 import { RegisterComponent } from './simplecomponents/register/register.component';
+import { OrderComponent } from './simplecomponents/order/order.component';
 
 const routes: Routes = [
   {path: '', component: BestComponent},
   {path: 'products', component: AllproductsComponent},
   {path: 'categories', component: AllcategoriesComponent},
   {path: 'category/:id', component: AllproductsComponent},
-  {path: 'order', component: AllproductsComponent},
+  {path: 'order', component: OrderComponent},
   {path: 'search', component: SearchComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
