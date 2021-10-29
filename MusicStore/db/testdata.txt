@@ -43,3 +43,5 @@ INSERT INTO boughtitems VALUES ('testmail',1,2,1, 1000.00);
 INSERT INTO boughtitems VALUES ('testmail',2,2,1, 500.00);
 INSERT INTO boughtitems VALUES ('testmail',3,2,1, 500.00);
 UPDATE order_bean SET total=2000.00 where id=2;
+
+UPDATE product_bean SET quantity=100 WHERE id IN (1,2,3,4,5,6,9);
