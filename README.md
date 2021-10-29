@@ -22,4 +22,4 @@ My first eCommerce webapplication. I'm building it using SpringBoot, Rest APIs a
 - [ ] `Frontend` Overall Style
 - [ ]  `Frontend`, `API`, `Database Query` "Recently seen"
 
-All used images rigths belong to: Unsplash.com[https://unsplash.com/]
+All used images rigths belong to: [Unsplash!](https://unsplash.com/)
