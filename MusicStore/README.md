@@ -23,6 +23,6 @@ The **Category** (MYSQL:`category_bean`) table contains a list of all the possib
 
 The **SoldProducts** (MYSQL:`soldprod`) table tracks how many items have been sold: it allowed me to present an home page of "most sold" goods. Each row of SoldProducts references to a product ID via foreign key constraint, to a producer ID via foreign key constraint and saves the number of sold units. 
 
-
+The **Cart** (MYSQL:`cart_bean`) table keeps track of the items added to cart by single users. I decided to track this via database to avoid leaving such data on the frontend and lose them when starting each new session. This table contains rows that CONTINUE... 
 # Stored Procedures
 # Data
