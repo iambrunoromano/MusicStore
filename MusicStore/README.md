@@ -27,5 +27,12 @@ The **Cart** (MYSQL: `cart_bean`) table keeps track of the items added to cart b
 
 The **BoughtItems** (MYSQL: `boughtitems`) table tracks all the ordered items. It represents an historical version of all the successfully ordered rows of the **Cart** table. The **BoughtItems** table contains information about the user mail that bought some items, the ID of the bought items via foreign key constraint, the order ID via foreign key constraint, an integer quantity of bought and therefore ordered items, and the price of that amount of products ordered all togheter (i.e. my order contains 3 electric guitars that cost 500.00 $ each, price will be 1500.00 $).
 
+#### Order and Shipment Tables
+
+The **Order** (MYSQL: `order_bean`) contains info about the unique integer ID of the order, the mail of the user that ordered products with that order, the date in which he did, the total price of the whole order. 
+
+The **Shipment** (MYSQL: `shipment_bean`) contains info about the unique integer ID of the shipment, the shipdate and the arrive date, the shippping address, the total cost of the shipping and the orded ID via foreign key constraint. 
+
 # Stored Procedures
+
 # Data
