@@ -39,7 +39,7 @@ The **Shipment** (MYSQL: `shipment_bean`) contains info about the unique integer
 
 I decided to use some custom stored procedures to perform some all-in-database operations or to list tables items by field-specific query.
 
-### Best_ Procedures
+### BestX Procedures
 
 The **BestProducts** (MYSQL: `BestProducts`) stored procedure returns the **Product** table sorted by most sold units, retrieved by the **SoldProducts** table. 
 
@@ -54,6 +54,14 @@ The **CartToOrder** stored procedure is part of the business logic of the e-comm
 4. Cleans the **Cart** table by the products added by a user
 5. Returs all the ordered items with relative quantity and price
 
-### _By_ Procedures
+### XByX Procedures
+
+The **ProductsByProducer** (MYSQL: `ProductsByProducer`) procedure returns all the products for a given producer mail.  
+
+The **CategoriesByProducer** (MYSQL: `CategoriesByProducer`) procedure returns all the categories in which a producer sells for a given producer mail.
+
+The **ProductsByCart** (MYSQL: `ProductsByCart`) procedure returns all the products in the **Cart** table for a given customer mail.
+
+The **ProductsByCategory** (MYSQL: `ProductsByCategory`) procedure returns all the products belonging to a category for a given category ID.
 
 # Data
