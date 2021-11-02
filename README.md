@@ -4,7 +4,10 @@ My first eCommerce WebApp. Tech Stack:
 - `Server Application & REST API` SpringBoot
 -  `Client Application` Angular
 
-You can read an introduction to Backend Application and Database Documentation [here](https://github.com/iambrunoromano/MusicStore/tree/main/MusicStore "Backend Application and Database README"). For detailed Backend Application  Documentation please read [here](https://github.com/iambrunoromano/MusicStore/tree/main/MusicStore/src "Backend Application README"). For detailed Database Schema and Documentation please read [here](https://github.com/iambrunoromano/MusicStore/tree/main/MusicStore/db "Database README"). For detailed Frontend Application Documentation please read [here](https://github.com/iambrunoromano/MusicStore/tree/main/musicstoreapp/src "Frontend Application README").
+You can read an introduction to Backend Application and Database Documentation [here](https://github.com/iambrunoromano/MusicStore/tree/main/MusicStore "Backend Application and Database README"). 
+- For detailed Backend Application  Documentation please read [here](https://github.com/iambrunoromano/MusicStore/tree/main/MusicStore/src "Backend Application README"). 
+- For detailed Database Schema and Documentation please read [here](https://github.com/iambrunoromano/MusicStore/tree/main/MusicStore/db "Database README"). 
+- For detailed Frontend Application Documentation please read [here](https://github.com/iambrunoromano/MusicStore/tree/main/musicstoreapp/src "Frontend Application README").
 
 The next big steps I'll implement after completing the tasks below are:
 - [ ] Containerization with Docker
