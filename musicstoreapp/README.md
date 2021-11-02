@@ -1,7 +1,3 @@
-# MusicStore
-The Angular Components relate to each other in the following way:
-![...loading...](https://github.com/iambrunoromano/MusicStore/blob/main/musicstoreapp/schema/Components.drawio.png?raw=true)
-
 # Musicstoreapp
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.5.
