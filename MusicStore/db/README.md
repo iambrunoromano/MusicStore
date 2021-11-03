@@ -29,28 +29,28 @@ The **BoughtItems** (MYSQL: `boughtitems`) table tracks all the ordered items. I
 
 ### Order and Shipment Tables
 
-The **Order** (MYSQL: `order_bean`) contains info about the unique integer ID of the order, the mail of the user that ordered products with that order, the date in which he did, the total price of the whole order. 
+The **Order** (MYSQL: `order_bean`) contains information about the unique integer ID of the order, the user mail via foreign key constraint, the date in which he did it and the total price of the order. 
 
-The **Shipment** (MYSQL: `shipment_bean`) contains info about the unique integer ID of the shipment, the shipdate and the arrive date, the shippping address, the total cost of the shipping and the orded ID via foreign key constraint. 
+The **Shipment** (MYSQL: `shipment_bean`) contains info about the unique integer ID of the shipment, the shipdate and the arrive date, the shipping address, the total cost of the shipping and the order ID via foreign key constraint. 
 
 # Stored Procedures
 
-I decided to use some custom stored procedures to perform some all-in-database operations or to list tables items by field-specific query.
+The database containes 7 stored procedures. The file `procedures.txt` in the current folder contains all the SQL commands used to generate such. I decided to use custom stored procedures to perform all-in-database operations or to list tables items by field-specific query.
 
 ### BestX Procedures
 
-The **BestProducts** (MYSQL: `BestProducts`) stored procedure returns the **Product** table sorted by most sold units, retrieved by the **SoldProducts** table. 
+The **BestProducts** (MYSQL: `BestProducts`) stored procedure returns the **Product** table sorted by most sold units according to data in **SoldProducts** table. 
 
-The **BestProducers** (MYSQL: `BestProducers`) stored procedure returns the **Producer** table sorted by most successfully solding producers, retrieving such info by the **SoldProducts** table. 
+The **BestProducers** (MYSQL: `BestProducers`) stored procedure returns the **Producer** table sorted by most successfully solding producers according to data in **SoldProducts** table. 
 
 ### CartToOrder Procedure
 
-The **CartToOrder** stored procedure is part of the business logic of the e-commerce application. I decided to manage the cart-to-order operation for order consolidation in this way because functionally equivalent to the case in which it is managed by the server application. Each customer can have only one "cart" per time. By definition a customer can add things to cart, empty the cart proceeding to the order, add new things to the cart. In this way the stored procedure is called and data are moved, transformed and generated all internally to the database. In case of dealing with a more complicate business logic I would implement it on server-side, that allows more complex operative logics. This procedure simply :
-1. Calculate quantity-proportional prices for each product added to cart by a user
-2. Instatiates a new order in the **Order** table
+The **CartToOrder** stored procedure is part of the business logic of the e-commerce application. I decided to manage the cart-to-order operation for order consolidation in this way because functionally equivalent to a solution that implements it at backend. In this logic each customer can have only one "cart" per time. A customer can add things to cart, empty the cart proceeding to the order, add new things to the cart. In this way the stored procedure is called and data are moved, transformed and generated internally the database. In case of dealing with a more complicate business logic (i.e. applying some discounts on the total order price to only some customers) I would implement it on server-side, because it allows more complex operative logics. This procedure simply :
+1. Calculates quantity-proportional prices for each product added to cart by a user (i.e. if my order contains 3 electric guitars that cost 500.00 $ each my electric guitar group-prodct price will be 1500.00 $)
+2. Instatiates a new order in the **Order** table summing all the group-product prices into the order total price
 3. Creates new rows in the **BoughtItems** table that identify the history of the cart for a user
 4. Cleans the **Cart** table by the products added by a user
-5. Returs all the ordered items with relative quantity and price
+5. Returs "order details" containing all the ordered items with relative quantity and price 
 
 ### XByX Procedures
 
