@@ -61,3 +61,7 @@ The **CategoriesByProducer** (MYSQL: `CategoriesByProducer`) procedure returns a
 The **ProductsByCart** (MYSQL: `ProductsByCart`) procedure returns all the products in the **Cart** table for a given customer mail.
 
 The **ProductsByCategory** (MYSQL: `ProductsByCategory`) procedure returns all the products belonging to a category for a given category ID.
+
+# Data
+
+The tables have been populated with exemplar data, whose insertion commands can be found in the file `testdata.txt` in the current folder.
