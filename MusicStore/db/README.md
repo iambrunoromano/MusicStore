@@ -3,7 +3,7 @@
 The database that stores all the data has been realized in MySQL reducing to the bare minimum the number of tables. Some stored procedures have been later on introduced to perform simple in-database operations to move data and calculate simple results. 
 
 # Tables
-The database containes 11 tables. The file `tablesbuilt.txt` in the current folder contains all the SQL commands used to generate such. All of the tables have a name used in the image of the schema, and an actual name I used in the table instatiation in the MYSQL database. This name can be found in parenthesis: i.e. the table WebUser will have (MYSQL: `web_user_bean`). I formatted names in the database in such way to make it easy SpringBoot mapping. 
+The database containes 11 tables. The file [tablesbuilt.txt](https://github.com/iambrunoromano/MusicStore/blob/main/MusicStore/db/tablesbuilt.txt "tablesbuilt") in the current folder contains all the SQL commands used to generate such. All of the tables have a name used in the image of the schema, and an actual name I used in the table instatiation in the MYSQL database. This name can be found in parenthesis: i.e. the table WebUser will have (MYSQL: `web_user_bean`). I formatted names in the database in such way to make it easy SpringBoot mapping. 
 
 ### Account Tables
 
@@ -35,7 +35,7 @@ The **Shipment** (MYSQL: `shipment_bean`) contains info about the unique integer
 
 # Stored Procedures
 
-The database containes 7 stored procedures. The file `procedures.txt` in the current folder contains all the SQL commands used to generate such. I decided to use custom stored procedures to perform all-in-database operations or to list tables items by field-specific query.
+The database containes 7 stored procedures. The file [procedures.txt](https://github.com/iambrunoromano/MusicStore/blob/main/MusicStore/db/procedures.txt "procedures") in the current folder contains all the SQL commands used to generate such. I decided to use custom stored procedures to perform all-in-database operations or to list tables items by field-specific query.
 
 ### BestX Procedures
 
@@ -64,4 +64,4 @@ The **ProductsByCategory** (MYSQL: `ProductsByCategory`) procedure returns all t
 
 # Data
 
-The tables have been populated with exemplar data, whose insertion commands can be found in the file `testdata.txt` in the current folder.
+The tables have been populated with exemplar data, whose insertion commands can be found in the file [testdata.txt](https://github.com/iambrunoromano/MusicStore/blob/main/MusicStore/db/testdata.txt "testdata").  in the current folder.
