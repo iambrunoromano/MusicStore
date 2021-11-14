@@ -1,0 +1,95 @@
+CREATE TABLE web_user_bean(
+mail VARCHAR(255) PRIMARY KEY,
+password VARCHAR(255) NOT NULL,
+imgurl VARCHAR(255)
+);
+
+CREATE TABLE producer_bean(
+mail VARCHAR(255) NOT NULL,
+name VARCHAR(255) NOT NULL,
+address VARCHAR(255) NOT NULL,
+FOREIGN KEY (mail) REFERENCES web_user_bean(mail)
+);
+
+CREATE TABLE admin_bean(
+mail VARCHAR(255) NOT NULL,
+name VARCHAR(255) NOT NULL,
+surname VARCHAR(255) NOT NULL,
+phone_number NUMERIC(10,0) NOT NULL,
+FOREIGN KEY (mail) REFERENCES web_user_bean(mail)
+);
+
+CREATE TABLE customer_bean(
+mail VARCHAR(255) NOT NULL,
+name VARCHAR(255) NOT NULL,
+surname VARCHAR(255) NOT NULL,
+payment_card NUMERIC(16,0) NOT NULL,
+billing_address VARCHAR(255) NOT NULL,
+FOREIGN KEY (mail) REFERENCES web_user_bean(mail)
+);
+
+CREATE TABLE category_bean(
+id INT PRIMARY KEY AUTO_INCREMENT,
+name VARCHAR(255) NOT NULL,
+parent INT NOT NULL,
+imgurl VARCHAR(255)
+);
+
+CREATE TABLE product_bean(
+id INT PRIMARY KEY AUTO_INCREMENT,
+name VARCHAR(255) NOT NULL,
+price NUMERIC(8,2) NOT NULL, 
+quantity INT NOT NULL, 
+producer VARCHAR(255) NOT NULL,
+category INT NOT NULL,
+imgurl VARCHAR(255),
+FOREIGN KEY (producer) REFERENCES producer_bean(mail),
+FOREIGN KEY (category) REFERENCES category_bean(id)
+);
+
+CREATE TABLE cart_bean(
+id INT PRIMARY KEY AUTO_INCREMENT,
+product_id INT NOT NULL,
+quantity INT NOT NULL,
+mail VARCHAR(255) NOT NULL,
+date DATETIME NOT NULL,
+FOREIGN KEY (product_id) REFERENCES product_bean(id),
+FOREIGN KEY (mail) REFERENCES web_user_bean(mail)
+);
+
+CREATE TABLE order_bean(
+id INT PRIMARY KEY AUTO_INCREMENT,
+mail VARCHAR(255) NOT NULL,
+date DATETIME NOT NULL,
+total NUMERIC(10,2) NOT NULL, 
+FOREIGN KEY (mail) REFERENCES web_user_bean(mail)
+);
+
+CREATE TABLE shipment_bean(
+id INT PRIMARY KEY AUTO_INCREMENT,
+ship_date DATETIME NOT NULL,
+arrive_date DATETIME NOT NULL,
+ship_address VARCHAR(255) NOT NULL,
+total NUMERIC(10,2) NOT NULL,
+id_order INT NOT NULL,
+FOREIGN KEY (id_order) REFERENCES order_bean(id)
+);
+
+CREATE TABLE soldprod (
+productId INT,
+producerId VARCHAR(255) NOT NULL,
+soldQuantity INT NOT NULL,
+FOREIGN KEY (productId) REFERENCES product_bean(id),
+FOREIGN KEY (producerId) REFERENCES producer_bean(mail)
+);
+
+CREATE TABLE boughtitems(
+mail VARCHAR(255) NOT NULL,
+productId INT NOT NULL,
+orderId INT NOT NULL,
+quantity INT NOT NULL,
+price NUMERIC(10,2) NOT NULL,
+FOREIGN KEY (mail) REFERENCES web_user_bean(mail),
+FOREIGN KEY (productId) REFERENCES product_bean(id),
+FOREIGN KEY (orderId) REFERENCES order_bean(id)
+);	
