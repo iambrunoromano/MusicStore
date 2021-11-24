@@ -10,6 +10,9 @@ You can read an introduction to Backend Application and Database Documentation [
 - For detailed Frontend Application Documentation please read [here](https://github.com/iambrunoromano/MusicStore/tree/main/musicstoreapp/src "Frontend Application README").
 
 The next big steps I'll implement after completing the tasks below are:
+- [ ] Integrate [Lombok](https://projectlombok.org/) for automatically available getter and setters 
+- [ ] Integrate [Spring Security](https://spring.io/projects/spring-security) for the authentication service
+- [ ] Integrate [Spring Cloud](https://spring.io/microservices) to rebuild it all with Microservices Architecture
 - [ ] Containerization with Docker
 - [ ] Implement a version with GraphQL instead of REST API
 - [ ] Implement a version with React instead of Angular
