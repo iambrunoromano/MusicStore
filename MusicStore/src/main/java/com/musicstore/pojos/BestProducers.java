@@ -1,16 +1,12 @@
 package com.musicstore.pojos;
 
-public class BestProducers {
+import lombok.Data;
+import lombok.AllArgsConstructor;
 
-	public String mail;
-	public String name;
-	public String address;
-	
-	public BestProducers(String mail,String name,String address) {
-		super();
-		this.mail = mail;
-		this.name = name;
-		this.address = address;
-	}
+public @Data @AllArgsConstructor class BestProducers {
+
+	private String mail;
+	private String name;
+	private String address;
 
 }

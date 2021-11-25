@@ -1,17 +1,13 @@
 package com.musicstore.pojos;
 
-public class Categories {
+import lombok.Data;
+import lombok.AllArgsConstructor;
 
-	public Integer id;
-	public String name;
-	public Integer parent;
-	public String imgurl;
+public @Data @AllArgsConstructor class Categories {
+
+	private Integer id;
+	private String name;
+	private Integer parent;
+	private String imgurl;
 	
-	public Categories(Integer id, String name, Integer parent, String imgurl) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.parent = parent;
-		this.imgurl = imgurl;
-	}
 }

@@ -1,19 +1,14 @@
 package com.musicstore.pojos;
 
-public class CartToOrderBI{
+import lombok.Data;
+import lombok.AllArgsConstructor;
 
-	public String mail;
-	public Integer productId;
-	public Integer orderId;
-	public Integer quantity;
-	public Double price;
+public @Data @AllArgsConstructor class CartToOrderBI{
+
+	private String mail;
+	private Integer productId;
+	private Integer orderId;
+	private Integer quantity;
+	private Double price;
 	
-	public CartToOrderBI(String mail, Integer productId, Integer orderId, Integer quantity, Double price) {
-		super();
-		this.mail = mail;
-		this.productId = productId;
-		this.orderId = orderId;
-		this.quantity = quantity;
-		this.price = price;
-	}
 }

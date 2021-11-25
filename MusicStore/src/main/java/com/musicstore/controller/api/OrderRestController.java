@@ -64,7 +64,7 @@ public class OrderRestController{
 			}
 		}
 		List<CartToOrderBI> lbi = orderService.create(b);
-		OrderBean ob = this.getById(lbi.get(0).orderId, b);
+		OrderBean ob = this.getById(lbi.get(0).getOrderId(), b);
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("order", ob);
 		map.put("boughtitems", lbi);

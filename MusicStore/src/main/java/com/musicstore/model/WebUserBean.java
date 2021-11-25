@@ -10,59 +10,15 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.JoinColumn;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
-public class WebUserBean {
+public @Data @NoArgsConstructor class WebUserBean {
 	
 	@Id
 	private String mail;
 	private String password;
 	private String imgurl;	
-	
-	public WebUserBean() {}
-	
-	public String getMail() {
-		return mail;
-	}
-	public void setMail(String mail) {
-		this.mail = mail;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getImgurl() {
-		return imgurl;
-	}
-
-	public void setImgurl(String imgurl) {
-		this.imgurl = imgurl;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(imgurl, mail, password);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		WebUserBean other = (WebUserBean) obj;
-		return Objects.equals(imgurl, other.imgurl) && Objects.equals(mail, other.mail)
-				&& Objects.equals(password, other.password);
-	}
-
-	@Override
-	public String toString() {
-		return "WebUserBean [mail=" + mail + ", password=" + password + ", imgurl=" + imgurl + "]";
-	}
-	
 	
 }

@@ -18,6 +18,9 @@ import javax.persistence.ParameterMode;
 import com.musicstore.pojos.CartToOrderBI;
 import java.sql.Date;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
 @SqlResultSetMapping(name="firstOrderProdMapping", classes= {
 		@ConstructorResult(targetClass = CartToOrderBI.class,
@@ -35,7 +38,7 @@ import java.sql.Date;
 			procedureName="CartToOrder", 
 			parameters= {@StoredProcedureParameter(mode=ParameterMode.IN, name="user_mail", type=String.class)}, 
 			resultSetMappings = {"firstOrderProdMapping"})})
-public class OrderBean {
+public @Data @NoArgsConstructor class OrderBean {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,61 +48,4 @@ public class OrderBean {
 	private Timestamp date;
 	private double total;
 	
-	public OrderBean() {}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getMail() {
-		return mail;
-	}
-
-	public void setMail(String mail) {
-		this.mail = mail;
-	}
-
-	public Timestamp getDate() {
-		return date;
-	}
-
-	public void setDate(Timestamp date) {
-		this.date = date;
-	}
-
-	public double getTotal() {
-		return total;
-	}
-
-	public void setTotal(double total) {
-		this.total = total;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(date, id, mail, total);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		OrderBean other = (OrderBean) obj;
-		return Objects.equals(date, other.date) && id == other.id && Objects.equals(mail, other.mail)
-				&& Double.doubleToLongBits(total) == Double.doubleToLongBits(other.total);
-	}
-
-	@Override
-	public String toString() {
-		return "OrderBean [id=" + id + ", mail=" + mail + ", date=" + date + ", total=" + total + "]";
-	}
-		
 }

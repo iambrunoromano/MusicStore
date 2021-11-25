@@ -16,6 +16,8 @@ import javax.persistence.StoredProcedureParameter;
 
 import com.musicstore.pojos.Categories;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 @Entity
 @SqlResultSetMapping(name="firstCategoryProcMapping", classes= {
 		@ConstructorResult(targetClass = Categories.class,
@@ -33,7 +35,7 @@ import com.musicstore.pojos.Categories;
 			parameters= {@StoredProcedureParameter(mode=ParameterMode.IN, name="producerMail", type=String.class)}, 
 			resultSetMappings = {"firstCategoryProcMapping"})
 	})
-public class CategoryBean {
+public @Data @NoArgsConstructor class CategoryBean {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,62 +44,5 @@ public class CategoryBean {
 	private String name;
 	private int parent;
 	private String imgurl;
-	
-	public CategoryBean() {}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public int getParent() {
-		return parent;
-	}
-
-	public void setParent(int parent) {
-		this.parent = parent;
-	}
-
-	public String getImgurl() {
-		return imgurl;
-	}
-
-	public void setImgurl(String imgurl) {
-		this.imgurl = imgurl;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id, imgurl, name, parent);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		CategoryBean other = (CategoryBean) obj;
-		return id == other.id && Objects.equals(imgurl, other.imgurl) && Objects.equals(name, other.name)
-				&& parent == other.parent;
-	}
-
-	@Override
-	public String toString() {
-		return "CategoryBean [id=" + id + ", name=" + name + ", parent=" + parent + ", imgurl=" + imgurl + "]";
-	}
 	
 }
