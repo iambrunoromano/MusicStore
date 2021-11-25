@@ -10,7 +10,6 @@ You can read an introduction to Backend Application and Database Documentation [
 - For detailed Frontend Application Documentation please read [here](https://github.com/iambrunoromano/MusicStore/tree/main/musicstoreapp/src "Frontend Application README").
 
 The next big steps I'll implement after completing the tasks below are:
-- [ ] Integrate [Lombok](https://projectlombok.org/) for automatically available getter and setters 
 - [ ] Integrate [Spring Security](https://spring.io/projects/spring-security) for the authentication service
 - [ ] Integrate [Spring Cloud](https://spring.io/microservices) to rebuild it all with Microservices Architecture
 - [ ] Integrate the [Application Properties](https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html) with : `spring.jpa.hibernate.ddl-auto = update` to create tables from Java classes, and with `spring.sql.init.mode=always` to launch SQL Scripts on the created database.
@@ -24,6 +23,7 @@ The next big steps I'll implement after completing the tasks below are:
 - [x] `API` Buying Logic Design
 - [x] `Frontend`, `API`, `Database Query` Login & Registration Features
 - [x] `Frontend` Navigation Logic
+- [x] Integrated [Lombok](https://projectlombok.org/) for automatically available getter and setters 
 
 # Next tasks:
 - [ ] `Frontend` Admin Login
