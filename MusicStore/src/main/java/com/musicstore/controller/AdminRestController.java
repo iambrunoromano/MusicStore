@@ -1,7 +1,5 @@
-package com.musicstore.controller.api;
+package com.musicstore.controller;
 
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Optional;
 
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.server.ResponseStatusException;
@@ -20,7 +17,6 @@ import com.musicstore.model.AdminBean;
 import com.musicstore.model.WebUserBean;
 import com.musicstore.service.DbAdminService;
 import com.musicstore.service.DbWebUserService;
-import com.musicstore.controller.api.WebUserRestController;
 import com.musicstore.utility.Utility;
 
 import java.util.Map;
