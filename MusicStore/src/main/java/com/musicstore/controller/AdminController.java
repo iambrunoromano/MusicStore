@@ -68,20 +68,14 @@ public class AdminController {
     AdminBean ab = Utility.adminDeMap(map.get("toput"));
     WebUserBean b = Utility.webuserDeMap(map.get("authorized"));
     adminCheck(b);
-    Optional<AdminBean> updatedAdmin = adminService.update(id, ab);
-    if (!updatedAdmin.isPresent()) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Admin to update not found");
-    }
-    return updatedAdmin.get();
+    Optional<AdminBean> adminBeanOptional = updateAndCheck(ab, id);
+    return adminBeanOptional.get();
   }
 
   @RequestMapping(value = "/musicstore/api/admin/{id}", method = RequestMethod.DELETE)
   public void delete(@PathVariable String id, @RequestBody WebUserBean b) {
     adminCheck(b);
-    Boolean isDeleted = adminService.delete(id);
-    if (isDeleted == false) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Admin to delete not found");
-    }
+    adminDeleteCheck(id);
   }
 
   private void adminCheck(WebUserBean webUserBean) {
@@ -89,5 +83,19 @@ public class AdminController {
       // TODO: implement AdviceController for unique exception handling point
       throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
     }
+  }
+
+  private void adminDeleteCheck(String id) {
+    if (!adminService.delete(id)) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Admin to delete not found");
+    }
+  }
+
+  private Optional<AdminBean> updateAndCheck(AdminBean ab, String id) {
+    Optional<AdminBean> updatedAdmin = adminService.update(id, ab);
+    if (!updatedAdmin.isPresent()) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Admin to update not found");
+    }
+    return updatedAdmin;
   }
 }
