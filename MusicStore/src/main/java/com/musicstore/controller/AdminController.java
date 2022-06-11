@@ -30,6 +30,10 @@ import java.util.Map;
 @Slf4j
 public class AdminController {
 
+  private static final String NOT_ADMIN = "Request by not an admin";
+  private static final String TO_DELETE_NOT_FOUND = "Admin to delete not found";
+  private static final String TO_UPDATE_NOT_FOUND = "Admin to update not found";
+
   // TODO: make final all private services
   private final DbAdminService adminService;
   private final DbWebUserService webuserService;
@@ -49,7 +53,7 @@ public class AdminController {
   @RequestMapping(value = "/musicstore/api/admin/{id}", method = RequestMethod.POST)
   public AdminBean getById(@PathVariable String id, @RequestBody WebUserBean b) {
     if (!adminService.isAdmin(b) && !webuserService.isWebUser(b)) {
-      throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
+      throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, NOT_ADMIN);
     }
     return adminService.getById(id).get();
   }
@@ -81,20 +85,20 @@ public class AdminController {
   private void adminCheck(WebUserBean webUserBean) {
     if (!adminService.isAdmin(webUserBean)) {
       // TODO: implement AdviceController for unique exception handling point
-      throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
+      throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, NOT_ADMIN);
     }
   }
 
   private void adminDeleteCheck(String id) {
     if (!adminService.delete(id)) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Admin to delete not found");
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, TO_DELETE_NOT_FOUND);
     }
   }
 
   private Optional<AdminBean> updateAndCheck(AdminBean ab, String id) {
     Optional<AdminBean> updatedAdmin = adminService.update(id, ab);
     if (!updatedAdmin.isPresent()) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Admin to update not found");
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, TO_UPDATE_NOT_FOUND);
     }
     return updatedAdmin;
   }
