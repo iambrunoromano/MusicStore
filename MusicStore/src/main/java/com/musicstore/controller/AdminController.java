@@ -28,14 +28,14 @@ import java.util.Map;
 // TODO: implement useful logging in all controllers and service and logic-implementing classes
 @Controller
 @Slf4j
-public class AdminRestController {
+public class AdminController {
 
   // TODO: make final all private services
   private final DbAdminService adminService;
   private final DbWebUserService webuserService;
 
   @Autowired
-  public AdminRestController(DbAdminService adminService, DbWebUserService webuserService) {
+  public AdminController(DbAdminService adminService, DbWebUserService webuserService) {
     this.adminService = adminService;
     this.webuserService = webuserService;
   }

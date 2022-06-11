@@ -15,12 +15,11 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class AdminRestControllerTest {
+class AdminControllerTest {
 
   private DbAdminService adminService = Mockito.mock(DbAdminService.class);
   private DbWebUserService webuserService = Mockito.mock(DbWebUserService.class);
-  private AdminRestController adminRestController =
-      new AdminRestController(adminService, webuserService);
+  private AdminController adminController = new AdminController(adminService, webuserService);
 
   @Test
   void getAllIsAdminTest() {
@@ -28,7 +27,7 @@ class AdminRestControllerTest {
     List<AdminBean> adminBeanList = new ArrayList<>();
     adminBeanList.add(new AdminBean());
     BDDMockito.given(adminService.getAll()).willReturn(adminBeanList);
-    assertEquals(adminBeanList, adminRestController.getAll(new WebUserBean()));
+    assertEquals(adminBeanList, adminController.getAll(new WebUserBean()));
   }
 
   @Test
@@ -41,7 +40,7 @@ class AdminRestControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              adminRestController.getAll(new WebUserBean());
+              adminController.getAll(new WebUserBean());
             });
     ResponseStatusException expectedException =
         new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
