@@ -23,19 +23,13 @@ class AdminControllerTest {
 
   @Test
   void getAllIsAdminTest() {
-    BDDMockito.given(adminService.isAdmin(Mockito.any())).willReturn(true);
-    List<AdminBean> adminBeanList = new ArrayList<>();
-    adminBeanList.add(new AdminBean());
-    BDDMockito.given(adminService.getAll()).willReturn(adminBeanList);
+    List<AdminBean> adminBeanList = prepareIsAdminTest(true);
     assertEquals(adminBeanList, adminController.getAll(new WebUserBean()));
   }
 
   @Test
   void getAllIsNotAdminTest() {
-    BDDMockito.given(adminService.isAdmin(Mockito.any())).willReturn(false);
-    List<AdminBean> adminBeanList = new ArrayList<>();
-    adminBeanList.add(new AdminBean());
-    BDDMockito.given(adminService.getAll()).willReturn(adminBeanList);
+    prepareIsAdminTest(false);
     ResponseStatusException actualException =
         assertThrows(
             ResponseStatusException.class,
@@ -46,5 +40,13 @@ class AdminControllerTest {
         new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
     assertEquals(expectedException.getReason(), actualException.getReason());
     assertEquals(expectedException.getStatus(), actualException.getStatus());
+  }
+
+  private List<AdminBean> prepareIsAdminTest(boolean isAdmin) {
+    BDDMockito.given(adminService.isAdmin(Mockito.any())).willReturn(isAdmin);
+    List<AdminBean> adminBeanList = new ArrayList<>();
+    adminBeanList.add(new AdminBean());
+    BDDMockito.given(adminService.getAll()).willReturn(adminBeanList);
+    return adminBeanList;
   }
 }
