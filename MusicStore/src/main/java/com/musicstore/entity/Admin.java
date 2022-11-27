@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AdminBean {
+public class Admin {
 
   @Id
   @Column(name = "mail")

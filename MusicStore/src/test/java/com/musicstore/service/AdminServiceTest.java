@@ -1,7 +1,7 @@
 package com.musicstore.service;
 
 import com.musicstore.constant.ReasonsConstant;
-import com.musicstore.model.AdminBean;
+import com.musicstore.entity.Admin;
 import com.musicstore.repository.AdminRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -55,8 +55,8 @@ public class AdminServiceTest {
   void isAdminAuthorizedTest() {
     BDDMockito.given(adminRepository.findById(Mockito.anyString()))
         .willReturn(getOptionalAdminBean());
-    AdminBean actualAdminBean = adminService.isAdmin(DELETE_ID);
-    assertEquals(buildAdmin(), actualAdminBean);
+    Admin actualAdmin = adminService.isAdmin(DELETE_ID);
+    assertEquals(buildAdmin(), actualAdmin);
   }
 
   private void assertNotAdminException(ResponseStatusException actualException) {
@@ -66,17 +66,12 @@ public class AdminServiceTest {
     assertEquals(expectedException.getStatus(), actualException.getStatus());
   }
 
-  private Optional<AdminBean> getOptionalAdminBean() {
-    AdminBean adminBean = buildAdmin();
-    return Optional.of(adminBean);
+  private Optional<Admin> getOptionalAdminBean() {
+    Admin admin = buildAdmin();
+    return Optional.of(admin);
   }
 
-  private AdminBean buildAdmin() {
-    return AdminBean.builder()
-        .mail(MAIL)
-        .name(NAME)
-        .surname(SURNAME)
-        .phoneNumber(PHONE_NUMBER)
-        .build();
+  private Admin buildAdmin() {
+    return Admin.builder().mail(MAIL).name(NAME).surname(SURNAME).phoneNumber(PHONE_NUMBER).build();
   }
 }
