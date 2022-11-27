@@ -1,13 +1,11 @@
 package com.musicstore.model;
 
 import java.sql.Timestamp;
-import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CartBean {
+public class Cart {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
