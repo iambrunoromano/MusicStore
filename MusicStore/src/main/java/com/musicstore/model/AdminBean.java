@@ -1,23 +1,31 @@
 package com.musicstore.model;
 
-import java.util.Objects;
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-public @Data @NoArgsConstructor class AdminBean {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class AdminBean {
 
-	@Id
-	private String mail;
-	
-	private String name;
-	private String surname;
-	private int phoneNumber;
-	
+  @Id
+  @Column(name = "mail")
+  private String mail;
+
+  @Column(name = "name")
+  private String name;
+
+  @Column(name = "surname")
+  private String surname;
+
+  @Column(name = "phone_number")
+  private String phoneNumber;
 }
