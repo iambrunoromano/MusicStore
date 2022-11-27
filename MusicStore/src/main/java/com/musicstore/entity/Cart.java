@@ -1,4 +1,4 @@
-package com.musicstore.model;
+package com.musicstore.entity;
 
 import java.sql.Timestamp;
 
