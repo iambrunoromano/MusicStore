@@ -3,8 +3,7 @@ package com.musicstore.repository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.musicstore.model.WebUserBean;
+import com.musicstore.entity.User;
 
 @Repository
-public interface IWebUserRepository extends CrudRepository<WebUserBean, String>{
-}
+public interface IWebUserRepository extends CrudRepository<User, String> {}
