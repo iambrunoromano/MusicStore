@@ -6,4 +6,4 @@ import org.springframework.stereotype.Repository;
 import com.musicstore.entity.User;
 
 @Repository
-public interface IWebUserRepository extends CrudRepository<User, String> {}
+public interface UserRepository extends CrudRepository<User, String> {}
