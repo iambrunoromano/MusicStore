@@ -1,9 +1,9 @@
 package com.musicstore.controller;
 
-import com.musicstore.model.AdminBean;
-import com.musicstore.model.WebUserBean;
-import com.musicstore.service.DbAdminService;
-import com.musicstore.service.DbWebUserService;
+import com.musicstore.constant.ReasonsConstant;
+import com.musicstore.entity.Admin;
+import com.musicstore.service.AdminService;
+import com.musicstore.service.AdminServiceTest;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
@@ -17,36 +17,96 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AdminControllerTest {
 
-  private DbAdminService adminService = Mockito.mock(DbAdminService.class);
-  private DbWebUserService webuserService = Mockito.mock(DbWebUserService.class);
-  private AdminController adminController = new AdminController(adminService, webuserService);
+  private static final String ADMIN_ID = "admin-id";
+
+  private AdminService adminService = Mockito.mock(AdminService.class);
+  private AdminController adminController = new AdminController(adminService);
 
   @Test
-  void getAllIsAdminTest() {
-    List<AdminBean> adminBeanList = prepareIsAdminTest(true);
-    assertEquals(adminBeanList, adminController.getAll(new WebUserBean()));
-  }
-
-  @Test
-  void getAllIsNotAdminTest() {
-    prepareIsAdminTest(false);
+  void getAllNotAuthorizedTest() {
+    mockExceptionThrown();
     ResponseStatusException actualException =
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              adminController.getAll(new WebUserBean());
+              adminController.getAll(ADMIN_ID);
             });
-    ResponseStatusException expectedException =
-        new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
-    assertEquals(expectedException.getReason(), actualException.getReason());
-    assertEquals(expectedException.getStatus(), actualException.getStatus());
+    AdminServiceTest.assertNotAdminException(actualException);
   }
 
-  private List<AdminBean> prepareIsAdminTest(boolean isAdmin) {
-    BDDMockito.given(adminService.isAdmin(Mockito.any())).willReturn(isAdmin);
-    List<AdminBean> adminBeanList = new ArrayList<>();
-    adminBeanList.add(new AdminBean());
-    BDDMockito.given(adminService.getAll()).willReturn(adminBeanList);
-    return adminBeanList;
+  @Test
+  void getAllAuthorizedTest() {
+    List<Admin> adminList = mockAdminList();
+    assertEquals(adminList, adminController.getAll(ADMIN_ID));
+  }
+
+  @Test
+  void getByIdNotAuthorizedTest() {
+    mockExceptionThrown();
+    ResponseStatusException actualException =
+        assertThrows(
+            ResponseStatusException.class,
+            () -> {
+              adminController.getById(ADMIN_ID, ADMIN_ID);
+            });
+    AdminServiceTest.assertNotAdminException(actualException);
+  }
+
+  @Test
+  void getByIdAuthorizedTest() {
+    Admin admin = mockAdmin();
+    assertEquals(admin, adminController.getById(ADMIN_ID, ADMIN_ID));
+  }
+
+  @Test
+  void updateNotAuthorizedTest() {
+    mockExceptionThrown();
+    ResponseStatusException actualException =
+        assertThrows(
+            ResponseStatusException.class,
+            () -> {
+              adminController.update(ADMIN_ID, AdminServiceTest.buildAdmin());
+            });
+    AdminServiceTest.assertNotAdminException(actualException);
+  }
+
+  @Test
+  void updateAuthorizedTest() {
+    Admin admin = mockAdmin();
+    BDDMockito.given(adminService.save(Mockito.any())).willReturn(AdminServiceTest.buildAdmin());
+    assertEquals(admin, adminController.update(ADMIN_ID, AdminServiceTest.buildAdmin()));
+  }
+
+  @Test
+  void deleteNotAuthorizedTest() {
+    mockExceptionThrown();
+    ResponseStatusException actualException =
+        assertThrows(
+            ResponseStatusException.class,
+            () -> {
+              adminController.delete(ADMIN_ID, ADMIN_ID);
+            });
+    AdminServiceTest.assertNotAdminException(actualException);
+  }
+
+  private void mockExceptionThrown() {
+    ResponseStatusException expectedException =
+        new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
+    BDDMockito.given(adminService.isAdmin(Mockito.anyString())).willThrow(expectedException);
+  }
+
+  private List<Admin> mockAdminList() {
+    Admin admin = mockAdmin();
+    List<Admin> adminList = new ArrayList<>();
+    adminList.add(admin);
+    adminList.add(admin);
+    BDDMockito.given(adminService.getAll()).willReturn(adminList);
+    return adminList;
+  }
+
+  private Admin mockAdmin() {
+    Admin admin = AdminServiceTest.buildAdmin();
+    BDDMockito.given(adminService.isAdmin(Mockito.anyString())).willReturn(admin);
+    return admin;
   }
 }

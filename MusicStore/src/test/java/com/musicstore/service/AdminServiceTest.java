@@ -59,7 +59,7 @@ public class AdminServiceTest {
     assertEquals(buildAdmin(), actualAdmin);
   }
 
-  private void assertNotAdminException(ResponseStatusException actualException) {
+  public static void assertNotAdminException(ResponseStatusException actualException) {
     ResponseStatusException expectedException =
         new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
     assertEquals(expectedException.getReason(), actualException.getReason());
@@ -71,7 +71,7 @@ public class AdminServiceTest {
     return Optional.of(admin);
   }
 
-  private Admin buildAdmin() {
+  public static Admin buildAdmin() {
     return Admin.builder().mail(MAIL).name(NAME).surname(SURNAME).phoneNumber(PHONE_NUMBER).build();
   }
 }
