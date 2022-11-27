@@ -21,7 +21,7 @@ public class AdminController {
     this.adminService = adminService;
   }
 
-  @GetMapping(value = "/{admin-id}")
+  @GetMapping(value = "/all/{admin-id}")
   public Iterable<Admin> getAll(@PathVariable String adminId) {
     adminService.isAdmin(adminId);
     return adminService.getAll();
