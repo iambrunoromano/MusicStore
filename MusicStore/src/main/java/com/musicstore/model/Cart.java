@@ -2,10 +2,7 @@ package com.musicstore.model;
 
 import java.sql.Timestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,8 +20,15 @@ public class Cart {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
 
-  private int product_id;
+  @Column(name = "product_id")
+  private int productId;
+
+  @Column(name = "quantity")
   private int quantity;
+
+  @Column(name = "mail")
   private String mail;
+
+  @Column(name = "date")
   private Timestamp date;
 }
