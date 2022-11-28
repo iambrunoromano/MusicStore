@@ -15,13 +15,13 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping(value = "cart")
-public class CartRestController {
+public class CartController {
 
   private final DbWebUserService userService;
   private final CartService cartService;
 
   @Autowired
-  public CartRestController(DbWebUserService userService, CartService cartService) {
+  public CartController(DbWebUserService userService, CartService cartService) {
     this.userService = userService;
     this.cartService = cartService;
   }
