@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.musicstore.entity.Admin;
 import com.musicstore.service.AdminService;
 
-// TODO: test admin controller (integration test)
-// TODO: test admin controller via Postman
+// TODO: integration test
+// TODO: external test
 
 @RestController
 @Slf4j
