@@ -1,17 +1,19 @@
 package com.musicstore.service;
 
+import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Cart;
 import com.musicstore.repository.CartRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CartServiceTest {
   private CartRepository cartRepository = Mockito.mock(CartRepository.class);
@@ -24,16 +26,13 @@ public class CartServiceTest {
   @Test
   void deleteNotFound() {
     mockCartRepository(new ArrayList<>());
-    assertFalse(cartService.deleteByMail("not_found_mail"));
-  }
-
-  @Test
-  void deleteFound() {
-    List<Cart> cartList = new ArrayList<>();
-    cartList.add(buildCart(1, 1, 1, "mail_1", Timestamp.from(Instant.now())));
-    cartList.add(buildCart(2, 2, 2, "mail_2", Timestamp.from(Instant.now())));
-    mockCartRepository(cartList);
-    assertTrue(cartService.deleteByMail("found_mail"));
+    ResponseStatusException actualException =
+        assertThrows(
+            ResponseStatusException.class,
+            () -> {
+              cartService.deleteByMail("not_found_mail");
+            });
+    assertCartNotFoundException(actualException);
   }
 
   private void mockCartRepository(List<Cart> cartList) {
@@ -41,14 +40,10 @@ public class CartServiceTest {
     BDDMockito.doNothing().when(cartRepository).delete(Mockito.any());
   }
 
-  private Cart buildCart(
-      Integer id, Integer productId, Integer quantity, String mail, Timestamp date) {
-    return Cart.builder()
-        .id(id)
-        .productId(productId)
-        .quantity(quantity)
-        .mail(mail)
-        .date(date)
-        .build();
+  public static void assertCartNotFoundException(ResponseStatusException actualException) {
+    ResponseStatusException expectedException =
+        new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.CART_NOT_FOUND);
+    assertEquals(expectedException.getReason(), actualException.getReason());
+    assertEquals(expectedException.getStatus(), actualException.getStatus());
   }
 }
