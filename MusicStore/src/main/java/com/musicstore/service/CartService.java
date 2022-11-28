@@ -1,64 +1,44 @@
 package com.musicstore.service;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.StoredProcedureQuery;
-
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.musicstore.entity.Cart;
-import com.musicstore.model.ProductBean;
+import com.musicstore.repository.CartRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
+@Slf4j
 public class CartService {
 
-  @Autowired private com.musicstore.repository.CartRepository CartRepository;
+  private final CartRepository cartRepository;
 
-  @PersistenceContext private EntityManager em;
-
-  public List<ProductBean> ProductsByCart(String mail) {
-    StoredProcedureQuery spq = em.createNamedStoredProcedureQuery("productThirdProc");
-    spq.setParameter("user_mail", mail);
-    spq.execute();
-    return spq.getResultList();
+  @Autowired
+  public CartService(CartRepository cartRepository) {
+    this.cartRepository = cartRepository;
   }
 
   public Iterable<Cart> getAll() {
-    return CartRepository.findAll();
+    return cartRepository.findAll();
   }
 
-  public Optional<Cart> getById(int id) {
-    return CartRepository.findById(id);
+  public List<Cart> getByMail(String mail) {
+    return cartRepository.findByMail(mail);
   }
 
-  public Cart create(Cart p) {
-    return CartRepository.save(p);
+  public Cart save(Cart cart) {
+    return cartRepository.save(cart);
   }
 
-  public Optional<Cart> update(int id, Cart p) {
-    Optional<Cart> foundCart = CartRepository.findById(id);
-    if (!foundCart.isPresent()) {
-      return Optional.empty();
-    }
-
-    foundCart.get().setProductId(p.getProductId());
-    foundCart.get().setMail(p.getMail());
-    foundCart.get().setDate(p.getDate());
-
-    CartRepository.save(foundCart.get());
-    return foundCart;
-  }
-
-  public boolean delete(int id) {
-    Optional<Cart> foundCart = CartRepository.findById(id);
-    if (!foundCart.isPresent()) {
+  public boolean deleteByMail(String mail) {
+    List<Cart> cartList = this.getByMail(mail);
+    if (cartList.isEmpty()) {
       return false;
     }
-    CartRepository.delete(foundCart.get());
-    return false;
+    for (Cart cart : cartList) {
+      cartRepository.delete(cart);
+    }
+    return true;
   }
 }
