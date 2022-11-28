@@ -2,7 +2,7 @@ package com.musicstore.controller;
 
 import com.musicstore.entity.Cart;
 import com.musicstore.service.CartService;
-import com.musicstore.service.DbWebUserService;
+import com.musicstore.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +17,11 @@ import java.util.List;
 @RequestMapping(value = "cart")
 public class CartController {
 
-  private final DbWebUserService userService;
+  private final UserService userService;
   private final CartService cartService;
 
   @Autowired
-  public CartController(DbWebUserService userService, CartService cartService) {
+  public CartController(UserService userService, CartService cartService) {
     this.userService = userService;
     this.cartService = cartService;
   }
