@@ -1,106 +1,45 @@
-package com.musicstore.controller.api;
+package com.musicstore.controller;
+
+import com.musicstore.entity.Cart;
+import com.musicstore.service.CartService;
+import com.musicstore.service.DbWebUserService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
-import java.util.ArrayList;
-import java.util.Optional;
 
-import java.util.Date;
-import java.sql.Timestamp;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.server.ResponseStatusException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.musicstore.model.AdminBean;
-import com.musicstore.model.CartBean;
-import com.musicstore.model.ProductBean;
-import com.musicstore.model.WebUserBean;
-import com.musicstore.service.DbCartService;
-import com.musicstore.utility.Utility;
-import com.musicstore.service.DbAdminService;
-import com.musicstore.service.DbWebUserService;
+// TODO: integration test
+// TODO: external test
 
 @RestController
+@Slf4j
+@RequestMapping(value = "cart")
 public class CartRestController {
 
-  @Autowired private DbAdminService adminService;
+  private final DbWebUserService userService;
+  private final CartService cartService;
 
-  @Autowired private DbWebUserService webuserService;
-
-  @Autowired private DbCartService cartService;
-
-  public CartRestController() {}
-
-  @RequestMapping(value = "/musicstore/api/cart/{mail}/products", method = RequestMethod.POST)
-  public List<ProductBean> ProductsByCart(@PathVariable String mail, @RequestBody WebUserBean b) {
-    if (!webuserService.isWebUser(b) || !b.getMail().equals(mail)) {
-      throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Request not allowed");
-    }
-    return cartService.ProductsByCart(mail);
+  @Autowired
+  public CartRestController(DbWebUserService userService, CartService cartService) {
+    this.userService = userService;
+    this.cartService = cartService;
   }
 
-  @RequestMapping(value = "/musicstore/api/cart/all", method = RequestMethod.POST)
-  public Iterable<CartBean> getAll(@RequestBody WebUserBean b) {
-    if (!adminService.isAdmin(b)) {
-      throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
-    }
-    return cartService.getAll();
+  @GetMapping(value = "/{mail}")
+  public List<Cart> getCart(@PathVariable String mail) {
+    userService.isUser(mail);
+    return cartService.getByMail(mail);
   }
 
-  @RequestMapping(value = "/musicstore/api/cart/{id}", method = RequestMethod.POST)
-  public CartBean getById(@PathVariable int id, @RequestBody WebUserBean b) {
-    if (!cartService.getById(id).get().getMail().equals(b.getMail())) {
-      throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
-    }
-    return cartService.getById(id).get();
+  @PostMapping(value = "/{mail}")
+  public Cart save(@PathVariable String mail, @RequestBody Cart cart) {
+    userService.isUser(mail);
+    return cartService.save(cart);
   }
 
-  @RequestMapping(value = "/musicstore/api/cart", method = RequestMethod.POST)
-  public CartBean create(@RequestBody Map<String, Map<String, String>> map) {
-    ProductBean p = Utility.productDeMap(map.get("topost"));
-    WebUserBean b = Utility.webuserDeMap(map.get("authorized"));
-    CartBean cb = new CartBean();
-    cb.setId(0);
-    cb.setMail(b.getMail());
-    cb.setProduct_id(p.getId());
-    cb.setQuantity(p.getQuantity());
-    cb.setDate(new Timestamp(System.currentTimeMillis()));
-    if (!webuserService.isWebUser(b) || !b.getMail().equals(cb.getMail())) {
-      throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
-    }
-    return cartService.create(cb);
-  }
-
-  @RequestMapping(value = "/musicstore/api/cart/{id}", method = RequestMethod.PUT)
-  public CartBean update(@PathVariable int id, @RequestBody Map<String, Map<String, String>> map) {
-    CartBean cb = Utility.cartDeMap(map.get("toput"));
-    WebUserBean b = Utility.webuserDeMap(map.get("authorized"));
-    if (!webuserService.isWebUser(b) || !b.getMail().equals(cb.getMail())) {
-      throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
-    }
-    Optional<CartBean> updatedCart = cartService.update(id, cb);
-    if (!updatedCart.isPresent()) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "item not found");
-    }
-    return updatedCart.get();
-  }
-
-  @RequestMapping(value = "/musicstore/api/cart/{id}", method = RequestMethod.DELETE)
-  public void delete(@PathVariable int id, @RequestBody WebUserBean b) {
-    if (!webuserService.isWebUser(b)
-        || !b.getMail().equals(cartService.getById(id).get().getMail())) {
-      throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
-    }
-    Boolean isDeleted = cartService.delete(id);
-    if (isDeleted == false) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart not found");
-    }
+  @DeleteMapping(value = "/{mail}")
+  public void delete(@PathVariable String mail) {
+    cartService.deleteByMail(mail);
   }
 }
