@@ -34,7 +34,7 @@ public class CartService {
     return cartRepository.save(cart);
   }
 
-  public void deleteByMail(String mail) {
+  public boolean deleteByMail(String mail) {
     List<Cart> cartList = this.getByMail(mail);
     if (cartList.isEmpty()) {
       log.info("No cart rows found for user with mail [{}]", mail);
@@ -43,5 +43,6 @@ public class CartService {
     for (Cart cart : cartList) {
       cartRepository.delete(cart);
     }
+    return true;
   }
 }
