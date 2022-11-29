@@ -11,6 +11,7 @@ import java.util.List;
 
 // TODO: integration test
 // TODO: external test
+// TODO: Returned Response Entity HTTP Status
 
 @RestController
 @Slf4j
@@ -40,6 +41,7 @@ public class CartController {
 
   @DeleteMapping(value = "/{mail}")
   public void delete(@PathVariable String mail) {
+    userService.isUser(mail);
     cartService.deleteByMail(mail);
   }
 }
