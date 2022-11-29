@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-public class DbWebUserService {
+public class UserService {
 
   @Autowired private UserRepository userRepository;
 
@@ -59,11 +59,13 @@ public class DbWebUserService {
     return false;
   }
 
-  public void isUser(String mail) {
+  public User isUser(String mail) {
     Optional<User> optionalUser = getById(mail);
-    if (!optionalUser.isPresent()) {
-      log.warn("User with Id [{}] is not a user", mail);
-      throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_USER);
+    if (optionalUser.isPresent()) {
+      log.info("User with Id [{}] is a user", mail);
+      return optionalUser.get();
     }
+    log.warn("User with Id [{}] is not a user", mail);
+    throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_USER);
   }
 }
