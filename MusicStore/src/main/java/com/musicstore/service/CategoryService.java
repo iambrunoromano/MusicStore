@@ -1,62 +1,60 @@
 package com.musicstore.service;
 
+import com.musicstore.constant.ReasonsConstant;
+import com.musicstore.entity.Category;
+import com.musicstore.repository.CategoryRepository;
+import com.musicstore.repository.ProducerRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.StoredProcedureQuery;
-
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.musicstore.entity.Category;
-
 @Service
+@Slf4j
 public class CategoryService {
 
-  @Autowired private com.musicstore.repository.CategoryRepository CategoryRepository;
+  private final CategoryRepository categoryRepository;
 
-  @PersistenceContext private EntityManager em;
-
-  public List<Category> CategoriesByProducer(String mail) {
-    StoredProcedureQuery spq = em.createNamedStoredProcedureQuery("categoryFirstProc");
-    spq.setParameter("producerMail", mail);
-    spq.execute();
-    return spq.getResultList();
+  @Autowired
+  public CategoryService(
+      CategoryRepository categoryRepository, ProducerRepository producerRepository) {
+    this.categoryRepository = categoryRepository;
   }
 
   public Iterable<Category> getAll() {
-    return CategoryRepository.findAll();
+    return categoryRepository.findAll();
   }
 
   public Optional<Category> getById(int id) {
-    return CategoryRepository.findById(id);
+    return categoryRepository.findById(id);
   }
 
-  public Category create(Category p) {
-    return CategoryRepository.save(p);
-  }
-
-  public Optional<Category> update(int id, Category p) {
-    Optional<Category> foundCategory = CategoryRepository.findById(id);
-    if (!foundCategory.isPresent()) {
-      return Optional.empty();
-    }
-
-    foundCategory.get().setName(p.getName());
-    foundCategory.get().setParent(p.getParent());
-
-    CategoryRepository.save(foundCategory.get());
-    return foundCategory;
+  public Category save(Category category) {
+    return categoryRepository.save(category);
   }
 
   public boolean delete(int id) {
-    Optional<Category> foundCategory = CategoryRepository.findById(id);
-    if (!foundCategory.isPresent()) {
-      return false;
+    Optional<Category> optionalCategory = this.getById(id);
+    if (optionalCategory.isPresent()) {
+      log.info("Deleting category with id [{}]", id);
+      categoryRepository.delete(optionalCategory.get());
+      return true;
     }
-    CategoryRepository.delete(foundCategory.get());
-    return false;
+    throw new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.CATEGORY_NOT_FOUND);
+  }
+
+  public List<Category> getAllByProducer(String mail) {
+    // TODO: implement this method once product track is on. Guide:
+    // 1. Query all products with product.producer = mail (launch exception if mail is not producer)
+    // 2. Select distinct categories from all those products (launch exception if any product is
+    // found for that producer)
+    // 3. Query those distinct categories on categories table and give back to the caller (launch
+    // exception if no category is found for products)
+    return new ArrayList<>();
   }
 }
