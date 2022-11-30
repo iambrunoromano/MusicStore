@@ -1,9 +1,12 @@
 package com.musicstore.repository;
 
+import com.musicstore.entity.Product;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.musicstore.entity.Product;
+import java.util.List;
 
 @Repository
-public interface ProductRepository extends CrudRepository<Product, Integer> {}
+public interface ProductRepository extends CrudRepository<Product, Integer> {
+  List<Product> findByProducer(String producer);
+}
