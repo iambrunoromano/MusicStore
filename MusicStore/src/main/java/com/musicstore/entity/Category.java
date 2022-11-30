@@ -1,4 +1,4 @@
-package com.musicstore.model;
+package com.musicstore.entity;
 
 import javax.persistence.ColumnResult;
 import javax.persistence.ConstructorResult;
