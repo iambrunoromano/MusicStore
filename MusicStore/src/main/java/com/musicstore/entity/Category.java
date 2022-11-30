@@ -1,54 +1,35 @@
 package com.musicstore.entity;
 
-import javax.persistence.ColumnResult;
-import javax.persistence.ConstructorResult;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedStoredProcedureQueries;
-import javax.persistence.NamedStoredProcedureQuery;
-import javax.persistence.ParameterMode;
-import javax.persistence.SqlResultSetMapping;
-import javax.persistence.StoredProcedureParameter;
-
-import com.musicstore.pojos.Categories;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+
 @Entity
-@SqlResultSetMapping(
-    name = "firstCategoryProcMapping",
-    classes = {
-      @ConstructorResult(
-          targetClass = Categories.class,
-          columns = {
-            @ColumnResult(name = "id", type = Integer.class),
-            @ColumnResult(name = "name", type = String.class),
-            @ColumnResult(name = "parent", type = Integer.class),
-            @ColumnResult(name = "imgurl", type = String.class)
-          })
-    })
-@NamedStoredProcedureQueries({
-  @NamedStoredProcedureQuery(
-      name = "categoryFirstProc",
-      procedureName = "CategoriesByProducer",
-      parameters = {
-        @StoredProcedureParameter(
-            mode = ParameterMode.IN,
-            name = "producerMail",
-            type = String.class)
-      },
-      resultSetMappings = {"firstCategoryProcMapping"})
-})
-public @Data @NoArgsConstructor class Category {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class Category {
+  // TODO: category logic that was in store procedure put into category service
+  // TODO: table names static + annotation for all entities
+  // TODO: indexes annotation for all entities
+  // TODO: active inactive status for all entities
+  // TODO: dtInsert & dtUpdate for all entities
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
   private int id;
 
+  @Column(name = "name")
   private String name;
+
+  @Column(name = "parent")
   private int parent;
-  private String imgurl;
+
+  @Column(name = "img_url")
+  private String imgUrl;
 }
