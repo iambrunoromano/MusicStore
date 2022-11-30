@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 import com.musicstore.model.ProducerBean;
 
 @Repository
-public interface IProducerRepository extends CrudRepository<ProducerBean, String>{
-}
+public interface ProducerRepository extends CrudRepository<ProducerBean, String> {}
