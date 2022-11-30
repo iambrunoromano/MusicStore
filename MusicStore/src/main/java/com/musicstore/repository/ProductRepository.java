@@ -3,8 +3,7 @@ package com.musicstore.repository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.musicstore.model.ProductBean;
+import com.musicstore.entity.Product;
 
 @Repository
-public interface IProductRepository extends CrudRepository<ProductBean, Integer>{
-}
+public interface ProductRepository extends CrudRepository<Product, Integer> {}
