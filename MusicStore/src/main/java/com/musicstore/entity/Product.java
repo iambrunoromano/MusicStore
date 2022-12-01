@@ -14,6 +14,8 @@ import javax.persistence.*;
 @Builder
 public class Product {
 
+  // TODO:indexes on all entities on column repositories search on
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
@@ -25,8 +27,11 @@ public class Product {
   @Column(name = "price")
   private double price;
 
-  @Column(name = "quantity")
-  private int quantity;
+  @Column(name = "left_quantity")
+  private int leftQuantity;
+
+  @Column(name = "sold_quantity")
+  private int soldQuantity;
 
   @Column(name = "producer")
   private String producer;
