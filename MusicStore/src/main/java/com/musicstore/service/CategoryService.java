@@ -18,8 +18,6 @@ import java.util.Optional;
 @Slf4j
 public class CategoryService {
 
-  // TODO: unit tests
-
   private final CategoryRepository categoryRepository;
   private final ProductRepository productRepository;
 
@@ -54,6 +52,9 @@ public class CategoryService {
 
   public List<Category> getByProducer(String mail) {
     List<Integer> categoryIdList = productRepository.findCategoriesByProducer(mail);
+    if (categoryIdList.isEmpty()) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.CATEGORY_NOT_FOUND);
+    }
     List<Category> categoryList = new ArrayList<>();
     for (Integer categoryId : categoryIdList) {
       Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
