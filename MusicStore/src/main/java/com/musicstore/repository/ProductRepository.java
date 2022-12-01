@@ -9,4 +9,8 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends CrudRepository<Product, Integer> {
   List<Product> findByProducer(String producer);
+
+  List<Product> findByCategory(Integer category);
+
+  List<Product> findByOrderBySoldQuantityDesc();
 }
