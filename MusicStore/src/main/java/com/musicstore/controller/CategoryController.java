@@ -1,80 +1,62 @@
 package com.musicstore.controller;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.server.ResponseStatusException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.musicstore.entity.Category;
 import com.musicstore.entity.User;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.CategoryService;
-import com.musicstore.service.UserService;
-import com.musicstore.utility.Utility;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+// TODO: unit test
+// TODO: integration test
+// TODO: external test
+// TODO: Returned Response Entity HTTP Status
+// TODO: Do refactor of naming for ids of all entities across all repo
 
 @RestController
+@Slf4j
+@RequestMapping(value = "category")
 public class CategoryController {
 
-  @Autowired private AdminService adminService;
+  private final AdminService adminService;
 
-  @Autowired private UserService webuserService;
+  private final CategoryService categoryService;
 
-  @Autowired private CategoryService categoryService;
-
-  public CategoryController() {}
-
-  @RequestMapping("/musicstore/api/category/{mail}/categories")
-  public List<Category> CategoriesByProducer(@PathVariable String mail) {
-    return categoryService.getByProducer(mail);
+  @Autowired
+  public CategoryController(AdminService adminService, CategoryService categoryService) {
+    this.adminService = adminService;
+    this.categoryService = categoryService;
   }
 
-  @RequestMapping("/musicstore/api/category/all")
+  @GetMapping(value = "/all")
   public Iterable<Category> getAll() {
     return categoryService.getAll();
   }
 
-  @RequestMapping("/musicstore/api/category/{id}")
-  public Category getById(@PathVariable int id) {
-    /*EVERYONE SHOULD BE ABLE TO GET INFOS ABOUT SPECIFIC CATEGORY*/
-    Optional<Category> category = categoryService.getById(id);
-    if (!category.isPresent()) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "item not found");
-    }
+  @GetMapping(value = "/{category-id}")
+  public Category getById(@PathVariable int categoryId) {
+    Optional<Category> category = categoryService.getById(categoryId);
     return category.get();
   }
 
-  @RequestMapping(value = "/musicstore/api/category", method = RequestMethod.POST)
-  public Category create(@RequestBody Map<String, Map<String, String>> map) {
-    Category cb = Utility.categoryDeMap(map.get("topost"));
-    User b = Utility.webuserDeMap(map.get("authorized"));
-    adminService.isAdmin(b.getMail());
-    return categoryService.save(cb);
+  @PostMapping(value = "/{admin-id}")
+  public Category update(@PathVariable String adminId, @RequestBody Category category) {
+    adminService.isAdmin(adminId);
+    return categoryService.save(category);
   }
 
-  @RequestMapping(value = "/musicstore/api/category/{id}", method = RequestMethod.PUT)
-  public Category update(@PathVariable int id, @RequestBody Map<String, Map<String, String>> map) {
-    Category cb = Utility.categoryDeMap(map.get("toput"));
-    User b = Utility.webuserDeMap(map.get("authorized"));
-    adminService.isAdmin(b.getMail());
-    Category updatedCategory = categoryService.save(cb);
-    return updatedCategory;
+  @DeleteMapping(value = "/{category-id}")
+  public void delete(@PathVariable int categoryId, @RequestBody User user) {
+    adminService.isAdmin(user.getMail());
+    categoryService.delete(categoryId);
   }
 
-  @RequestMapping(value = "/musicstore/api/category/{id}", method = RequestMethod.DELETE)
-  public void delete(@PathVariable int id, @RequestBody User b) {
-    adminService.isAdmin(b.getMail());
-    Boolean isDeleted = categoryService.delete(id);
-    if (isDeleted == false) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
-    }
+  @GetMapping("/{producer-id}/categories")
+  public List<Category> getByProducer(@PathVariable String producerId) {
+    return categoryService.getByProducer(producerId);
   }
 }
