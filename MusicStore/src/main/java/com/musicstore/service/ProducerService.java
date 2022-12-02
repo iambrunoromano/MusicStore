@@ -1,19 +1,21 @@
 package com.musicstore.service;
 
-import java.util.List;
-import java.util.Optional;
+import com.musicstore.constant.ReasonsConstant;
+import com.musicstore.model.ProducerBean;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.StoredProcedureQuery;
-
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.musicstore.model.ProducerBean;
-import com.musicstore.entity.User;
+import java.util.List;
+import java.util.Optional;
 
 @Service
+@Slf4j
 public class ProducerService {
 
   @Autowired private com.musicstore.repository.ProducerRepository ProducerRepository;
@@ -60,10 +62,13 @@ public class ProducerService {
     return false;
   }
 
-  public boolean isProducer(User wub) {
-    Optional<ProducerBean> producerFound = this.getById(wub.getMail());
-    if (producerFound.isPresent())
-      if (producerFound.get().getMail().equals(wub.getMail())) return true;
-    return false;
+  public ProducerBean isProducer(String mail) {
+    Optional<ProducerBean> optionalProducer = this.getById(mail);
+    if (optionalProducer.isPresent()) {
+      log.info("User with Id [{}] is producer", mail);
+      return optionalProducer.get();
+    }
+    log.warn("User with Id [{}] is not producer", mail);
+    throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_PRODUCER);
   }
 }
