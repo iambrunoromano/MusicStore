@@ -16,9 +16,9 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CategoryServiceTest {
+public class CategoryServiceTest {
 
-  private static final Integer ID = 1;
+  public static final Integer ID = 1;
   private static final String NAME = "category-name";
   private static final Integer PARENT = 0;
   private static final String IMG_URL = "img-url";
@@ -103,7 +103,7 @@ class CategoryServiceTest {
         .willReturn(Optional.of(buildCategory()));
   }
 
-  private Category buildCategory() {
+  public static Category buildCategory() {
     return Category.builder().id(ID).name(NAME).parent(PARENT).imgUrl(IMG_URL).build();
   }
 }
