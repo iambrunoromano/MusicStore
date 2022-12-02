@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AdminControllerTest {
 
-  private static final String ADMIN_ID = "admin-id";
+  public static final String ADMIN_ID = "admin-id";
 
   private AdminService adminService = Mockito.mock(AdminService.class);
   private AdminController adminController = new AdminController(adminService);
