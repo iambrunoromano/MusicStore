@@ -33,7 +33,11 @@ public class CategoryService {
   }
 
   public Optional<Category> getById(int id) {
-    return categoryRepository.findById(id);
+    Optional<Category> optionalCategory = categoryRepository.findById(id);
+    if (!optionalCategory.isPresent()) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.CATEGORY_NOT_FOUND);
+    }
+    return optionalCategory;
   }
 
   public Category save(Category category) {
@@ -42,12 +46,8 @@ public class CategoryService {
 
   public boolean delete(int id) {
     Optional<Category> optionalCategory = this.getById(id);
-    if (optionalCategory.isPresent()) {
-      log.info("Deleting category with id [{}]", id);
-      categoryRepository.delete(optionalCategory.get());
-      return true;
-    }
-    throw new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.CATEGORY_NOT_FOUND);
+    categoryRepository.delete(optionalCategory.get());
+    return true;
   }
 
   public List<Category> getByProducer(String mail) {
