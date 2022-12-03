@@ -29,7 +29,7 @@ public class AdminServiceTest {
 
   @Test
   void deleteNotAuthorizedTest() {
-    BDDMockito.given(adminRepository.findById(Mockito.anyString())).willReturn(Optional.empty());
+    mockNotFound();
     ResponseStatusException actualException =
         assertThrows(
             ResponseStatusException.class,
@@ -41,7 +41,7 @@ public class AdminServiceTest {
 
   @Test
   void isAdminNotAuthorizedTest() {
-    BDDMockito.given(adminRepository.findById(Mockito.anyString())).willReturn(Optional.empty());
+    mockNotFound();
     ResponseStatusException actualException =
         assertThrows(
             ResponseStatusException.class,
@@ -49,6 +49,10 @@ public class AdminServiceTest {
               adminService.isAdmin(DELETE_ID);
             });
     assertNotAdminException(actualException);
+  }
+
+  private void mockNotFound() {
+    BDDMockito.given(adminRepository.findById(Mockito.anyString())).willReturn(Optional.empty());
   }
 
   @Test
