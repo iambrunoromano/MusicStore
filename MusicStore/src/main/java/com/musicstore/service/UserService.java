@@ -34,11 +34,12 @@ public class UserService {
     return userRepository.save(user);
   }
 
-  public void delete(String mail) {
-    Optional<User> optionalUser = userRepository.findById(mail);
+  public boolean delete(String mail) {
+    Optional<User> optionalUser = getById(mail);
     if (optionalUser.isPresent()) {
       log.info("Deleting user with userId [{}]", mail);
       userRepository.delete(optionalUser.get());
+      return true;
     }
     throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_USER);
   }
