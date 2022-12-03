@@ -116,7 +116,7 @@ public class UserServiceTest {
     assertEquals(expectedException.getStatus(), actualException.getStatus());
   }
 
-  private static User buildUser() {
+  public static User buildUser() {
     return User.builder().mail(MAIL).password(PASSWORD).imgUrl(IMG_URL).build();
   }
 }
