@@ -29,7 +29,7 @@ public class CartController {
 
   @GetMapping(value = "/{mail}")
   public List<Cart> getCart(@PathVariable String mail) {
-    userService.isUser(mail);
+    userService.isUser(mail); // TODO: substitute this method with isAuthentic
     return cartService.getByMail(mail);
   }
 
