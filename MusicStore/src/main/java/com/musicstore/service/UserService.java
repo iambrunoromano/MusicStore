@@ -15,7 +15,12 @@ import java.util.Optional;
 @Slf4j
 public class UserService {
 
-  @Autowired private UserRepository userRepository;
+  private final UserRepository userRepository;
+
+  @Autowired
+  public UserService(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
 
   public Iterable<User> getAll() {
     return userRepository.findAll();
@@ -25,41 +30,22 @@ public class UserService {
     return userRepository.findById(id);
   }
 
-  public User create(User p) {
-    return userRepository.save(p);
+  public User save(User user) {
+    return userRepository.save(user);
   }
 
-  public Optional<User> update(String id, User p) {
-    Optional<User> foundWebUser = userRepository.findById(id);
-    if (!foundWebUser.isPresent()) {
-      return Optional.empty();
+  public void delete(String mail) {
+    Optional<User> optionalUser = userRepository.findById(mail);
+    if (optionalUser.isPresent()) {
+      log.info("Deleting user with userId [{}]", mail);
+      userRepository.delete(optionalUser.get());
     }
-
-    foundWebUser.get().setMail(p.getMail());
-    foundWebUser.get().setPassword(p.getPassword());
-
-    userRepository.save(foundWebUser.get());
-    return foundWebUser;
-  }
-
-  public boolean delete(String id) {
-    Optional<User> foundWebUser = userRepository.findById(id);
-    if (!foundWebUser.isPresent()) {
-      return false;
-    }
-    userRepository.delete(foundWebUser.get());
-    return false;
-  }
-
-  public boolean isWebUser(User wub) {
-    Optional<User> webuserFound = this.getById(wub.getMail());
-    if (webuserFound.isPresent())
-      if (webuserFound.get().getMail().equals(wub.getMail())
-          && webuserFound.get().getPassword().equals(wub.getPassword())) return true;
-    return false;
+    throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_USER);
   }
 
   public User isUser(String mail) {
+    // TODO: replace everywhere the calls to this method with calls to isAuthentic: in this way data
+    // are accessible only to the authorized user
     Optional<User> optionalUser = getById(mail);
     if (optionalUser.isPresent()) {
       log.info("User with Id [{}] is a user", mail);
@@ -67,5 +53,16 @@ public class UserService {
     }
     log.warn("User with Id [{}] is not a user", mail);
     throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_USER);
+  }
+
+  public User isAuthentic(User user) {
+    Optional<User> optionalUser =
+        userRepository.findByMailAndPassword(user.getMail(), user.getPassword());
+    if (optionalUser.isPresent()) {
+      log.info("Matching user for mail [{}] and password [{}]", user.getMail(), user.getPassword());
+      return optionalUser.get();
+    }
+    log.warn("Cannot Authenticate User with Mail [{}]", user.getMail());
+    throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_AUTHENTIC);
   }
 }
