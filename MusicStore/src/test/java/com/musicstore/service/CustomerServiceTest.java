@@ -9,11 +9,13 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CustomerServiceTest {
+public class CustomerServiceTest {
 
   private static final String CUSTOMER_ID = "customer-id";
 
@@ -93,7 +95,14 @@ class CustomerServiceTest {
     assertEquals(expectedException.getStatus(), actualException.getStatus());
   }
 
-  private static Customer buildCustomer() {
+  public static List<Customer> buildCustomerList() {
+    List<Customer> customerList = new ArrayList<>();
+    customerList.add(buildCustomer());
+    customerList.add(buildCustomer());
+    return customerList;
+  }
+
+  public static Customer buildCustomer() {
     // TODO: centralize all entities build methods in a static test utils class and alwasys use that
     return Customer.builder()
         .mail(CUSTOMER_ID)
