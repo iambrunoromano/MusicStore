@@ -98,7 +98,8 @@ class CategoryControllerTest {
   }
 
   private void mockIsAdmin() {
-    BDDMockito.doNothing().when(adminService).isAdmin(Mockito.anyString());
+    BDDMockito.given(adminService.isAdmin(Mockito.anyString()))
+        .willReturn(AdminServiceTest.buildAdmin());
   }
 
   private void mockNotAdmin() {
