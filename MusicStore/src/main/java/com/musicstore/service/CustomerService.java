@@ -1,58 +1,46 @@
 package com.musicstore.service;
 
+import com.musicstore.constant.ReasonsConstant;
+import com.musicstore.entity.Customer;
+import com.musicstore.repository.CustomerRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.Optional;
 
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.musicstore.entity.Customer;
-import com.musicstore.entity.User;
-
 @Service
+@Slf4j
 public class CustomerService {
 
-  @Autowired private com.musicstore.repository.CustomerRepository CustomerRepository;
+  private final CustomerRepository customerRepository;
+
+  @Autowired
+  public CustomerService(CustomerRepository customerRepository) {
+    this.customerRepository = customerRepository;
+  }
 
   public Iterable<Customer> getAll() {
-    return CustomerRepository.findAll();
+    return customerRepository.findAll();
   }
 
-  public Optional<Customer> getById(String id) {
-    return CustomerRepository.findById(id);
-  }
-
-  public Customer create(Customer p) {
-    return CustomerRepository.save(p);
-  }
-
-  public Optional<Customer> update(String id, Customer p) {
-    Optional<Customer> foundCustomer = CustomerRepository.findById(id);
-    if (!foundCustomer.isPresent()) {
-      return Optional.empty();
+  public Optional<Customer> getById(String customerId) {
+    Optional<Customer> optionalCustomer = customerRepository.findById(customerId);
+    if (!optionalCustomer.isPresent()) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.CUSTOMER_NOT_FOUND);
     }
-
-    foundCustomer.get().setName(p.getName());
-    foundCustomer.get().setSurname(p.getSurname());
-    foundCustomer.get().setPaymentCard(p.getPaymentCard());
-    foundCustomer.get().setBillingAddress(p.getBillingAddress());
-
-    CustomerRepository.save(foundCustomer.get());
-    return foundCustomer;
+    return optionalCustomer;
   }
 
-  public boolean delete(String id) {
-    Optional<Customer> foundCustomer = CustomerRepository.findById(id);
-    if (!foundCustomer.isPresent()) {
-      return false;
-    }
-    CustomerRepository.delete(foundCustomer.get());
-    return false;
+  public Customer save(Customer customer) {
+    return customerRepository.save(customer);
   }
 
-  public boolean isCustomer(User wub) {
-    Optional<Customer> customerFound = this.getById(wub.getMail());
-    if (customerFound.isPresent())
-      if (customerFound.get().getMail().equals(wub.getMail())) return true;
-    return false;
+  public boolean delete(String customerId) {
+    Optional<Customer> optionalCustomer = this.getById(customerId);
+    customerRepository.delete(optionalCustomer.get());
+    return true;
   }
 }
