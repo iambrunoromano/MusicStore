@@ -16,8 +16,6 @@ import java.util.Optional;
 @Slf4j
 public class ProductService {
 
-  // TODO: unit tests
-
   private final ProductRepository productRepository;
 
   @Autowired
@@ -55,6 +53,6 @@ public class ProductService {
   }
 
   public List<Product> getMostSold() {
-    return productRepository.findByOrderBySoldQuantityDesc();
+    return productRepository.findBySoldQuantityDesc();
   }
 }

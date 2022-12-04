@@ -13,7 +13,7 @@ public interface ProductRepository extends CrudRepository<Product, Integer> {
 
   List<Product> findByCategory(Integer category);
 
-  List<Product> findByOrderBySoldQuantityDesc();
+  List<Product> findBySoldQuantityDesc();
 
   @Query("SELECT DISTINCT(category) FROM product WHERE producer = ?1")
   List<Integer> findCategoriesByProducer(String producer);
