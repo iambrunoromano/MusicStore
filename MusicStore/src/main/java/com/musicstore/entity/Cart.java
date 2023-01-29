@@ -38,7 +38,7 @@ public class Cart {
   private boolean bought;
 
   @Column(name = "order_id")
-  private String orderId;
+  private int orderId;
 
   @Column(name = "overall_price")
   private double overallPrice;
