@@ -16,7 +16,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-// TODO: unit tests
 // TODO: logs
 // TODO: exceptions for all cases of order not found etc.
 
