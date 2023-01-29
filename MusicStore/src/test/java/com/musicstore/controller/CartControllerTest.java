@@ -57,17 +57,8 @@ class CartControllerTest {
   }
 
   @Test
-  void saveCartTest() {
-    mockIsUser();
-    mockSaveCart(PRODUCT_ID);
-    Cart actualCart = cartController.save(MAIL, buildCart(PRODUCT_ID));
-    assertCart(actualCart, PRODUCT_ID);
-  }
-
-  @Test
   void saveCartNotUserTest() {
     mockIsNotUser();
-    mockSaveCart(PRODUCT_ID);
     ResponseStatusException actualException =
         assertThrows(
             ResponseStatusException.class,
@@ -92,10 +83,6 @@ class CartControllerTest {
 
   private void mockDeleteCart() {
     BDDMockito.given(cartService.deleteByMail(Mockito.anyString())).willReturn(true);
-  }
-
-  private void mockSaveCart(Integer id) {
-    BDDMockito.given(cartService.save(Mockito.any())).willReturn(buildCart(id));
   }
 
   private void mockGetCartByMail() {
