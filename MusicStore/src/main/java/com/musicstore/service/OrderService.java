@@ -1,63 +1,75 @@
 package com.musicstore.service;
 
+import com.musicstore.constant.ReasonsConstant;
+import com.musicstore.entity.Cart;
+import com.musicstore.entity.Order;
+import com.musicstore.repository.CartRepository;
+import com.musicstore.repository.OrderRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.StoredProcedureQuery;
-
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.musicstore.model.OrderBean;
-import com.musicstore.model.ProductBean;
-import com.musicstore.model.WebUserBean;
-import com.musicstore.pojos.CartToOrderBI;
+// TODO: unit tests
+// TODO: logs
+// TODO: exceptions for all cases of order not found etc.
 
 @Service
-public class DbOrderService{
-	
-	@Autowired
-	private com.musicstore.repository.OrderRepository OrderRepository;
+@Slf4j
+public class OrderService {
 
-	@PersistenceContext
-	private EntityManager em;
-	
-	public Iterable<OrderBean> getAll(){
-		return OrderRepository.findAll();
-	}
-	
-	public Optional<OrderBean> getById(int id){
-		return OrderRepository.findById(id);
-	}
-	
-	public List<CartToOrderBI> create(WebUserBean b){
-		StoredProcedureQuery spq = em.createNamedStoredProcedureQuery("orderFirstProc");
-		spq.setParameter("user_mail", b.getMail());
-		spq.execute();
-		return spq.getResultList();
-	}
-	
-	public Optional<OrderBean> update(int id,OrderBean p) {
-			Optional<OrderBean> foundOrder = OrderRepository.findById(id);
-			if(foundOrder.isEmpty()) {
-				return Optional.empty();
-			}
-			
-			foundOrder.get().setDate(p.getDate());
-			foundOrder.get().setTotal(p.getTotal());
-			
-			OrderRepository.save(foundOrder.get());
-			return foundOrder;
-		}
+  private final OrderRepository orderRepository;
+  private final CartRepository cartRepository;
 
-	public boolean delete(int id) {
-		Optional<OrderBean> foundOrder = OrderRepository.findById(id);
-		if(foundOrder.isEmpty()) {
-			return false;
-		}
-		OrderRepository.delete(foundOrder.get());
-		return false;
-	}
+  @Autowired
+  public OrderService(OrderRepository orderRepository, CartRepository cartRepository) {
+    this.orderRepository = orderRepository;
+    this.cartRepository = cartRepository;
+  }
+
+  public Iterable<Order> getAll() {
+    return orderRepository.findAll();
+  }
+
+  public Order getVerifiedOrder(int orderId, String mail) {
+    Optional<Order> optionalOrder = orderRepository.findById(orderId);
+    if (!optionalOrder.isPresent()) {
+      throw new ResponseStatusException(
+          HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.ORDER_NOT_FOUND);
+    }
+    Order order = optionalOrder.get();
+    if (mail == null || !mail.equals(order.getMail())) {
+      throw new ResponseStatusException(
+          HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.ORDER_USER_MISMATCH);
+    }
+    return order;
+  }
+
+  public Order create(String mail) {
+    List<Cart> cartList = cartRepository.findByMail(mail);
+    Double total = 0.0;
+    for (Cart cart : cartList) {
+      total += cart.getOverallPrice();
+    }
+    return Order.builder().mail(mail).date(Timestamp.from(Instant.now())).total(total).build();
+  }
+
+  public Order save(Order order) {
+    return orderRepository.save(order);
+  }
+
+  public boolean delete(int orderId) {
+    Optional<Order> optionalOrder = orderRepository.findById(orderId);
+    if (!optionalOrder.isPresent()) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.ORDER_NOT_FOUND);
+    }
+    orderRepository.delete(optionalOrder.get());
+    return true;
+  }
 }
