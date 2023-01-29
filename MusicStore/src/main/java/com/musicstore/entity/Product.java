@@ -25,7 +25,7 @@ public class Product {
   private String name;
 
   @Column(name = "price")
-  private double price;
+  private Double price;
 
   @Column(name = "left_quantity")
   private int leftQuantity;
