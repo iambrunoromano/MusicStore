@@ -1,6 +1,7 @@
 package com.musicstore.service;
 
 import com.musicstore.constant.ReasonsConstant;
+import com.musicstore.entity.Cart;
 import com.musicstore.entity.Order;
 import com.musicstore.repository.CartRepository;
 import com.musicstore.repository.OrderRepository;
@@ -12,10 +13,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class OrderServiceTest {
 
@@ -53,7 +55,41 @@ class OrderServiceTest {
             () -> {
               orderService.getVerifiedOrder(ID, MAIL);
             });
-    assertOrderNotFoundException(actualException);
+    assertOrderNotFoundException(actualException, HttpStatus.METHOD_NOT_ALLOWED);
+  }
+
+  @Test
+  void createTest() {
+    mockCartListFound();
+    Order actualOrder = orderService.create(MAIL);
+    assertEquals(MAIL, actualOrder.getMail());
+    assertEquals(4.0, actualOrder.getTotal());
+  }
+
+  @Test
+  void createNoCartTest() {
+    mockCartListNotFound();
+    Order actualOrder = orderService.create(MAIL);
+    assertEquals(MAIL, actualOrder.getMail());
+    assertEquals(0.0, actualOrder.getTotal());
+  }
+
+  @Test
+  void deleteTest() {
+    mockFindOrderById();
+    assertTrue(orderService.delete(ID));
+  }
+
+  @Test
+  void deleteNotFoundTest() {
+    mockNotFoundOrderById();
+    ResponseStatusException actualException =
+        assertThrows(
+            ResponseStatusException.class,
+            () -> {
+              orderService.delete(ID);
+            });
+    assertOrderNotFoundException(actualException, HttpStatus.NOT_FOUND);
   }
 
   void doMailTest(String mail) {
@@ -67,6 +103,14 @@ class OrderServiceTest {
     assertOrderUserMismatchException(actualException);
   }
 
+  private void mockCartListNotFound() {
+    BDDMockito.given(cartRepository.findByMail(Mockito.anyString())).willReturn(new ArrayList<>());
+  }
+
+  private void mockCartListFound() {
+    BDDMockito.given(cartRepository.findByMail(Mockito.anyString())).willReturn(createCartList());
+  }
+
   private void mockNotFoundOrderById() {
     BDDMockito.given(orderRepository.findById(Mockito.anyInt())).willReturn(Optional.empty());
   }
@@ -74,6 +118,13 @@ class OrderServiceTest {
   private void mockFindOrderById() {
     BDDMockito.given(orderRepository.findById(Mockito.anyInt()))
         .willReturn(Optional.of(createOrder()));
+  }
+
+  private List<Cart> createCartList() {
+    List<Cart> cartList = new ArrayList<>();
+    cartList.add(CartServiceTest.createCart());
+    cartList.add(CartServiceTest.createCart());
+    return cartList;
   }
 
   private Order createOrder() {
@@ -88,9 +139,10 @@ class OrderServiceTest {
     assertEquals(expectedException.getStatus(), actualException.getStatus());
   }
 
-  private static void assertOrderNotFoundException(ResponseStatusException actualException) {
+  private static void assertOrderNotFoundException(
+      ResponseStatusException actualException, HttpStatus expectedHttpStatus) {
     ResponseStatusException expectedException =
-        new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.ORDER_NOT_FOUND);
+        new ResponseStatusException(expectedHttpStatus, ReasonsConstant.ORDER_NOT_FOUND);
     assertEquals(expectedException.getReason(), actualException.getReason());
     assertEquals(expectedException.getStatus(), actualException.getStatus());
   }
