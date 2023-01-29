@@ -1,6 +1,5 @@
 package com.musicstore.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,27 +8,18 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.StoredProcedureQuery;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 
-import com.musicstore.repository.IOrderRepository;
 import com.musicstore.model.OrderBean;
 import com.musicstore.model.ProductBean;
 import com.musicstore.model.WebUserBean;
 import com.musicstore.pojos.CartToOrderBI;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.StoredProcedureQuery;
-
 @Service
 public class DbOrderService{
 	
 	@Autowired
-	private IOrderRepository OrderRepository; 
+	private com.musicstore.repository.OrderRepository OrderRepository;
 
 	@PersistenceContext
 	private EntityManager em;
