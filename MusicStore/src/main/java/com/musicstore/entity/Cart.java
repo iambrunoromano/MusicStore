@@ -9,8 +9,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-// TODO: add in cart logic overall price computation before insertion
-
 @Entity
 @Data
 @AllArgsConstructor
