@@ -1,6 +1,7 @@
 package com.musicstore.controller;
 
 import com.musicstore.entity.Cart;
+import com.musicstore.request.CartRequest;
 import com.musicstore.service.CartService;
 import com.musicstore.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -34,9 +35,9 @@ public class CartController {
   }
 
   @PostMapping(value = "/{mail}")
-  public Cart save(@PathVariable String mail, @RequestBody Cart cart) {
+  public void save(@PathVariable String mail, @RequestBody List<CartRequest> cartRequestList) {
     userService.isUser(mail);
-    return cartService.save(cart);
+    cartService.save(cartRequestList);
   }
 
   @DeleteMapping(value = "/{mail}")
