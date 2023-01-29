@@ -30,6 +30,10 @@ public class CartService {
     return cartRepository.findByMail(mail);
   }
 
+  public List<Cart> getByOrderId(int orderId) {
+    return cartRepository.findByOrderId(orderId);
+  }
+
   public Cart save(Cart cart) {
     return cartRepository.save(cart);
   }
