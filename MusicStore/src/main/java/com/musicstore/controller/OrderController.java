@@ -1,103 +1,76 @@
 package com.musicstore.controller;
 
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.Optional;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.server.ResponseStatusException;
-
+import com.musicstore.entity.Cart;
+import com.musicstore.entity.Order;
+import com.musicstore.service.AdminService;
+import com.musicstore.service.CartService;
+import com.musicstore.service.OrderService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import com.musicstore.model.CartBean;
-import com.musicstore.model.OrderBean;
-import com.musicstore.model.WebUserBean;
-import com.musicstore.pojos.CartToOrderBI;
-import com.musicstore.service.DbAdminService;
-import com.musicstore.service.DbOrderService;
-import com.musicstore.service.DbWebUserService;
-import com.musicstore.utility.Utility;
+import java.util.HashMap;
+import java.util.List;
+
+// TODO: unit test
+// TODO: logs
+// TODO: integration test
+// TODO: external test
+// TODO: Returned Response Entity HTTP Status
 
 @RestController
-public class OrderRestController {
+@Slf4j
+@RequestMapping(value = "order")
+public class OrderController {
 
-  @Autowired private DbAdminService adminService;
+  private static final String ORDER = "order";
+  private static final String DETAIL = "detail";
 
-  @Autowired private DbWebUserService webuserService;
+  private final AdminService adminService;
+  private final CartService cartService;
+  private final OrderService orderService;
 
-  @Autowired private DbOrderService orderService;
+  @Autowired
+  public OrderController(
+      AdminService adminService, CartService cartService, OrderService orderService) {
+    this.adminService = adminService;
+    this.cartService = cartService;
+    this.orderService = orderService;
+  }
 
-  public OrderRestController() {}
-
-  @RequestMapping(value = "/musicstore/api/order/all", method = RequestMethod.POST)
-  public Iterable<OrderBean> getAll(@RequestBody WebUserBean b) {
-    if (!adminService.isAdmin(b)) {
-      throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
-    }
+  @GetMapping(value = "/all/{admin-id}")
+  public Iterable<Order> getAll(@PathVariable String adminId) {
+    adminService.isAdmin(adminId);
     return orderService.getAll();
   }
 
-  @RequestMapping(value = "/musicstore/api/order/{id}", method = RequestMethod.POST)
-  public OrderBean getById(@PathVariable int id, @RequestBody WebUserBean b) {
-    if (!orderService.getById(id).get().getMail().equals(b.getMail()) && !adminService.isAdmin(b)
-        || !webuserService.isWebUser(b)) {
-      throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
-    }
-    return orderService.getById(id).get();
+  @GetMapping(value = "/{order-id}")
+  public Order getById(@PathVariable int orderId, @RequestBody String mail) {
+    return orderService.getVerifiedOrder(orderId, mail);
   }
 
-  @RequestMapping(value = "/musicstore/api/order", method = RequestMethod.POST)
-  public HashMap<String, Object> create(@RequestBody WebUserBean b) {
-    if (!adminService.isAdmin(b)) {
-      if (!webuserService.isWebUser(b)) {
-        throw new ResponseStatusException(
-            HttpStatus.METHOD_NOT_ALLOWED, "request by not an authorized");
-      }
-    }
-    List<CartToOrderBI> lbi = orderService.create(b);
-    OrderBean ob = this.getById(lbi.get(0).getOrderId(), b);
-    HashMap<String, Object> map = new HashMap<>();
-    map.put("order", ob);
-    map.put("boughtitems", lbi);
-    return map;
+  @PostMapping
+  public HashMap<String, Object> create(@RequestBody String mail) {
+    Order order = orderService.create(mail);
+    order = orderService.save(order);
+    HashMap<String, Object> orderMap = new HashMap<>();
+    orderMap.put(ORDER, order);
+    orderMap.put(DETAIL, getCartList(order.getId()));
+    return orderMap;
   }
 
-  @RequestMapping(value = "/musicstore/api/order/{id}", method = RequestMethod.PUT)
-  public OrderBean update(@PathVariable int id, @RequestBody Map<String, Map<String, String>> map) {
-    OrderBean ob = Utility.orderDeMap(map.get("toput"));
-    WebUserBean b = Utility.webuserDeMap(map.get("authorized"));
-    if (!adminService.isAdmin(b)) {
-      if (!webuserService.isWebUser(b) || !b.getMail().equals(ob.getMail())) {
-        throw new ResponseStatusException(
-            HttpStatus.METHOD_NOT_ALLOWED, "request by not an authorized");
-      }
-    }
-    Optional<OrderBean> updatedOrder = orderService.update(id, ob);
-    if (!updatedOrder.isPresent()) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "item not found");
-    }
-    return updatedOrder.get();
+  @DeleteMapping(value = "/{order-id}")
+  public void delete(@PathVariable int orderId, @RequestBody String adminId) {
+    adminService.isAdmin(adminId);
+    orderService.delete(orderId);
   }
 
-  @RequestMapping(value = "/musicstore/api/order/{id}", method = RequestMethod.DELETE)
-  public void delete(@PathVariable int id, @RequestBody WebUserBean b) {
-    if (!adminService.isAdmin(b)) {
-      if (!webuserService.isWebUser(b)
-          || !b.getMail().equals(orderService.getById(id).get().getMail())) {
-        throw new ResponseStatusException(
-            HttpStatus.METHOD_NOT_ALLOWED, "request by not an authorized");
-      }
+  private List<Cart> getCartList(int orderId) {
+    List<Cart> cartList = cartService.getByOrderId(orderId);
+    for (Cart cart : cartList) {
+      cart.setBought(true);
+      cart.setOrderId(orderId);
     }
-    Boolean isDeleted = orderService.delete(id);
-    if (isDeleted == false) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "item not found");
-    }
+    return cartList;
   }
 }
