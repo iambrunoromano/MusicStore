@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -68,7 +70,7 @@ public class CartService {
           .productId(cartRequest.getProductId())
           .quantity(cartRequest.getQuantity())
           .mail(cartRequest.getMail())
-          .date(cartRequest.getDate())
+          .date(Timestamp.from(Instant.now()))
           .bought(false)
           .overallPrice(optionalProduct.get().getPrice() * cartRequest.getQuantity())
           .build();
