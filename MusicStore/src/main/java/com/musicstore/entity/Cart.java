@@ -9,6 +9,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// TODO: add column for bought or not bough items
+// TODO: add column order id
+// TODO: add column for overall price for row
+// TODO: add in cart logic overall price computation before insertion
+
 @Entity
 @Data
 @AllArgsConstructor
