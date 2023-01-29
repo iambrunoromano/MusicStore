@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface CartRepository extends CrudRepository<Cart, Integer> {
   List<Cart> findByMail(String mail);
+
+  List<Cart> findByOrderId(int orderId);
 }
