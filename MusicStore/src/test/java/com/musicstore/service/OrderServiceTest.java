@@ -19,10 +19,10 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class OrderServiceTest {
+public class OrderServiceTest {
 
-  private static final int ID = 0;
-  private static final String MAIL = "mail";
+  public static final int ID = 0;
+  public static final String MAIL = "mail";
   private static final Timestamp DATE = Timestamp.from(Instant.now());
   private static final double TOTAL = 1.0;
 
@@ -124,18 +124,18 @@ class OrderServiceTest {
         .willReturn(Optional.of(createOrder()));
   }
 
-  private List<Cart> createCartList() {
+  public static List<Cart> createCartList() {
     List<Cart> cartList = new ArrayList<>();
     cartList.add(CartServiceTest.createCart());
     cartList.add(CartServiceTest.createCart());
     return cartList;
   }
 
-  private Order createOrder() {
+  public static Order createOrder() {
     return Order.builder().id(ID).mail(MAIL).date(DATE).total(TOTAL).build();
   }
 
-  private static void assertOrderUserMismatchException(ResponseStatusException actualException) {
+  public static void assertOrderUserMismatchException(ResponseStatusException actualException) {
     ResponseStatusException expectedException =
         new ResponseStatusException(
             HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.ORDER_USER_MISMATCH);
@@ -143,7 +143,7 @@ class OrderServiceTest {
     assertEquals(expectedException.getStatus(), actualException.getStatus());
   }
 
-  private static void assertOrderNotFoundException(
+  public static void assertOrderNotFoundException(
       ResponseStatusException actualException, HttpStatus expectedHttpStatus) {
     ResponseStatusException expectedException =
         new ResponseStatusException(expectedHttpStatus, ReasonsConstant.ORDER_NOT_FOUND);
