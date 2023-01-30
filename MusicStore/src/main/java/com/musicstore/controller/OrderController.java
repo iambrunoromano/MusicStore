@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 
-// TODO: unit test
 // TODO: integration test
 // TODO: external test
 // TODO: Returned Response Entity HTTP Status
@@ -22,8 +21,8 @@ import java.util.List;
 @RequestMapping(value = "order")
 public class OrderController {
 
-  private static final String ORDER = "order";
-  private static final String DETAIL = "detail";
+  public static final String ORDER = "order";
+  public static final String DETAIL = "detail";
 
   private final AdminService adminService;
   private final CartService cartService;
@@ -50,6 +49,7 @@ public class OrderController {
 
   @PostMapping
   public HashMap<String, Object> create(@RequestBody String mail) {
+    // TODO: check all controller outputs and return Response classes instead of maps
     Order order = orderService.create(mail);
     order = orderService.save(order);
     HashMap<String, Object> orderMap = new HashMap<>();
