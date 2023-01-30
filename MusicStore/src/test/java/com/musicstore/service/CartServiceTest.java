@@ -111,7 +111,6 @@ public class CartServiceTest {
         .productId(ProductServiceTest.PRODUCT_ID)
         .quantity(QUANTITY)
         .mail(UserServiceTest.MAIL)
-        .date(DATE)
         .build();
   }
 
@@ -119,7 +118,7 @@ public class CartServiceTest {
     return Product.builder().id(ProductServiceTest.PRODUCT_ID).price(price).build();
   }
 
-  private Cart createCart() {
+  public static Cart createCart() {
     return Cart.builder()
         .productId(ProductServiceTest.PRODUCT_ID)
         .quantity(QUANTITY)
