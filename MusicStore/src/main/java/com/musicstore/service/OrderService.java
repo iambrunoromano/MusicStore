@@ -16,8 +16,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-// TODO: logs
-// TODO: exceptions for all cases of order not found etc.
 
 @Service
 @Slf4j
@@ -43,6 +41,7 @@ public class OrderService {
           HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.ORDER_NOT_FOUND);
     }
     Order order = optionalOrder.get();
+    log.info("Found order [{}] for orderId [{}] and mail [{}]", order, orderId, mail);
     if (mail == null || !mail.equals(order.getMail())) {
       throw new ResponseStatusException(
           HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.ORDER_USER_MISMATCH);
@@ -52,6 +51,10 @@ public class OrderService {
 
   public Order create(String mail) {
     List<Cart> cartList = cartRepository.findByMail(mail);
+    if (cartList.isEmpty()) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.CART_NOT_FOUND);
+    }
+    log.info("Found [{}] cart associated to mail [{}]", cartList.size(), mail);
     Double total = 0.0;
     for (Cart cart : cartList) {
       total += cart.getOverallPrice();
@@ -68,6 +71,7 @@ public class OrderService {
     if (!optionalOrder.isPresent()) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.ORDER_NOT_FOUND);
     }
+    log.info("Deleting order with orderId [{}]", orderId);
     orderRepository.delete(optionalOrder.get());
     return true;
   }

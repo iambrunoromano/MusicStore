@@ -67,11 +67,15 @@ class OrderServiceTest {
   }
 
   @Test
-  void createNoCartTest() {
+  void createCartNotFoundTest() {
     mockCartListNotFound();
-    Order actualOrder = orderService.create(MAIL);
-    assertEquals(MAIL, actualOrder.getMail());
-    assertEquals(0.0, actualOrder.getTotal());
+    ResponseStatusException actualException =
+            assertThrows(
+                    ResponseStatusException.class,
+                    () -> {
+                      orderService.create(MAIL);
+                    });
+    CartServiceTest.assertCartNotFoundException(actualException);
   }
 
   @Test
