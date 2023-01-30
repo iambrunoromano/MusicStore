@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 
 // TODO: unit test
-// TODO: logs
 // TODO: integration test
 // TODO: external test
 // TODO: Returned Response Entity HTTP Status
