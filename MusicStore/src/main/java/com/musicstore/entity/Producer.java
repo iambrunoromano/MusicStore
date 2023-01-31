@@ -1,6 +1,4 @@
-package com.musicstore.model;
-
-import java.util.Objects;
+package com.musicstore.entity;
 
 import javax.persistence.ColumnResult;
 import javax.persistence.ConstructorResult;
@@ -9,10 +7,6 @@ import javax.persistence.NamedStoredProcedureQueries;
 import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.SqlResultSetMapping;
 
-import com.musicstore.pojos.BestProducts;
-
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import com.musicstore.pojos.BestProducers;
@@ -30,7 +24,7 @@ import lombok.NoArgsConstructor;
 						   })
 })
 @NamedStoredProcedureQueries({@NamedStoredProcedureQuery(name="producerFirstProc", procedureName="BestProducers", resultSetMappings = {"firstProducerProdMapping"})})
-public @Data @NoArgsConstructor class ProducerBean {
+public @Data @NoArgsConstructor class Producer {
 
 	@Id
 	private String mail;
