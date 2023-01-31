@@ -31,7 +31,7 @@ public class ProducerService {
     return producerRepository.findByMail(mail);
   }
 
-  public Producer create(Producer producer) {
+  public Producer save(Producer producer) {
     return producerRepository.save(producer);
   }
 
