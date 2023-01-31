@@ -1,74 +1,56 @@
 package com.musicstore.service;
 
 import com.musicstore.constant.ReasonsConstant;
-import com.musicstore.model.ProducerBean;
+import com.musicstore.entity.Producer;
+import com.musicstore.repository.ProducerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.StoredProcedureQuery;
-import java.util.List;
 import java.util.Optional;
 
 @Service
 @Slf4j
 public class ProducerService {
 
-  @Autowired private com.musicstore.repository.ProducerRepository ProducerRepository;
+  private final ProducerRepository producerRepository;
 
-  @PersistenceContext private EntityManager em;
-
-  public List<ProducerBean> BestProducers() {
-    StoredProcedureQuery spq = em.createNamedStoredProcedureQuery("producerFirstProc");
-    spq.execute();
-    return spq.getResultList();
+  @Autowired
+  public ProducerService(ProducerRepository producerRepository) {
+    this.producerRepository = producerRepository;
   }
 
-  public Iterable<ProducerBean> getAll() {
-    return ProducerRepository.findAll();
+  public Iterable<Producer> getAll() {
+    return producerRepository.findAll();
   }
 
-  public Optional<ProducerBean> getById(String id) {
-    return ProducerRepository.findById(id);
+  public Optional<Producer> getByMail(String mail) {
+    return producerRepository.findByMail(mail);
   }
 
-  public ProducerBean create(ProducerBean p) {
-    return ProducerRepository.save(p);
+  public Producer create(Producer producer) {
+    return producerRepository.save(producer);
   }
 
-  public Optional<ProducerBean> update(String id, ProducerBean p) {
-    Optional<ProducerBean> foundProducer = ProducerRepository.findById(id);
-    if (!foundProducer.isPresent()) {
-      return Optional.empty();
-    }
-
-    foundProducer.get().setName(p.getName());
-    foundProducer.get().setAddress(p.getAddress());
-
-    ProducerRepository.save(foundProducer.get());
-    return foundProducer;
-  }
-
-  public boolean delete(String id) {
-    Optional<ProducerBean> foundProducer = ProducerRepository.findById(id);
-    if (!foundProducer.isPresent()) {
-      return false;
-    }
-    ProducerRepository.delete(foundProducer.get());
-    return false;
-  }
-
-  public ProducerBean isProducer(String mail) {
-    Optional<ProducerBean> optionalProducer = this.getById(mail);
+  public void delete(String mail) {
+    Optional<Producer> optionalProducer = getByMail(mail);
     if (optionalProducer.isPresent()) {
-      log.info("User with Id [{}] is producer", mail);
+      log.info("Deleting producer with email [{}]", mail);
+      producerRepository.delete(optionalProducer.get());
+    }
+    log.warn("Producer with mail [{}] not found", mail);
+    throw new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCER_NOT_FOUND);
+  }
+
+  public Producer isProducer(String mail) {
+    Optional<Producer> optionalProducer = getByMail(mail);
+    if (optionalProducer.isPresent()) {
+      log.info("Found producer for mail [{}]", mail);
       return optionalProducer.get();
     }
-    log.warn("User with Id [{}] is not producer", mail);
+    log.warn("Producer with mail [{}] not found", mail);
     throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_PRODUCER);
   }
 }
