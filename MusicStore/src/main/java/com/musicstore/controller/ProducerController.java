@@ -1,88 +1,62 @@
-/*
 package com.musicstore.controller;
 
-import com.musicstore.entity.User;
-import com.musicstore.model.ProducerBean;
+import com.musicstore.constant.ReasonsConstant;
+import com.musicstore.entity.Producer;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.ProducerService;
-import com.musicstore.service.UserService;
-import com.musicstore.utility.Utility;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
+// TODO: unit test
+// TODO: logs in all controllers because we have the @Slf4j but not logging anything now
+// TODO: integration test
+// TODO: external test
+// TODO: Returned Response Entity HTTP Status
+
 @RestController
-public class ProducerRestController {
+@Slf4j
+@RequestMapping(value = "producer")
+public class ProducerController {
 
-  @Autowired private AdminService adminService;
+  private final AdminService adminService;
+  private final ProducerService producerService;
 
-  @Autowired private UserService webuserService;
-
-  @Autowired private ProducerService producerService;
-
-  public ProducerRestController() {}
-
-  @RequestMapping("/musicstore/api/producer/best")
-  public List<ProducerBean> BestProducers() {
-    return producerService.BestProducers();
+  @Autowired
+  public ProducerController(AdminService adminService, ProducerService producerService) {
+    this.adminService = adminService;
+    this.producerService = producerService;
   }
 
-  @RequestMapping(value = "/musicstore/api/producer/all", method = RequestMethod.POST)
-  public Iterable<ProducerBean> getAll(@RequestBody User b) {
-    if (!adminService.isAdmin(b)) {
-      throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
-    }
+  @GetMapping(value = "/all/{admin-id}")
+  public Iterable<Producer> getAll(@PathVariable String adminId) {
+    adminService.isAdmin(adminId);
     return producerService.getAll();
   }
 
-  @RequestMapping(value = "/musicstore/api/producer/{id}", method = RequestMethod.POST)
-  public ProducerBean getById(@PathVariable String id, @RequestBody User b) {
-    if (!adminService.isAdmin(b) && !(webuserService.isWebUser(b) && b.getMail().equals(id))) {
-      throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
+  @GetMapping(value = "/{admin-id}")
+  public Producer getById(@PathVariable String adminId, @RequestBody String mail) {
+    adminService.isAdmin(adminId);
+    Optional<Producer> optionalProducer = producerService.getByMail(mail);
+    if (!optionalProducer.isPresent()) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCER_NOT_FOUND);
     }
-    return producerService.getById(id).get();
+    return optionalProducer.get();
   }
 
-  @RequestMapping(value = "/musicstore/api/producer", method = RequestMethod.POST)
-  public ProducerBean create(@RequestBody ProducerBean p) {
-    return producerService.create(p);
+  @PostMapping(value = "/{admin-id}")
+  public Producer create(@PathVariable String adminId, @RequestBody Producer producer) {
+    adminService.isAdmin(adminId);
+    return producerService.save(producer);
   }
 
-  @RequestMapping(value = "/musicstore/api/producer/{id}", method = RequestMethod.PUT)
-  public ProducerBean update(
-      @PathVariable String id, @RequestBody Map<String, Map<String, String>> map) {
-    ProducerBean pb = Utility.producerDeMap(map.get("toput"));
-    User b = Utility.webuserDeMap(map.get("authorized"));
-    if (!adminService.isAdmin(b)) {
-      if (!webuserService.isWebUser(b) || !b.getMail().equals(pb.getMail())) {
-        throw new ResponseStatusException(
-            HttpStatus.METHOD_NOT_ALLOWED, "request by not an authorized user");
-      }
-    }
-    Optional<ProducerBean> updatedProducer = producerService.update(id, pb);
-    if (!updatedProducer.isPresent()) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "item not found");
-    }
-    return updatedProducer.get();
-  }
-
-  @RequestMapping(value = "/musicstore/api/producer/{id}", method = RequestMethod.DELETE)
-  public void delete(@PathVariable String id, @RequestBody User b) {
-    if (!adminService.isAdmin(b)) {
-      if (!webuserService.isWebUser(b)
-          || !b.getMail().equals(producerService.getById(id).get().getMail())) {
-        throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
-      }
-    }
-    Boolean isDeleted = producerService.delete(id);
-    if (isDeleted == false) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "item not found");
-    }
+  @DeleteMapping(value = "/{admin-id}")
+  public void delete(@PathVariable String adminId, @RequestBody String mail) {
+    adminService.isAdmin(adminId);
+    producerService.delete(mail);
   }
 }
-*/
