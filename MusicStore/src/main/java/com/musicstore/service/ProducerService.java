@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -52,5 +53,16 @@ public class ProducerService {
     }
     log.warn("Producer with mail [{}] not found", mail);
     throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_PRODUCER);
+  }
+
+  public List<Producer> getBestProducers(int firstNProducers) {
+    // TODO: implement logic (BestProducers stored procedure)
+    // 1. Create method in product repository to extract producerId list of product grouped by
+    // producerId summing sold quantity
+    // 2. Get producer info for each producerId and fill the List<Producer> up to firstNProducers
+    // 3. Return list
+    // TODO: unit test
+    // TODO: add method on ProducerController
+    return null;
   }
 }
