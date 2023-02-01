@@ -1,51 +1,46 @@
 package com.musicstore.service;
 
+import com.musicstore.constant.ReasonsConstant;
+import com.musicstore.entity.Shipment;
+import com.musicstore.repository.ShipmentRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.Optional;
 
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.musicstore.entity.Shipment;
-
 @Service
-public class DbShipmentService {
-	
-	@Autowired
-	private com.musicstore.repository.ShipmentRepository ShipmentRepository;
-	
-	public Iterable<Shipment> getAll(){
-		return ShipmentRepository.findAll();
-	}
-	
-	public Optional<Shipment> getById(int id){
-		return ShipmentRepository.findById(id);
-	}
-	
-	public Shipment create(Shipment p) {
-		return ShipmentRepository.save(p);
-	}
-	
-	public Optional<Shipment> update(int id, Shipment p) {
-			Optional<Shipment> foundShipment = ShipmentRepository.findById(id);
-			if(foundShipment.isEmpty()) {
-				return Optional.empty();
-			}
-			
-			foundShipment.get().setShipDate(p.getShipDate());
-			foundShipment.get().setArriveDate(p.getArriveDate());
-			foundShipment.get().setShipAddress(p.getShipAddress());
-			foundShipment.get().setTotal(p.getTotal());
-			
-			ShipmentRepository.save(foundShipment.get());
-			return foundShipment;
-		}
+@Slf4j
+public class ShipmentService {
 
-	public boolean delete(int id) {
-		Optional<Shipment> foundShipment = ShipmentRepository.findById(id);
-		if(foundShipment.isEmpty()) {
-			return false;
-		}
-		ShipmentRepository.delete(foundShipment.get());
-		return false;
-	}
+  private final ShipmentRepository shipmentRepository;
+
+  @Autowired
+  public ShipmentService(ShipmentRepository shipmentRepository) {
+    this.shipmentRepository = shipmentRepository;
+  }
+
+  public Iterable<Shipment> getAll() {
+    return shipmentRepository.findAll();
+  }
+
+  public Optional<Shipment> getById(int id) {
+    return shipmentRepository.findById(id);
+  }
+
+  public Shipment save(Shipment shipment) {
+    return shipmentRepository.save(shipment);
+  }
+
+  public void delete(int id) {
+    Optional<Shipment> optionalShipment = shipmentRepository.findById(id);
+    if (optionalShipment.isPresent()) {
+      log.info("Deleting shipment with id [{}]", id);
+      shipmentRepository.delete(optionalShipment.get());
+    }
+    log.warn("Shipment with id [{}] not found", id);
+    throw new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.SHIPMENT_NOT_FOUND);
+  }
 }
