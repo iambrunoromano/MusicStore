@@ -32,6 +32,6 @@ public class Shipment {
   @Column(name = "total")
   private double total;
 
-  @Column(name = "id_order")
-  private int idOrder;
+  @Column(name = "order_id")
+  private int orderId;
 }
