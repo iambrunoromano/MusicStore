@@ -1,27 +1,37 @@
-package com.musicstore.model;
+package com.musicstore.entity;
 
-import java.sql.Timestamp;
-import java.util.Objects;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+import java.sql.Timestamp;
+
 @Entity
-public @Data @NoArgsConstructor class ShipmentBean {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class Shipment {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	
-	private Timestamp shipDate;
-	private Timestamp arriveDate;
-	private String shipAddress;
-	private double total;
-	private int idOrder;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private int id;
 
+  @Column(name = "ship_date")
+  private Timestamp shipDate;
+
+  @Column(name = "arrive_date")
+  private Timestamp arriveDate;
+
+  @Column(name = "ship_address")
+  private String shipAddress;
+
+  @Column(name = "total")
+  private double total;
+
+  @Column(name = "id_order")
+  private int idOrder;
 }
