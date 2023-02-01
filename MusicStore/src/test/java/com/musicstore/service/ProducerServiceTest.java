@@ -14,9 +14,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class ProducerServiceTest {
+public class ProducerServiceTest {
 
-  private static final String MAIL = "mail";
+  public static final String MAIL = "mail";
   private static final String NAME = "name";
   private static final String ADDRESS = "address";
 
@@ -65,7 +65,7 @@ class ProducerServiceTest {
         .willReturn(Optional.empty());
   }
 
-  private Producer createProducer() {
+  public static Producer createProducer() {
     return Producer.builder().mail(MAIL).name(NAME).address(ADDRESS).build();
   }
 
