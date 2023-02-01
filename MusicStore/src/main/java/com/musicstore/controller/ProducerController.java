@@ -12,7 +12,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
-// TODO: unit test
 // TODO: logs in all controllers because we have the @Slf4j but not logging anything now
 // TODO: integration test
 // TODO: external test
@@ -39,7 +38,7 @@ public class ProducerController {
   }
 
   @GetMapping(value = "/{admin-id}")
-  public Producer getById(@PathVariable String adminId, @RequestBody String mail) {
+  public Producer getByName(@PathVariable String adminId, @RequestBody String mail) {
     adminService.isAdmin(adminId);
     Optional<Producer> optionalProducer = producerService.getByMail(mail);
     if (!optionalProducer.isPresent()) {
@@ -49,7 +48,7 @@ public class ProducerController {
   }
 
   @PostMapping(value = "/{admin-id}")
-  public Producer create(@PathVariable String adminId, @RequestBody Producer producer) {
+  public Producer save(@PathVariable String adminId, @RequestBody Producer producer) {
     adminService.isAdmin(adminId);
     return producerService.save(producer);
   }
