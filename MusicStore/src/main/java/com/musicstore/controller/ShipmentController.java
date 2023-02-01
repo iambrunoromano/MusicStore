@@ -1,37 +1,28 @@
+/*
 package com.musicstore.controller;
 
-import java.util.List;
-import java.util.Map;
-import java.util.ArrayList;
-import java.util.Optional;
-
+import com.musicstore.model.ShipmentBean;
+import com.musicstore.service.AdminService;
+import com.musicstore.service.DbShipmentService;
+import com.musicstore.service.OrderService;
+import com.musicstore.service.UserService;
+import com.musicstore.utility.Utility;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.musicstore.model.OrderBean;
-import com.musicstore.model.ShipmentBean;
-import com.musicstore.model.WebUserBean;
-import com.musicstore.service.DbAdminService;
-import com.musicstore.service.DbShipmentService;
-import com.musicstore.service.DbWebUserService;
-import com.musicstore.utility.Utility;
-import com.musicstore.service.DbOrderService;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 public class ShipmentRestController {
 
-  @Autowired private DbAdminService adminService;
+  @Autowired private AdminService adminService;
 
-  @Autowired private DbWebUserService webuserService;
+  @Autowired private UserService webuserService;
 
-  @Autowired private DbOrderService orderService;
+  @Autowired private OrderService orderService;
 
   @Autowired private DbShipmentService shipmentService;
 
@@ -109,3 +100,4 @@ public class ShipmentRestController {
     }
   }
 }
+*/
