@@ -82,7 +82,7 @@ class OrderControllerTest {
   @Test
   void createTest() {
     mockCreate();
-    HashMap<String, Object> actualMap = orderController.create(OrderServiceTest.MAIL);
+    HashMap<String, Object> actualMap = orderController.create(OrderServiceTest.MAIL,OrderServiceTest.ADDRESS);
     assertEquals(OrderServiceTest.createOrder(), actualMap.get(OrderController.ORDER));
     List<Cart> expectedCartList = OrderServiceTest.createCartList();
     for (Cart cart : expectedCartList) {
@@ -99,7 +99,7 @@ class OrderControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              orderController.create(OrderServiceTest.MAIL);
+              orderController.create(OrderServiceTest.MAIL, OrderServiceTest.ADDRESS);
             });
     CartServiceTest.assertCartNotFoundException(actualException);
   }
@@ -140,13 +140,13 @@ class OrderControllerTest {
   }
 
   void mockCreateNoCartFound() {
-    BDDMockito.given(orderService.create(Mockito.anyString()))
+    BDDMockito.given(orderService.create(Mockito.anyString(),Mockito.anyString()))
         .willThrow(
             new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.CART_NOT_FOUND));
   }
 
   void mockCreate() {
-    BDDMockito.given(orderService.create(Mockito.anyString()))
+    BDDMockito.given(orderService.create(Mockito.anyString(),Mockito.anyString()))
         .willReturn(OrderServiceTest.createOrder());
     BDDMockito.given(orderService.save(Mockito.any())).willReturn(OrderServiceTest.createOrder());
     BDDMockito.given(cartService.getByOrderId(Mockito.anyInt()))

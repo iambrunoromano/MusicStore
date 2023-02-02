@@ -47,10 +47,10 @@ public class OrderController {
     return orderService.getVerifiedOrder(orderId, mail);
   }
 
-  @PostMapping
-  public HashMap<String, Object> create(@RequestBody String mail) {
+  @PostMapping(value = "/{mail}")
+  public HashMap<String, Object> create(@PathVariable String mail, @RequestBody String address) {
     // TODO: check all controller outputs and return Response classes instead of maps
-    Order order = orderService.create(mail);
+    Order order = orderService.create(mail, address);
     order = orderService.save(order);
     HashMap<String, Object> orderMap = new HashMap<>();
     orderMap.put(ORDER, order);
