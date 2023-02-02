@@ -16,18 +16,20 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-
 @Service
 @Slf4j
 public class OrderService {
 
   private final OrderRepository orderRepository;
   private final CartRepository cartRepository;
+  private final AdminService adminService;
 
   @Autowired
-  public OrderService(OrderRepository orderRepository, CartRepository cartRepository) {
+  public OrderService(
+      OrderRepository orderRepository, CartRepository cartRepository, AdminService adminService) {
     this.orderRepository = orderRepository;
     this.cartRepository = cartRepository;
+    this.adminService = adminService;
   }
 
   public Iterable<Order> getAll() {
@@ -35,21 +37,22 @@ public class OrderService {
   }
 
   public Order getVerifiedOrder(int orderId, String mail) {
-    Optional<Order> optionalOrder = orderRepository.findById(orderId);
-    if (!optionalOrder.isPresent()) {
-      throw new ResponseStatusException(
-          HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.ORDER_NOT_FOUND);
-    }
-    Order order = optionalOrder.get();
-    log.info("Found order [{}] for orderId [{}] and mail [{}]", order, orderId, mail);
+    Order order = getOrder(orderId);
     if (mail == null || !mail.equals(order.getMail())) {
+      log.error("Mail [{}] does not correspond to order mail [{}]", mail, order.getMail());
       throw new ResponseStatusException(
           HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.ORDER_USER_MISMATCH);
     }
     return order;
   }
 
-  public Order create(String mail) {
+  public Order getAdminOrder(int orderId, String adminId) {
+    Order order = getOrder(orderId);
+    adminService.isAdmin(adminId);
+    return order;
+  }
+
+  public Order create(String mail, String address) {
     List<Cart> cartList = cartRepository.findByMail(mail);
     if (cartList.isEmpty()) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.CART_NOT_FOUND);
@@ -59,7 +62,7 @@ public class OrderService {
     for (Cart cart : cartList) {
       total += cart.getOverallPrice();
     }
-    return Order.builder().mail(mail).date(Timestamp.from(Instant.now())).total(total).build();
+    return Order.builder().mail(mail).date(Timestamp.from(Instant.now())).total(total).address(address).build();
   }
 
   public Order save(Order order) {
@@ -74,5 +77,16 @@ public class OrderService {
     log.info("Deleting order with orderId [{}]", orderId);
     orderRepository.delete(optionalOrder.get());
     return true;
+  }
+
+  private Order getOrder(int orderId) {
+    Optional<Order> optionalOrder = orderRepository.findById(orderId);
+    if (!optionalOrder.isPresent()) {
+      throw new ResponseStatusException(
+          HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.ORDER_NOT_FOUND);
+    }
+    Order order = optionalOrder.get();
+    log.info("Found order [{}] for orderId [{}] with mail [{}]", order, orderId, order.getMail());
+    return order;
   }
 }

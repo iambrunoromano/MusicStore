@@ -25,10 +25,13 @@ public class OrderServiceTest {
   public static final String MAIL = "mail";
   private static final Timestamp DATE = Timestamp.from(Instant.now());
   private static final double TOTAL = 1.0;
+  public static final String ADDRESS = "address";
 
   private OrderRepository orderRepository = Mockito.mock(OrderRepository.class);
   private CartRepository cartRepository = Mockito.mock(CartRepository.class);
-  private OrderService orderService = new OrderService(orderRepository, cartRepository);
+  private AdminService adminService = Mockito.mock(AdminService.class);
+  private OrderService orderService =
+      new OrderService(orderRepository, cartRepository, adminService);
 
   @Test
   void getVerifiedOrderTest() {
@@ -59,9 +62,29 @@ public class OrderServiceTest {
   }
 
   @Test
+  void getAdminOrderTest() {
+    mockFindOrderById();
+    mockIsAdmin();
+    assertEquals(createOrder(), orderService.getAdminOrder(ID, MAIL));
+  }
+
+  @Test
+  void getAdminOrderNotAdminTest() {
+    mockFindOrderById();
+    mockNotAdmin();
+    ResponseStatusException actualException =
+        assertThrows(
+            ResponseStatusException.class,
+            () -> {
+              orderService.getAdminOrder(ID, MAIL);
+            });
+    AdminServiceTest.assertNotAdminException(actualException);
+  }
+
+  @Test
   void createTest() {
     mockCartListFound();
-    Order actualOrder = orderService.create(MAIL);
+    Order actualOrder = orderService.create(MAIL, ADDRESS);
     assertEquals(MAIL, actualOrder.getMail());
     assertEquals(4.0, actualOrder.getTotal());
   }
@@ -70,11 +93,11 @@ public class OrderServiceTest {
   void createCartNotFoundTest() {
     mockCartListNotFound();
     ResponseStatusException actualException =
-            assertThrows(
-                    ResponseStatusException.class,
-                    () -> {
-                      orderService.create(MAIL);
-                    });
+        assertThrows(
+            ResponseStatusException.class,
+            () -> {
+              orderService.create(MAIL, ADDRESS);
+            });
     CartServiceTest.assertCartNotFoundException(actualException);
   }
 
@@ -107,6 +130,17 @@ public class OrderServiceTest {
     assertOrderUserMismatchException(actualException);
   }
 
+  private void mockNotAdmin() {
+    BDDMockito.given(adminService.isAdmin(Mockito.anyString()))
+        .willThrow(
+            new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN));
+  }
+
+  private void mockIsAdmin() {
+    BDDMockito.given(adminService.isAdmin(Mockito.anyString()))
+        .willReturn(AdminServiceTest.buildAdmin());
+  }
+
   private void mockCartListNotFound() {
     BDDMockito.given(cartRepository.findByMail(Mockito.anyString())).willReturn(new ArrayList<>());
   }
@@ -132,7 +166,7 @@ public class OrderServiceTest {
   }
 
   public static Order createOrder() {
-    return Order.builder().id(ID).mail(MAIL).date(DATE).total(TOTAL).build();
+    return Order.builder().id(ID).mail(MAIL).date(DATE).total(TOTAL).address(ADDRESS).build();
   }
 
   public static void assertOrderUserMismatchException(ResponseStatusException actualException) {
