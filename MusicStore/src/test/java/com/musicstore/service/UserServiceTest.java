@@ -14,7 +14,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UserServiceTest {
-  private static final String MAIL = "mail";
+  public static final String MAIL = "mail";
   private static final String PASSWORD = "password";
   private static final String IMG_URL = "img-url";
 
