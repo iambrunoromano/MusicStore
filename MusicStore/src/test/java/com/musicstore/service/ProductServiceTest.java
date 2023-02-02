@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ProductServiceTest {
 
-  private static final Integer PRODUCT_ID = 0;
+  public static final Integer PRODUCT_ID = 0;
 
   private final ProductRepository productRepository = Mockito.mock(ProductRepository.class);
   private final ProductService productService = new ProductService(productRepository);
