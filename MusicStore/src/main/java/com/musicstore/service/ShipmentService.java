@@ -1,6 +1,7 @@
 package com.musicstore.service;
 
 import com.musicstore.constant.ReasonsConstant;
+import com.musicstore.entity.Order;
 import com.musicstore.entity.Shipment;
 import com.musicstore.repository.ShipmentRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 @Service
@@ -30,8 +34,17 @@ public class ShipmentService {
     return shipmentRepository.findById(id);
   }
 
-  public Shipment save(Shipment shipment) {
-    return shipmentRepository.save(shipment);
+  public Shipment save(Order order) {
+    Shipment shipment =
+        Shipment.builder()
+            .shipDate(Timestamp.from(Instant.now()))
+            .arriveDate(Timestamp.from(Instant.now().plus(7, ChronoUnit.DAYS)))
+            .shipAddress(order.getAddress())
+            .total(order.getTotal())
+            .orderId(order.getId())
+            .build();
+    shipmentRepository.save(shipment);
+    return shipment;
   }
 
   public void delete(int id) {
