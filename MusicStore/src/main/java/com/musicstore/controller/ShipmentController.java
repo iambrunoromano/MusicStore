@@ -6,7 +6,6 @@ import com.musicstore.entity.Shipment;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.OrderService;
 import com.musicstore.service.ShipmentService;
-import com.musicstore.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,18 +26,13 @@ import java.util.Optional;
 public class ShipmentController {
 
   private final AdminService adminService;
-  private final UserService userService;
   private final OrderService orderService;
   private final ShipmentService shipmentService;
 
   @Autowired
   public ShipmentController(
-      AdminService adminService,
-      UserService userService,
-      OrderService orderService,
-      ShipmentService shipmentService) {
+      AdminService adminService, OrderService orderService, ShipmentService shipmentService) {
     this.adminService = adminService;
-    this.userService = userService;
     this.orderService = orderService;
     this.shipmentService = shipmentService;
   }
