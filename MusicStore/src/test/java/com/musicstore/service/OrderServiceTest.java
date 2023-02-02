@@ -24,14 +24,13 @@ public class OrderServiceTest {
   public static final int ID = 0;
   public static final String MAIL = "mail";
   private static final Timestamp DATE = Timestamp.from(Instant.now());
-  private static final double TOTAL = 1.0;
+  public static final double TOTAL = 1.0;
   public static final String ADDRESS = "address";
 
   private OrderRepository orderRepository = Mockito.mock(OrderRepository.class);
   private CartRepository cartRepository = Mockito.mock(CartRepository.class);
-  private AdminService adminService = Mockito.mock(AdminService.class);
   private OrderService orderService =
-      new OrderService(orderRepository, cartRepository, adminService);
+      new OrderService(orderRepository, cartRepository);
 
   @Test
   void getVerifiedOrderTest() {
@@ -64,21 +63,7 @@ public class OrderServiceTest {
   @Test
   void getAdminOrderTest() {
     mockFindOrderById();
-    mockIsAdmin();
-    assertEquals(createOrder(), orderService.getAdminOrder(ID, MAIL));
-  }
-
-  @Test
-  void getAdminOrderNotAdminTest() {
-    mockFindOrderById();
-    mockNotAdmin();
-    ResponseStatusException actualException =
-        assertThrows(
-            ResponseStatusException.class,
-            () -> {
-              orderService.getAdminOrder(ID, MAIL);
-            });
-    AdminServiceTest.assertNotAdminException(actualException);
+    assertEquals(createOrder(), orderService.getOrder(ID));
   }
 
   @Test
@@ -128,17 +113,6 @@ public class OrderServiceTest {
               orderService.getVerifiedOrder(ID, mail);
             });
     assertOrderUserMismatchException(actualException);
-  }
-
-  private void mockNotAdmin() {
-    BDDMockito.given(adminService.isAdmin(Mockito.anyString()))
-        .willThrow(
-            new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN));
-  }
-
-  private void mockIsAdmin() {
-    BDDMockito.given(adminService.isAdmin(Mockito.anyString()))
-        .willReturn(AdminServiceTest.buildAdmin());
   }
 
   private void mockCartListNotFound() {

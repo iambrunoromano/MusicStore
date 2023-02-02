@@ -22,14 +22,12 @@ public class OrderService {
 
   private final OrderRepository orderRepository;
   private final CartRepository cartRepository;
-  private final AdminService adminService;
 
   @Autowired
   public OrderService(
-      OrderRepository orderRepository, CartRepository cartRepository, AdminService adminService) {
+      OrderRepository orderRepository, CartRepository cartRepository) {
     this.orderRepository = orderRepository;
     this.cartRepository = cartRepository;
-    this.adminService = adminService;
   }
 
   public Iterable<Order> getAll() {
@@ -46,9 +44,14 @@ public class OrderService {
     return order;
   }
 
-  public Order getAdminOrder(int orderId, String adminId) {
-    Order order = getOrder(orderId);
-    adminService.isAdmin(adminId);
+  public Order getOrder(int orderId) {
+    Optional<Order> optionalOrder = orderRepository.findById(orderId);
+    if (!optionalOrder.isPresent()) {
+      throw new ResponseStatusException(
+              HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.ORDER_NOT_FOUND);
+    }
+    Order order = optionalOrder.get();
+    log.info("Found order [{}] for orderId [{}] with mail [{}]", order, orderId, order.getMail());
     return order;
   }
 
@@ -77,16 +80,5 @@ public class OrderService {
     log.info("Deleting order with orderId [{}]", orderId);
     orderRepository.delete(optionalOrder.get());
     return true;
-  }
-
-  private Order getOrder(int orderId) {
-    Optional<Order> optionalOrder = orderRepository.findById(orderId);
-    if (!optionalOrder.isPresent()) {
-      throw new ResponseStatusException(
-          HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.ORDER_NOT_FOUND);
-    }
-    Order order = optionalOrder.get();
-    log.info("Found order [{}] for orderId [{}] with mail [{}]", order, orderId, order.getMail());
-    return order;
   }
 }
