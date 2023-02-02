@@ -1,103 +1,76 @@
-/*
 package com.musicstore.controller;
 
-import com.musicstore.model.ShipmentBean;
+import com.musicstore.constant.ReasonsConstant;
+import com.musicstore.entity.Order;
+import com.musicstore.entity.Shipment;
 import com.musicstore.service.AdminService;
-import com.musicstore.service.DbShipmentService;
 import com.musicstore.service.OrderService;
+import com.musicstore.service.ShipmentService;
 import com.musicstore.service.UserService;
-import com.musicstore.utility.Utility;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Map;
 import java.util.Optional;
 
+// TODO: unit test
+// TODO: logs
+// TODO: integration test
+// TODO: external test
+// TODO: Returned Response Entity HTTP Status
+
 @RestController
-public class ShipmentRestController {
+@Slf4j
+@RequestMapping(value = "shipment")
+public class ShipmentController {
 
-  @Autowired private AdminService adminService;
+  private final AdminService adminService;
+  private final UserService userService;
+  private final OrderService orderService;
+  private final ShipmentService shipmentService;
 
-  @Autowired private UserService webuserService;
+  @Autowired
+  public ShipmentController(
+      AdminService adminService,
+      UserService userService,
+      OrderService orderService,
+      ShipmentService shipmentService) {
+    this.adminService = adminService;
+    this.userService = userService;
+    this.orderService = orderService;
+    this.shipmentService = shipmentService;
+  }
 
-  @Autowired private OrderService orderService;
-
-  @Autowired private DbShipmentService shipmentService;
-
-  public ShipmentRestController() {}
-
-  @RequestMapping(value = "/musicstore/api/shipment/all", method = RequestMethod.POST)
-  public Iterable<ShipmentBean> getAll(@RequestBody WebUserBean b) {
-    if (!adminService.isAdmin(b)) {
-      throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
-    }
+  @GetMapping(value = "/all/{admin-id}")
+  public Iterable<Shipment> getAll(@PathVariable String adminId) {
+    adminService.isAdmin(adminId);
     return shipmentService.getAll();
   }
 
-  @RequestMapping(value = "/musicstore/api/shipment/{id}", method = RequestMethod.POST)
-  public ShipmentBean getById(@PathVariable int id, @RequestBody WebUserBean b) {
-    ShipmentBean sb = shipmentService.getById(id).get();
-    if (!orderService.getById(sb.getIdOrder()).get().getMail().equals(b.getMail())
-            && !adminService.isAdmin(b)
-        || !webuserService.isWebUser(b)) {
-      throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "request by not an admin");
+  @GetMapping(value = "/{id}")
+  public Shipment getById(@PathVariable int id, @RequestBody String mail) {
+    Optional<Shipment> optionalShipment = shipmentService.getById(id);
+    if (!optionalShipment.isPresent()) {
+      log.warn("Shipment with id [{}] not found", id);
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.SHIPMENT_NOT_FOUND);
     }
-    return shipmentService.getById(id).get();
+    Shipment shipment = optionalShipment.get();
+    orderService.getVerifiedOrder(shipment.getOrderId(), mail);
+    return shipment;
   }
 
-  @RequestMapping(value = "/musicstore/api/shipment", method = RequestMethod.POST)
-  public ShipmentBean create(@RequestBody Map<String, Map<String, String>> map) {
-    ShipmentBean sb = Utility.shipmentDeMap(map.get("topost"));
-    WebUserBean b = Utility.webuserDeMap(map.get("authorized"));
-    if (!adminService.isAdmin(b)) {
-      if (!webuserService.isWebUser(b)
-          || !b.getMail().equals(orderService.getById(sb.getIdOrder()).get().getMail())) {
-        throw new ResponseStatusException(
-            HttpStatus.METHOD_NOT_ALLOWED, "request by not an authorized");
-      }
-    }
-    return shipmentService.create(sb);
+  @PostMapping(value = "/{admin-id}")
+  public Shipment save(@PathVariable String adminId, @RequestBody int orderId) {
+    adminService.isAdmin(adminId);
+    Order order = orderService.getOrder(orderId);
+    return shipmentService.save(order);
   }
 
-  @RequestMapping(value = "/musicstore/api/shipment/{id}", method = RequestMethod.PUT)
-  public ShipmentBean update(
-      @PathVariable int id, @RequestBody Map<String, Map<String, String>> map) {
-    ShipmentBean sb = Utility.shipmentDeMap(map.get("topost"));
-    WebUserBean b = Utility.webuserDeMap(map.get("authorized"));
-    if (!adminService.isAdmin(b)) {
-      if (!webuserService.isWebUser(b)
-          || !b.getMail().equals(orderService.getById(sb.getIdOrder()).get().getMail())) {
-        throw new ResponseStatusException(
-            HttpStatus.METHOD_NOT_ALLOWED, "request by not an authorized");
-      }
-    }
-    Optional<ShipmentBean> updatedShipment = shipmentService.update(id, sb);
-    if (!updatedShipment.isPresent()) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "item not found");
-    }
-    return updatedShipment.get();
-  }
-
-  @RequestMapping(value = "/musicstore/api/shipment/{id}", method = RequestMethod.DELETE)
-  public void delete(@PathVariable int id, @RequestBody WebUserBean b) {
-    if (!adminService.isAdmin(b)) {
-      if (!webuserService.isWebUser(b)
-          || !b.getMail()
-              .equals(
-                  orderService
-                      .getById(shipmentService.getById(id).get().getIdOrder())
-                      .get()
-                      .getMail())) {
-        throw new ResponseStatusException(
-            HttpStatus.METHOD_NOT_ALLOWED, "request by not an authorized");
-      }
-    }
-    Boolean isDeleted = shipmentService.delete(id);
-    if (isDeleted == false) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "item not found");
-    }
+  @DeleteMapping(value = "/{admin-id}")
+  public void delete(@PathVariable String adminId, @RequestBody int id) {
+    adminService.isAdmin(adminId);
+    shipmentService.delete(id);
   }
 }
-*/
