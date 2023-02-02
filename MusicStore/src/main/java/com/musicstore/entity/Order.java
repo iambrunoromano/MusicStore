@@ -28,4 +28,7 @@ public class Order {
 
   @Column(name = "total")
   private double total;
+
+  @Column(name = "address")
+  private String address;
 }
