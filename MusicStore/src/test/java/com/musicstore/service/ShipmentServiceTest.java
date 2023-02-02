@@ -17,7 +17,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class ShipmentServiceTest {
+public class ShipmentServiceTest {
 
   private static final int SHIPMENT_ID = 0;
   private static final Timestamp SHIP_DATE = Timestamp.from(Instant.now());
