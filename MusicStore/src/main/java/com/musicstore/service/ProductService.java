@@ -27,8 +27,12 @@ public class ProductService {
     return productRepository.findAll();
   }
 
-  public Optional<Product> getById(int id) {
-    return productRepository.findById(id);
+  public Product getById(int id) {
+    Optional<Product> optionalProduct = productRepository.findById(id);
+    if (!optionalProduct.isPresent()) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCT_NOT_FOUND);
+    }
+    return optionalProduct.get();
   }
 
   public Product save(Product p) {
