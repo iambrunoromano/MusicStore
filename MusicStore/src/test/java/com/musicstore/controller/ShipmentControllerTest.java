@@ -3,6 +3,7 @@ package com.musicstore.controller;
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Shipment;
 import com.musicstore.service.*;
+import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
@@ -14,8 +15,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-// TODO: implement all test cases
-
 class ShipmentControllerTest {
 
   private AdminService adminService = Mockito.mock(AdminService.class);
@@ -23,6 +22,112 @@ class ShipmentControllerTest {
   private ShipmentService shipmentService = Mockito.mock(ShipmentService.class);
   private ShipmentController shipmentController =
       new ShipmentController(adminService, orderService, shipmentService);
+
+  @Test
+  void getAllTest() {
+    mockIsAdmin();
+    mockGetAll();
+    assertEquals(createShipmentList(), shipmentController.getAll(AdminControllerTest.ADMIN_ID));
+  }
+
+  @Test
+  void getAllNotAdminTest() {
+    mockNotAdmin();
+    mockGetAll();
+    ResponseStatusException actualException =
+        assertThrows(
+            ResponseStatusException.class,
+            () -> {
+              shipmentController.getAll(AdminControllerTest.ADMIN_ID);
+            });
+    AdminServiceTest.assertNotAdminException(actualException);
+  }
+
+  @Test
+  void getByIdTest() {
+    mockGetById();
+    mockGetVerifiedOrder();
+    assertEquals(
+        ShipmentServiceTest.createShipment(),
+        shipmentController.getById(ShipmentServiceTest.SHIPMENT_ID, OrderServiceTest.MAIL));
+  }
+
+  @Test
+  void getByIdNotFoundTest() {
+    mockGetByIdNotFound();
+    mockGetVerifiedOrder();
+    ResponseStatusException actualException =
+        assertThrows(
+            ResponseStatusException.class,
+            () -> {
+              shipmentController.getById(ShipmentServiceTest.SHIPMENT_ID, OrderServiceTest.MAIL);
+            });
+    ShipmentServiceTest.assertShipmentNotFoundException(actualException);
+  }
+
+  @Test
+  void getByIdUserMismatchTest() {
+    mockGetById();
+    mockGetVerifiedOrderNotFound();
+    ResponseStatusException actualException =
+        assertThrows(
+            ResponseStatusException.class,
+            () -> {
+              shipmentController.getById(ShipmentServiceTest.SHIPMENT_ID, OrderServiceTest.MAIL);
+            });
+    OrderServiceTest.assertOrderUserMismatchException(actualException);
+  }
+
+  @Test
+  void saveTest() {
+    mockIsAdmin();
+    mockGetOrder();
+    mockSave();
+    assertEquals(
+        ShipmentServiceTest.createShipment(),
+        shipmentController.save(AdminControllerTest.ADMIN_ID, OrderServiceTest.ID));
+  }
+
+  @Test
+  void saveNotAdminTest() {
+    mockNotAdmin();
+    mockGetOrder();
+    mockSave();
+    ResponseStatusException actualException =
+        assertThrows(
+            ResponseStatusException.class,
+            () -> {
+              shipmentController.save(AdminControllerTest.ADMIN_ID, OrderServiceTest.ID);
+            });
+    AdminServiceTest.assertNotAdminException(actualException);
+  }
+
+  @Test
+  void saveAbsentOrderTest() {
+    mockIsAdmin();
+    mockGetOrderNotFound();
+    mockSave();
+    ResponseStatusException actualException =
+        assertThrows(
+            ResponseStatusException.class,
+            () -> {
+              shipmentController.save(AdminControllerTest.ADMIN_ID, OrderServiceTest.ID);
+            });
+    OrderServiceTest.assertOrderNotFoundException(actualException, HttpStatus.METHOD_NOT_ALLOWED);
+  }
+
+  @Test
+  void deleteNotAdminTest() {
+    mockNotAdmin();
+    ResponseStatusException actualException =
+        assertThrows(
+            ResponseStatusException.class,
+            () -> {
+              shipmentController.delete(
+                  AdminControllerTest.ADMIN_ID, ShipmentServiceTest.SHIPMENT_ID);
+            });
+    AdminServiceTest.assertNotAdminException(actualException);
+  }
 
   private void mockNotAdmin() {
     BDDMockito.given(adminService.isAdmin(Mockito.anyString()))
@@ -71,7 +176,7 @@ class ShipmentControllerTest {
   }
 
   private void mockGetOrderNotFound() {
-    BDDMockito.given(orderService.getVerifiedOrder(Mockito.anyInt(), Mockito.anyString()))
+    BDDMockito.given(orderService.getOrder(Mockito.anyInt()))
         .willThrow(
             new ResponseStatusException(
                 HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.ORDER_NOT_FOUND));

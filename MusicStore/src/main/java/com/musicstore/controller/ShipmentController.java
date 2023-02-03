@@ -14,8 +14,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
-// TODO: unit test
-// TODO: logs
 // TODO: integration test
 // TODO: external test
 // TODO: Returned Response Entity HTTP Status
