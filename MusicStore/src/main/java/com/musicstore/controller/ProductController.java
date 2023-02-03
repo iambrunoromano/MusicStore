@@ -1,39 +1,31 @@
 package com.musicstore.controller;
 
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Optional;
-
+import com.musicstore.model.Product;
+import com.musicstore.model.WebUser;
+import com.musicstore.service.AdminService;
+import com.musicstore.service.ProducerService;
+import com.musicstore.service.ProductService;
+import com.musicstore.service.UserService;
+import com.musicstore.utility.Utility;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.musicstore.model.CartBean;
-import com.musicstore.model.ProductBean;
-import com.musicstore.model.WebUserBean;
-import com.musicstore.service.DbAdminService;
-import com.musicstore.service.DbProductService;
-import com.musicstore.service.DbProducerService;
-import com.musicstore.service.DbWebUserService;
-import com.musicstore.utility.Utility;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 public class ProductRestController {
 
-  @Autowired private DbAdminService adminService;
+  @Autowired private AdminService adminService;
 
-  @Autowired private DbProducerService producerService;
+  @Autowired private ProducerService producerService;
 
-  @Autowired private DbWebUserService webuserService;
+  @Autowired private UserService webuserService;
 
-  @Autowired private DbProductService productService;
+  @Autowired private ProductService productService;
 
   public ProductRestController() {}
 
