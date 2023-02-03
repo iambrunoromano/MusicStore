@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ShipmentServiceTest {
 
-  private static final int SHIPMENT_ID = 0;
+  public static final int SHIPMENT_ID = 0;
   private static final Timestamp SHIP_DATE = Timestamp.from(Instant.now());
   private static final Timestamp ARRIVE_DATE =
       Timestamp.from(Instant.now().plus(14, ChronoUnit.DAYS));
@@ -58,7 +58,7 @@ public class ShipmentServiceTest {
     BDDMockito.given(shipmentRepository.findById(Mockito.anyInt())).willReturn(Optional.empty());
   }
 
-  private static void assertShipmentNotFoundException(ResponseStatusException actualException) {
+  public static void assertShipmentNotFoundException(ResponseStatusException actualException) {
     ResponseStatusException expectedException =
         new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.SHIPMENT_NOT_FOUND);
     assertEquals(expectedException.getReason(), actualException.getReason());
