@@ -14,13 +14,17 @@ Please read [here](https://github.com/iambrunoromano/MusicStore/tree/main/musics
 - [x] `Backend` Rest API design & development
 - [x] `Backend` Business logic design & development
 - [x] `Frontend` Application logic design & development
-- [x] `Backend` Integrated [Lombok](https://projectlombok.org/) for automatically available getter and setters 
+- [x] `Backend` Integrate [Lombok](https://projectlombok.org/)
+- [x] `Backend` Refactor services and controllers
+- [x] `Backend` UnitTest with [JUnit](https://junit.org/junit5/) services and controllers
 
 # Current task:
-- [ ] `Backend` Refactor services and controllers 
-- [ ] `Backend` UnitTest with [JUnit](https://junit.org/junit5/) services and controllers 
+- [ ] `Backend` Integration testing
 
 # Future tasks:
+- [ ] `Backend` Use validated Requests and Responses for Rest API
+- [ ] `Backend` Controller Advice for centralized exception handling
+- [ ] `Backend` Search indexes, insert/update dates columns and table names on all entities
 - [ ] `Frontend` Admin Login
 - [ ] `Frontend` Admin managment for:
   - [ ] Users

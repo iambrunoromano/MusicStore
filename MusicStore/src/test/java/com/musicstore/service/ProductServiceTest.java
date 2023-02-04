@@ -74,7 +74,7 @@ public class ProductServiceTest {
     BDDMockito.given(productRepository.findById(Mockito.anyInt())).willReturn(Optional.empty());
   }
 
-  private void assertProductNotFoundException(ResponseStatusException actualException) {
+  public static void assertProductNotFoundException(ResponseStatusException actualException) {
     UserServiceTest.assertGenericUserException(
         actualException, HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCT_NOT_FOUND);
   }
