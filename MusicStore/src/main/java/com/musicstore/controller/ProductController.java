@@ -1,102 +1,82 @@
 package com.musicstore.controller;
 
-import com.musicstore.model.Product;
-import com.musicstore.model.WebUser;
+import com.musicstore.constant.ReasonsConstant;
+import com.musicstore.entity.Product;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.ProducerService;
 import com.musicstore.service.ProductService;
-import com.musicstore.service.UserService;
-import com.musicstore.utility.Utility;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+
+// TODO: all request parameters need to be not nullable/empty and validated in all controllers
 
 @RestController
-public class ProductRestController {
+@Slf4j
+@RequestMapping(value = "product")
+public class ProductController {
 
-  @Autowired private AdminService adminService;
+  private final AdminService adminService;
+  private final ProducerService producerService;
+  private final ProductService productService;
 
-  @Autowired private ProducerService producerService;
-
-  @Autowired private UserService webuserService;
-
-  @Autowired private ProductService productService;
-
-  public ProductRestController() {}
-
-  @RequestMapping("/musicstore/api/product/category/{id}")
-  public List<ProductBean> ProductsByCategory(@PathVariable int id) {
-    return productService.ProductsByCategory(id);
+  @Autowired
+  public ProductController(
+      AdminService adminService, ProducerService producerService, ProductService productService) {
+    this.adminService = adminService;
+    this.producerService = producerService;
+    this.productService = productService;
   }
 
-  @RequestMapping("/musicstore/api/product/{mail}/products")
-  public List<ProductBean> ProductsByProducer(@PathVariable String mail) {
-    return productService.ProductsByProducer(mail);
+  @GetMapping(value = "/category/{category-id}")
+  public List<Product> getByCategory(@PathVariable int categoryId) {
+    return productService.getByCategory(categoryId);
   }
 
-  @RequestMapping("/musicstore/api/product/best")
-  public List<ProductBean> BestProducts() {
-    return productService.BestProducts();
+  @GetMapping(value = "/producer/{mail}")
+  public List<Product> getByProducer(@PathVariable String mail) {
+    return productService.getByProducer(mail);
   }
 
-  @RequestMapping("/musicstore/api/product/all")
-  public Iterable<ProductBean> getAll() {
+  @GetMapping(value = "/best")
+  public List<Product> getBest() {
+    return productService.getMostSold();
+  }
+
+  @GetMapping
+  public Iterable<Product> getAll() {
     return productService.getAll();
   }
 
-  @RequestMapping("/musicstore/api/product/{id}")
-  public ProductBean getById(@PathVariable int id) {
-    Optional<ProductBean> product = productService.getById(id);
-    if (!product.isPresent()) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "item not found");
-    }
-    return product.get();
+  @GetMapping(value = "/product/{product-id}")
+  public Product getById(@PathVariable int productId) {
+    return productService.getById(productId);
   }
 
-  @RequestMapping(value = "/musicstore/api/product", method = RequestMethod.POST)
-  public ProductBean create(@RequestBody Map<String, Map<String, String>> map) {
-    ProductBean pb = Utility.productDeMap(map.get("topost"));
-    WebUserBean b = Utility.webuserDeMap(map.get("authorized"));
-    if (!adminService.isAdmin(b) && !pb.getProducer().equals(b.getMail())
-        || !webuserService.isWebUser(b)) {
-      throw new ResponseStatusException(
-          HttpStatus.METHOD_NOT_ALLOWED, "request by not an authorized");
-    }
-    return productService.create(pb);
+  @PostMapping(value = "/producer/{mail}")
+  public Product createAsProducer(@PathVariable String mail, @RequestBody Product product) {
+    producerService.isProducer(mail);
+    return productService.save(product);
   }
 
-  @RequestMapping(value = "/musicstore/api/product/{id}", method = RequestMethod.PUT)
-  public ProductBean update(
-      @PathVariable int id, @RequestBody Map<String, Map<String, String>> map) {
-    ProductBean pb = Utility.productDeMap(map.get("topost"));
-    WebUserBean b = Utility.webuserDeMap(map.get("authorized"));
-    if (!adminService.isAdmin(b) && !pb.getProducer().equals(b.getMail())
-        || !webuserService.isWebUser(b)) {
-      throw new ResponseStatusException(
-          HttpStatus.METHOD_NOT_ALLOWED, "request by not an authorized");
-    }
-    Optional<ProductBean> updatedProduct = productService.update(id, pb);
-    if (!updatedProduct.isPresent()) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "item not found");
-    }
-    return updatedProduct.get();
+  @PostMapping(value = "/admin/{mail}")
+  public Product createAsAdmin(@PathVariable String mail, @RequestBody Product product) {
+    adminService.isAdmin(mail);
+    return productService.save(product);
   }
 
-  @RequestMapping(value = "/musicstore/api/product/{id}", method = RequestMethod.DELETE)
-  public void delete(@PathVariable int id, @RequestBody WebUserBean b) {
-    if (!adminService.isAdmin(b) && !getById(id).getProducer().equals(b.getMail())
-        || !webuserService.isWebUser(b)) {
-      throw new ResponseStatusException(
-          HttpStatus.METHOD_NOT_ALLOWED, "request by not an authorized");
+  @DeleteMapping(value = "/producer/{mail}")
+  public void delete(@PathVariable String mail, @RequestBody int productId) {
+    producerService.isProducer(mail);
+    Product product = productService.getById(productId);
+    if (mail != null && mail.equals(product.getProducer())) {
+      productService.delete(productId);
     }
-    Boolean isDeleted = productService.delete(id);
-    if (isDeleted == false) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "item not found");
-    }
+    throw new ResponseStatusException(
+        HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCT_PRODUCER_MISMATCH);
   }
 }
