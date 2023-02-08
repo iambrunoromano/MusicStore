@@ -1,6 +1,9 @@
 package com.musicstore.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import com.musicstore.constant.ReasonsConstant;
 import lombok.extern.slf4j.Slf4j;
@@ -22,8 +25,9 @@ public class AdminService {
     this.adminRepository = AdminRepository;
   }
 
-  public Iterable<Admin> getAll() {
-    return adminRepository.findAll();
+  public List<Admin> getAll() {
+    return StreamSupport.stream(adminRepository.findAll().spliterator(), false)
+        .collect(Collectors.toList());
   }
 
   public Optional<Admin> getById(String adminId) {

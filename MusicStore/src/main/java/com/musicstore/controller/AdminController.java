@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.musicstore.entity.Admin;
 import com.musicstore.service.AdminService;
 
+import java.util.List;
+
 // TODO: integration test
 // TODO: external test
 // TODO: Returned Response Entity HTTP Status
@@ -23,7 +25,7 @@ public class AdminController {
   }
 
   @GetMapping(value = "/all/{admin-id}")
-  public Iterable<Admin> getAll(@PathVariable String adminId) {
+  public List<Admin> getAll(@PathVariable String adminId) {
     adminService.isAdmin(adminId);
     return adminService.getAll();
   }

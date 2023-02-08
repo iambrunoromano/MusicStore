@@ -9,12 +9,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
+@Entity(name = Admin.TABLE_NAME)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class Admin {
+  public static final String TABLE_NAME = "admin";
 
   @Id
   @Column(name = "mail")
