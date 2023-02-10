@@ -65,7 +65,7 @@ class AdminControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              adminController.update(ADMIN_ID, AdminServiceTest.buildAdmin());
+              adminController.save(ADMIN_ID, AdminServiceTest.buildAdmin());
             });
     AdminServiceTest.assertNotAdminException(actualException);
   }
@@ -74,7 +74,7 @@ class AdminControllerTest {
   void updateAuthorizedTest() {
     Admin admin = mockAdmin();
     BDDMockito.given(adminService.save(Mockito.any())).willReturn(AdminServiceTest.buildAdmin());
-    assertEquals(admin, adminController.update(ADMIN_ID, AdminServiceTest.buildAdmin()));
+    assertEquals(admin, adminController.save(ADMIN_ID, AdminServiceTest.buildAdmin()));
   }
 
   @Test
