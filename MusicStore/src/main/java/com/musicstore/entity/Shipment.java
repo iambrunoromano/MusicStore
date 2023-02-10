@@ -8,17 +8,18 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-@Entity
+@Entity(name = Shipment.TABLE_NAME)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class Shipment {
+  public static final String TABLE_NAME = "shipment";
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
-  private int id;
+  private Integer id;
 
   @Column(name = "ship_date")
   private Timestamp shipDate;
@@ -33,5 +34,5 @@ public class Shipment {
   private double total;
 
   @Column(name = "order_id")
-  private int orderId;
+  private Integer orderId;
 }

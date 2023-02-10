@@ -57,6 +57,6 @@ public class ProductService {
   }
 
   public List<Product> getMostSold() {
-    return productRepository.findBySoldQuantityDesc();
+    return productRepository.findAllByOrderBySoldQuantityDesc();
   }
 }

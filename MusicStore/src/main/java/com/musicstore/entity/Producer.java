@@ -9,12 +9,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@Entity
+@Entity(name = Producer.TABLE_NAME)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class Producer {
+  public static final String TABLE_NAME = "producer";
 
   @Id
   @Column(name = "mail")

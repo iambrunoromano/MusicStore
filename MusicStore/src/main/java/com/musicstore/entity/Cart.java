@@ -9,22 +9,23 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
+@Entity(name = Cart.TABLE_NAME)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class Cart {
+  public static final String TABLE_NAME = "cart";
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id;
+  private Integer id;
 
   @Column(name = "product_id")
-  private int productId;
+  private Integer productId;
 
   @Column(name = "quantity")
-  private int quantity;
+  private Integer quantity;
 
   @Column(name = "mail")
   private String mail;

@@ -83,15 +83,15 @@ public class CategoryServiceTest {
   }
 
   private void mockFindCategoryByProducerNotFound() {
-    BDDMockito.given(productRepository.findCategoriesByProducer(Mockito.anyString()))
+    BDDMockito.given(categoryRepository.findCategoriesByProducer(Mockito.anyString()))
         .willReturn(new ArrayList<>());
   }
 
   private void mockFindCategoryByProducer() {
-    List<Integer> categoryIdList = new ArrayList<>();
-    categoryIdList.add(ID);
-    BDDMockito.given(productRepository.findCategoriesByProducer(Mockito.anyString()))
-        .willReturn(categoryIdList);
+    List<Category> categoryList = new ArrayList<>();
+    categoryList.add(buildCategory());
+    BDDMockito.given(categoryRepository.findCategoriesByProducer(Mockito.anyString()))
+        .willReturn(categoryList);
   }
 
   private void mockFindByIdNotFound() {

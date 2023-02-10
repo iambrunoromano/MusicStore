@@ -51,21 +51,9 @@ public class CategoryService {
   }
 
   public List<Category> getByProducer(String mail) {
-    List<Integer> categoryIdList = productRepository.findCategoriesByProducer(mail);
-    if (categoryIdList.isEmpty()) {
+    List<Category> categoryList = categoryRepository.findCategoriesByProducer(mail);
+    if (categoryList.isEmpty()) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.CATEGORY_NOT_FOUND);
-    }
-    List<Category> categoryList = new ArrayList<>();
-    for (Integer categoryId : categoryIdList) {
-      Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
-      if (!optionalCategory.isPresent()) {
-        log.error(
-            "Category with id [{}] of product belonging to producer with mail [{}] not found",
-            categoryId,
-            mail);
-      } else {
-        categoryList.add(optionalCategory.get());
-      }
     }
     return categoryList;
   }

@@ -7,19 +7,20 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name = Product.TABLE_NAME)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class Product {
+  public static final String TABLE_NAME = "product";
 
   // TODO:indexes on all entities on column repositories search on
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
-  private int id;
+  private Integer id;
 
   @Column(name = "name")
   private String name;
@@ -28,16 +29,16 @@ public class Product {
   private Double price;
 
   @Column(name = "left_quantity")
-  private int leftQuantity;
+  private Integer leftQuantity;
 
   @Column(name = "sold_quantity")
-  private int soldQuantity;
+  private Integer soldQuantity;
 
   @Column(name = "producer")
   private String producer;
 
   @Column(name = "category")
-  private int category;
+  private Integer category;
 
   @Column(name = "img_url")
   private String imgUrl;
