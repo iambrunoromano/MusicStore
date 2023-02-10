@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 
-// TODO: integration test
 // TODO: external test
 // TODO: Returned Response Entity HTTP Status
 
@@ -37,7 +36,7 @@ public class OrderController {
   }
 
   @GetMapping(value = "/all/{admin-id}")
-  public Iterable<Order> getAll(@PathVariable String adminId) {
+  public List<Order> getAll(@PathVariable String adminId) {
     adminService.isAdmin(adminId);
     return orderService.getAll();
   }

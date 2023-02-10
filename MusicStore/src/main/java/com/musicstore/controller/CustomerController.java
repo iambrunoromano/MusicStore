@@ -9,10 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
-// TODO: unit test
-// TODO: integration test
 // TODO: external test
 // TODO: Returned Response Entity HTTP Status
 // TODO: understand how the customer route differs in the usage from user route
@@ -35,7 +34,7 @@ public class CustomerController {
   }
 
   @GetMapping(value = "/all")
-  public Iterable<Customer> getAll(@RequestBody User user) {
+  public List<Customer> getAll(@RequestBody User user) {
     adminService.isAdmin(user.getMail());
     return customerService.getAll();
   }

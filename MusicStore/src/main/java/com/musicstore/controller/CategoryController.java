@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-// TODO: integration test
 // TODO: external test
 // TODO: Returned Response Entity HTTP Status
 // TODO: Do refactor of naming for ids of all entities across all repo
@@ -32,7 +31,7 @@ public class CategoryController {
   }
 
   @GetMapping(value = "/all")
-  public Iterable<Category> getAll() {
+  public List<Category> getAll() {
     return categoryService.getAll();
   }
 

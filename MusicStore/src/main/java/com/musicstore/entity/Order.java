@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Builder
 public class Order {
-  public static final String TABLE_NAME = "order";
+  public static final String TABLE_NAME = "order_table";
 
   @Id
   @Column(name = "id")

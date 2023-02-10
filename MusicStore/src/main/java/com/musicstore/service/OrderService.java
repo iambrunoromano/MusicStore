@@ -30,7 +30,7 @@ public class OrderService {
     this.cartRepository = cartRepository;
   }
 
-  public Iterable<Order> getAll() {
+  public List<Order> getAll() {
     return orderRepository.findAll();
   }
 

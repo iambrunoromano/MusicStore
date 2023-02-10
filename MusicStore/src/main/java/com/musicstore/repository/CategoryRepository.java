@@ -10,7 +10,10 @@ import java.util.List;
 @Repository
 public interface CategoryRepository extends CrudRepository<Category, Integer> {
 
+  List<Category> findAll();
+
   @Query(
-      "SELECT id,name,parent,imgUrl from category where id in (select distinct(category) FROM product WHERE producer = ?1)")
+      value =
+          "SELECT c from category c where id in (select distinct(category) FROM product WHERE producer = ?1)")
   List<Category> findCategoriesByProducer(String producer);
 }
