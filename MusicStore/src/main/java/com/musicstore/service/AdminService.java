@@ -40,11 +40,11 @@ public class AdminService {
 
   public void delete(String adminId) {
     Optional<Admin> optionalAdminBean = this.getById(adminId);
-    if (optionalAdminBean.isPresent()) {
-      log.info("Deleting admin with userId [{}]", adminId);
-      adminRepository.delete(optionalAdminBean.get());
+    if (!optionalAdminBean.isPresent()) {
+      throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
     }
-    throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
+    log.info("Deleting admin with userId [{}]", adminId);
+    adminRepository.delete(optionalAdminBean.get());
   }
 
   public Admin isAdmin(String adminId) {
