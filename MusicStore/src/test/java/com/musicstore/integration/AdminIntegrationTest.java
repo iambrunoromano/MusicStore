@@ -32,8 +32,16 @@ public class AdminIntegrationTest {
   @Test
   @Order(1)
   @Sql("classpath:integration/admin/admin_getall.sql")
-  public void adminGetAllTest() {
+  public void getAllTest() {
     List<Admin> adminList = adminController.getAll(ADMIN_ID);
     assertEquals(2, adminList.size());
+  }
+
+  @Test
+  @Order(2)
+  @Sql("classpath:integration/admin/admin_getall.sql")
+  public void getByIdTest() {
+    Admin admin = adminController.getById(ADMIN_ID, ADMIN_ID);
+    assertEquals(ADMIN_ID, admin.getMail());
   }
 }
