@@ -37,7 +37,7 @@ public class AdminController {
   }
 
   @PostMapping(value = "/{admin-id}")
-  public Admin update(@PathVariable String adminId, @RequestBody Admin newAdmin) {
+  public Admin save(@PathVariable String adminId, @RequestBody Admin newAdmin) {
     adminService.isAdmin(adminId);
     return adminService.save(newAdmin);
   }
