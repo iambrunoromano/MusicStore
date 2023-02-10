@@ -8,7 +8,6 @@ import com.musicstore.service.AdminService;
 
 import java.util.List;
 
-// TODO: integration test
 // TODO: external test
 // TODO: Returned Response Entity HTTP Status
 
