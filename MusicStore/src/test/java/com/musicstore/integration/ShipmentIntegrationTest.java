@@ -2,10 +2,7 @@ package com.musicstore.integration;
 
 import com.musicstore.MusicStoreApplication;
 import com.musicstore.controller.ShipmentController;
-import com.musicstore.entity.Product;
 import com.musicstore.entity.Shipment;
-import com.musicstore.repository.ShipmentRepository;
-import com.musicstore.service.ShipmentServiceTest;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
