@@ -73,10 +73,10 @@ public class ProductController {
   public void delete(@PathVariable String mail, @RequestBody int productId) {
     producerService.isProducer(mail);
     Product product = productService.getById(productId);
-    if (mail != null && mail.equals(product.getProducer())) {
-      productService.delete(productId);
+    if (mail == null || !mail.equals(product.getProducer())) {
+      throw new ResponseStatusException(
+          HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCT_PRODUCER_MISMATCH);
     }
-    throw new ResponseStatusException(
-        HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCT_PRODUCER_MISMATCH);
+    productService.delete(productId);
   }
 }
