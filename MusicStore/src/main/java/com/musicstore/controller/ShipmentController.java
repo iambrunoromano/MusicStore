@@ -12,9 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
-// TODO: integration test
 // TODO: external test
 // TODO: Returned Response Entity HTTP Status
 
@@ -36,7 +36,7 @@ public class ShipmentController {
   }
 
   @GetMapping(value = "/all/{admin-id}")
-  public Iterable<Shipment> getAll(@PathVariable String adminId) {
+  public List<Shipment> getAll(@PathVariable String adminId) {
     adminService.isAdmin(adminId);
     return shipmentService.getAll();
   }
