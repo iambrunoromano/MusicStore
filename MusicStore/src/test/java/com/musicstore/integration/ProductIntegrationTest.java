@@ -84,6 +84,8 @@ public class ProductIntegrationTest {
     Product product =
         productController.createAsProducer(FIRST_PRODUCER_MAIL, ProductServiceTest.createProduct());
     product.setId(ProductServiceTest.createProduct().getId());
+    product.setInsertDate(null);
+    product.setUpdateDate(null);
     assertEquals(ProductServiceTest.createProduct(), product);
   }
 
@@ -94,6 +96,8 @@ public class ProductIntegrationTest {
     Product product =
         productController.createAsAdmin(FIRST_ADMIN_ID, ProductServiceTest.createProduct());
     product.setId(ProductServiceTest.createProduct().getId());
+    product.setInsertDate(null);
+    product.setUpdateDate(null);
     assertEquals(ProductServiceTest.createProduct(), product);
   }
 

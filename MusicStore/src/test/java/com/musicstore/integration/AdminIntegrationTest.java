@@ -55,6 +55,8 @@ public class AdminIntegrationTest {
     Admin adminToPost = AdminServiceTest.buildAdmin();
     adminToPost.setMail(FIRST_ADMIN_ID);
     Admin saveAdmin = adminController.save(FIRST_ADMIN_ID, adminToPost);
+    saveAdmin.setInsertDate(null);
+    saveAdmin.setUpdateDate(null);
     assertEquals(adminToPost, saveAdmin);
   }
 

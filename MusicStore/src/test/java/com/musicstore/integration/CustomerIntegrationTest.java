@@ -57,6 +57,8 @@ public class CustomerIntegrationTest {
   void createTest() {
     Customer customer =
         customerController.create(buildAuthenticUser(), CustomerServiceTest.buildCustomer());
+    customer.setInsertDate(null);
+    customer.setUpdateDate(null);
     assertEquals(CustomerServiceTest.buildCustomer(), customer);
   }
 

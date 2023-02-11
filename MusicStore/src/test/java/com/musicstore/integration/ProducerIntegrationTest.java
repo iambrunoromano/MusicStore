@@ -56,6 +56,8 @@ public class ProducerIntegrationTest {
   @Sql("classpath:integration/producer.sql")
   void saveTest() {
     Producer producer = producerController.save(FIRST_ADMIN_ID, buildProducer());
+    producer.setInsertDate(null);
+    producer.setUpdateDate(null);
     assertEquals(buildProducer(), producer);
   }
 
