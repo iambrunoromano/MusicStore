@@ -37,12 +37,12 @@ public class ProducerService {
 
   public void delete(String mail) {
     Optional<Producer> optionalProducer = getByMail(mail);
-    if (optionalProducer.isPresent()) {
-      log.info("Deleting producer with email [{}]", mail);
-      producerRepository.delete(optionalProducer.get());
+    if (!optionalProducer.isPresent()) {
+      log.warn("Producer with mail [{}] not found", mail);
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCER_NOT_FOUND);
     }
-    log.warn("Producer with mail [{}] not found", mail);
-    throw new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCER_NOT_FOUND);
+    log.info("Deleting producer with email [{}]", mail);
+    producerRepository.delete(optionalProducer.get());
   }
 
   public Producer isProducer(String mail) {
