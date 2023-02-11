@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,7 +27,7 @@ public class ShipmentService {
     this.shipmentRepository = shipmentRepository;
   }
 
-  public Iterable<Shipment> getAll() {
+  public List<Shipment> getAll() {
     return shipmentRepository.findAll();
   }
 
