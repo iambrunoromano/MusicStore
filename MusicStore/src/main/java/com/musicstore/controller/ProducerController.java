@@ -10,10 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 // TODO: logs in all controllers because we have the @Slf4j but not logging anything now
-// TODO: integration test
 // TODO: external test
 // TODO: Returned Response Entity HTTP Status
 
@@ -32,7 +32,7 @@ public class ProducerController {
   }
 
   @GetMapping(value = "/all/{admin-id}")
-  public Iterable<Producer> getAll(@PathVariable String adminId) {
+  public List<Producer> getAll(@PathVariable String adminId) {
     adminService.isAdmin(adminId);
     return producerService.getAll();
   }
