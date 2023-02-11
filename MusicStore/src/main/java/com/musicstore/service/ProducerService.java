@@ -23,7 +23,7 @@ public class ProducerService {
     this.producerRepository = producerRepository;
   }
 
-  public Iterable<Producer> getAll() {
+  public List<Producer> getAll() {
     return producerRepository.findAll();
   }
 
