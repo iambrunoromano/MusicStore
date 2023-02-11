@@ -28,6 +28,7 @@ public class UserController {
 
   @GetMapping(value = "/all/{admin-id}")
   public List<User> getAll(@PathVariable String adminId) {
+    // TODO: create userResponse class without the password field
     adminService.isAdmin(adminId);
     return userService.getAll();
   }

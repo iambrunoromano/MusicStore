@@ -48,7 +48,7 @@ public class OrderController {
 
   @PostMapping(value = "/{mail}")
   public HashMap<String, Object> create(@PathVariable String mail, @RequestBody String address) {
-    // TODO: check all controller outputs and return Response classes instead of maps
+    // TODO: return response instead of map
     Order order = orderService.create(mail, address);
     order = orderService.save(order);
     HashMap<String, Object> orderMap = new HashMap<>();
