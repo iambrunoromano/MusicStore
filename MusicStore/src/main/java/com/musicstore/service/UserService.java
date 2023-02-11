@@ -35,36 +35,36 @@ public class UserService {
     return userRepository.save(user);
   }
 
-  public boolean delete(String mail) {
+  public void delete(String mail) {
     Optional<User> optionalUser = getById(mail);
-    if (optionalUser.isPresent()) {
-      log.info("Deleting user with userId [{}]", mail);
-      userRepository.delete(optionalUser.get());
-      return true;
+    if (!optionalUser.isPresent()) {
+      throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_USER);
     }
-    throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_USER);
+    log.info("Deleting user with userId [{}]", mail);
+    userRepository.delete(optionalUser.get());
   }
 
   public User isUser(String mail) {
     // TODO: replace everywhere the calls to this method with calls to isAuthentic: in this way data
     // are accessible only to the authorized user
     Optional<User> optionalUser = getById(mail);
-    if (optionalUser.isPresent()) {
-      log.info("User with Id [{}] is a user", mail);
-      return optionalUser.get();
+    if (!optionalUser.isPresent()) {
+      log.warn("User with Id [{}] is not a user", mail);
+      throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_USER);
     }
-    log.warn("User with Id [{}] is not a user", mail);
-    throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_USER);
+    log.info("User with Id [{}] is a user", mail);
+    return optionalUser.get();
   }
 
   public User isAuthentic(User user) {
     Optional<User> optionalUser =
         userRepository.findByMailAndPassword(user.getMail(), user.getPassword());
-    if (optionalUser.isPresent()) {
-      log.info("Matching user for mail [{}] and password [{}]", user.getMail(), user.getPassword());
-      return optionalUser.get();
+    if (!optionalUser.isPresent()) {
+      log.warn("Cannot Authenticate User with Mail [{}]", user.getMail());
+      throw new ResponseStatusException(
+          HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_AUTHENTIC);
     }
-    log.warn("Cannot Authenticate User with Mail [{}]", user.getMail());
-    throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_AUTHENTIC);
+    log.info("Matching user for mail [{}] and password [{}]", user.getMail(), user.getPassword());
+    return optionalUser.get();
   }
 }

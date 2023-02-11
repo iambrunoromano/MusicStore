@@ -38,12 +38,6 @@ public class UserServiceTest {
   }
 
   @Test
-  void deleteFoundTest() {
-    mockFound();
-    assertTrue(userService.delete(MAIL));
-  }
-
-  @Test
   void isNotUserTest() {
     mockNotFound();
     ResponseStatusException actualException =
