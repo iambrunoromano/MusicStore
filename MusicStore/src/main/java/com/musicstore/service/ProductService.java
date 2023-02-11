@@ -39,13 +39,13 @@ public class ProductService {
     return productRepository.save(p);
   }
 
-  public boolean delete(int id) {
+  public void delete(int id) {
     Optional<Product> optionalProduct = productRepository.findById(id);
-    if (optionalProduct.isPresent()) {
-      log.info("Deleting product with id [{}]", id);
-      productRepository.delete(optionalProduct.get());
+    if (!optionalProduct.isPresent()) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCT_NOT_FOUND);
     }
-    throw new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCT_NOT_FOUND);
+    log.info("Deleting product with id [{}]", id);
+    productRepository.delete(optionalProduct.get());
   }
 
   public List<Product> getByProducer(String mail) {
