@@ -23,7 +23,7 @@ public class ProductService {
     this.productRepository = productRepository;
   }
 
-  public Iterable<Product> getAll() {
+  public List<Product> getAll() {
     return productRepository.findAll();
   }
 

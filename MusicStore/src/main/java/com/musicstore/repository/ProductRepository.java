@@ -1,7 +1,6 @@
 package com.musicstore.repository;
 
 import com.musicstore.entity.Product;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,4 +13,6 @@ public interface ProductRepository extends CrudRepository<Product, Integer> {
   List<Product> findByCategory(Integer category);
 
   List<Product> findAllByOrderBySoldQuantityDesc();
+
+  List<Product> findAll();
 }
