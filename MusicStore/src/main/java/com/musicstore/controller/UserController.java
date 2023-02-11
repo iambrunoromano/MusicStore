@@ -47,9 +47,9 @@ public class UserController {
     return userService.save(user);
   }
 
-  @DeleteMapping(value = "/{user-id}")
-  public void delete(@PathVariable String userId) {
-    userService.isUser(userId);
-    userService.delete(userId);
+  @DeleteMapping
+  public void delete(@RequestBody User user) {
+    userService.isAuthentic(user);
+    userService.delete(user.getMail());
   }
 }

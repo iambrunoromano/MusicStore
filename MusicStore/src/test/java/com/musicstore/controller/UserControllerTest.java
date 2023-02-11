@@ -77,7 +77,7 @@ class UserControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              userController.delete(NOT_ADMIN_ID);
+              userController.delete(UserServiceTest.buildUser());
             });
     UserServiceTest.assertNotUserException(actualException);
   }
@@ -85,7 +85,7 @@ class UserControllerTest {
   private void mockIsNotUser() {
     ResponseStatusException expectedException =
         new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_USER);
-    BDDMockito.given(userService.isUser(Mockito.anyString())).willThrow(expectedException);
+    BDDMockito.given(userService.isAuthentic(Mockito.any())).willThrow(expectedException);
   }
 
   private void mockIsNotAdmin() {
