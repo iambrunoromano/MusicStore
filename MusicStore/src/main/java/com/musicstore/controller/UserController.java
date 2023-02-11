@@ -7,7 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-// TODO: integration test
+import java.util.List;
+
 // TODO: external test
 // TODO: Returned Response Entity HTTP Status
 
@@ -26,7 +27,7 @@ public class UserController {
   }
 
   @GetMapping(value = "/all/{admin-id}")
-  public Iterable<User> getAll(@PathVariable String adminId) {
+  public List<User> getAll(@PathVariable String adminId) {
     adminService.isAdmin(adminId);
     return userService.getAll();
   }
