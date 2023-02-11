@@ -2,6 +2,7 @@ package com.musicstore.controller;
 
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.User;
+import com.musicstore.response.UserResponse;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.AdminServiceTest;
 import com.musicstore.service.UserService;
@@ -43,13 +44,14 @@ class UserControllerTest {
   void getAllTest() {
     mockIsAdmin();
     mockUserList();
-    assertEquals(buildUserList(), userController.getAll(ADMIN_ID));
+    assertEquals(buildUserResponseList(), userController.getAll(ADMIN_ID));
   }
 
   @Test
   void getByIdTest() {
     mockIsAuthentic();
-    assertEquals(UserServiceTest.buildUser(), userController.getById(UserServiceTest.buildUser()));
+    assertEquals(
+        UserServiceTest.buildUserResponse(), userController.getById(UserServiceTest.buildUser()));
   }
 
   @Test
@@ -67,7 +69,8 @@ class UserControllerTest {
   @Test
   void saveTest() {
     mockSave();
-    assertEquals(UserServiceTest.buildUser(), userController.save(UserServiceTest.buildUser()));
+    assertEquals(
+        UserServiceTest.buildUserResponse(), userController.save(UserServiceTest.buildUser()));
   }
 
   @Test
@@ -109,6 +112,13 @@ class UserControllerTest {
     userList.add(UserServiceTest.buildUser());
     userList.add(UserServiceTest.buildUser());
     return userList;
+  }
+
+  private List<UserResponse> buildUserResponseList() {
+    List<UserResponse> userResponseList = new ArrayList<>();
+    userResponseList.add(UserServiceTest.buildUserResponse());
+    userResponseList.add(UserServiceTest.buildUserResponse());
+    return userResponseList;
   }
 
   private void mockIsAuthentic() {

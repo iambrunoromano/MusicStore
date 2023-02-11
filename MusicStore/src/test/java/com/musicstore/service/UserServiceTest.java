@@ -3,6 +3,7 @@ package com.musicstore.service;
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.User;
 import com.musicstore.repository.UserRepository;
+import com.musicstore.response.UserResponse;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
@@ -95,5 +96,9 @@ public class UserServiceTest {
 
   public static User buildUser() {
     return User.builder().mail(MAIL).password(PASSWORD).imgUrl(IMG_URL).build();
+  }
+
+  public static UserResponse buildUserResponse() {
+    return UserResponse.builder().mail(MAIL).imgUrl(IMG_URL).build();
   }
 }
