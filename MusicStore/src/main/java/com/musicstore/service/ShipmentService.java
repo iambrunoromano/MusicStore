@@ -50,11 +50,11 @@ public class ShipmentService {
 
   public void delete(int id) {
     Optional<Shipment> optionalShipment = shipmentRepository.findById(id);
-    if (optionalShipment.isPresent()) {
-      log.info("Deleting shipment with id [{}]", id);
-      shipmentRepository.delete(optionalShipment.get());
+    if (!optionalShipment.isPresent()) {
+      log.warn("Shipment with id [{}] not found", id);
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.SHIPMENT_NOT_FOUND);
     }
-    log.warn("Shipment with id [{}] not found", id);
-    throw new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.SHIPMENT_NOT_FOUND);
+    log.info("Deleting shipment with id [{}]", id);
+    shipmentRepository.delete(optionalShipment.get());
   }
 }
