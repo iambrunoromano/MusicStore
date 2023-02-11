@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class UserResponse {
-    private String mail;
-    private String imgUrl;
+  private String mail;
+  private String imgUrl;
 }
