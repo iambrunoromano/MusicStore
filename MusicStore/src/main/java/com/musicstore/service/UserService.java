@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,7 +23,7 @@ public class UserService {
     this.userRepository = userRepository;
   }
 
-  public Iterable<User> getAll() {
+  public List<User> getAll() {
     return userRepository.findAll();
   }
 
