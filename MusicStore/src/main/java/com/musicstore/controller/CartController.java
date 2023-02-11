@@ -42,6 +42,7 @@ public class CartController {
 
   @DeleteMapping
   public void delete(@RequestBody User user) {
+    // TODO: make @RequestHeader User and Admin when passed to Rest API methods
     userService.isAuthentic(user);
     cartService.deleteByMail(user.getMail());
   }
