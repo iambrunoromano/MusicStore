@@ -11,7 +11,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserServiceTest {
   public static final String MAIL = "mail";
@@ -35,24 +36,6 @@ public class UserServiceTest {
               userService.delete(MAIL);
             });
     assertNotUserException(actualException);
-  }
-
-  @Test
-  void isNotUserTest() {
-    mockNotFound();
-    ResponseStatusException actualException =
-        assertThrows(
-            ResponseStatusException.class,
-            () -> {
-              userService.isUser(MAIL);
-            });
-    assertNotUserException(actualException);
-  }
-
-  @Test
-  void isUserTest() {
-    mockFound();
-    assertEquals(buildUser(), userService.isUser(MAIL));
   }
 
   @Test

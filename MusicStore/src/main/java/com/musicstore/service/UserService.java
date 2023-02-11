@@ -44,18 +44,6 @@ public class UserService {
     userRepository.delete(optionalUser.get());
   }
 
-  public User isUser(String mail) {
-    // TODO: replace everywhere the calls to this method with calls to isAuthentic: in this way data
-    // are accessible only to the authorized user
-    Optional<User> optionalUser = getById(mail);
-    if (!optionalUser.isPresent()) {
-      log.warn("User with Id [{}] is not a user", mail);
-      throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_USER);
-    }
-    log.info("User with Id [{}] is a user", mail);
-    return optionalUser.get();
-  }
-
   public User isAuthentic(User user) {
     Optional<User> optionalUser =
         userRepository.findByMailAndPassword(user.getMail(), user.getPassword());
