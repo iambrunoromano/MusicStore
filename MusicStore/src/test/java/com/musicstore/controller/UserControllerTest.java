@@ -67,7 +67,7 @@ class UserControllerTest {
   @Test
   void saveTest() {
     mockSave();
-    assertEquals(UserServiceTest.buildUser(), userController.update(UserServiceTest.buildUser()));
+    assertEquals(UserServiceTest.buildUser(), userController.save(UserServiceTest.buildUser()));
   }
 
   @Test
