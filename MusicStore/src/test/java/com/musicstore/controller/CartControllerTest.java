@@ -37,7 +37,7 @@ class CartControllerTest {
   void getCartTest() {
     mockIsUser();
     mockGetCartByMail();
-    List<Cart> cartList = cartController.getCart(MAIL);
+    List<Cart> cartList = cartController.getCart(UserServiceTest.buildUser());
     for (Integer i = START_LIST; i < END_LIST; i++) {
       assertCart(cartList.get(i), i);
     }
@@ -51,7 +51,7 @@ class CartControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              cartController.getCart(MAIL);
+              cartController.getCart(UserServiceTest.buildUser());
             });
     UserServiceTest.assertNotUserException(actualException);
   }
@@ -63,7 +63,7 @@ class CartControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              cartController.getCart(MAIL);
+              cartController.getCart(UserServiceTest.buildUser());
             });
     UserServiceTest.assertNotUserException(actualException);
   }
@@ -76,7 +76,7 @@ class CartControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              cartController.getCart(MAIL);
+              cartController.getCart(UserServiceTest.buildUser());
             });
     UserServiceTest.assertNotUserException(actualException);
   }
@@ -90,11 +90,11 @@ class CartControllerTest {
   }
 
   private void mockIsUser() {
-    BDDMockito.given(userService.isUser(Mockito.anyString())).willReturn(new User());
+    BDDMockito.given(userService.isAuthentic(Mockito.any())).willReturn(new User());
   }
 
   private void mockIsNotUser() {
-    BDDMockito.given(userService.isUser(Mockito.any()))
+    BDDMockito.given(userService.isAuthentic(Mockito.any()))
         .willThrow(
             new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_USER));
   }

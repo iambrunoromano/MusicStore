@@ -1,6 +1,7 @@
 package com.musicstore.controller;
 
 import com.musicstore.entity.Cart;
+import com.musicstore.entity.User;
 import com.musicstore.request.CartRequest;
 import com.musicstore.service.CartService;
 import com.musicstore.service.UserService;
@@ -27,21 +28,21 @@ public class CartController {
     this.cartService = cartService;
   }
 
-  @GetMapping(value = "/{mail}")
-  public List<Cart> getCart(@PathVariable String mail) {
-    userService.isUser(mail); // TODO: substitute this method with isAuthentic
-    return cartService.getByMail(mail);
+  @GetMapping
+  public List<Cart> getCart(@RequestBody User user) {
+    userService.isAuthentic(user);
+    return cartService.getByMail(user.getMail());
   }
 
-  @PostMapping(value = "/{mail}")
-  public void save(@PathVariable String mail, @RequestBody List<CartRequest> cartRequestList) {
-    userService.isUser(mail);
+  @PostMapping
+  public void save(@RequestHeader User user, @RequestBody List<CartRequest> cartRequestList) {
+    userService.isAuthentic(user);
     cartService.save(cartRequestList);
   }
 
-  @DeleteMapping(value = "/{mail}")
-  public void delete(@PathVariable String mail) {
-    userService.isUser(mail);
-    cartService.deleteByMail(mail);
+  @DeleteMapping
+  public void delete(@RequestBody User user) {
+    userService.isAuthentic(user);
+    cartService.deleteByMail(user.getMail());
   }
 }
