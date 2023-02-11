@@ -48,6 +48,9 @@ public class AdminService {
   }
 
   public Admin isAdmin(String adminId) {
+    // TODO: this method should authenticate a user verifying:
+    // 1. The user isAuthentic using userService method
+    // 2. The userMail is present on the admin table as adminId
     Optional<Admin> optionalAdminBean = this.getById(adminId);
     if (optionalAdminBean.isPresent()) {
       log.info("User with Id [{}] is admin", adminId);
