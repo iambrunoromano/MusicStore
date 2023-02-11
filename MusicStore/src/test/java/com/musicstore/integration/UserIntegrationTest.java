@@ -21,9 +21,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class UserIntegrationTest {
 
   private static final String FIRST_ADMIN_ID = "mail1@test";
-  private static final String FIRST_USER_ID = "usermail1@test";
-  private static final String FIRST_USER_PASSWORD = "password1";
-  private static final String SECOND_USER_ID = "usermail2@test";
+  public static final String FIRST_USER_ID = "usermail1@test";
+  public static final String FIRST_USER_PASSWORD = "password1";
+  public static final String SECOND_USER_ID = "usermail2@test";
+  public static final String SECOND_USER_PASSWORD = "password2";
   private static final String THIRD_USER_ID = "usermail3@test";
 
   private final UserController userController;
@@ -45,7 +46,7 @@ public class UserIntegrationTest {
   @Order(2)
   @Sql("classpath:integration/user.sql")
   void getByIdTest() {
-    User user = userController.getById(buildUser(FIRST_USER_ID));
+    User user = userController.getById(buildUser(FIRST_USER_ID, FIRST_USER_PASSWORD));
     assertEquals(FIRST_USER_ID, user.getMail());
   }
 
@@ -53,7 +54,7 @@ public class UserIntegrationTest {
   @Order(3)
   @Sql("classpath:integration/user.sql")
   void saveTest() {
-    User user = userController.save(buildUser(THIRD_USER_ID));
+    User user = userController.save(buildUser(THIRD_USER_ID, SECOND_USER_PASSWORD));
     assertEquals(THIRD_USER_ID, user.getMail());
   }
 
@@ -61,14 +62,14 @@ public class UserIntegrationTest {
   @Order(4)
   @Sql("classpath:integration/user.sql")
   void deleteTest() {
-    userController.delete(FIRST_USER_ID);
+    userController.delete(buildUser(FIRST_USER_ID, FIRST_USER_PASSWORD));
     List<User> userList = userController.getAll(FIRST_ADMIN_ID);
     assertEquals(1, userList.size());
     User leftUser = userList.get(0);
     assertEquals(SECOND_USER_ID, leftUser.getMail());
   }
 
-  private User buildUser(String userId) {
-    return User.builder().mail(userId).password(FIRST_USER_PASSWORD).build();
+  public static User buildUser(String userId, String userPassword) {
+    return User.builder().mail(userId).password(userPassword).build();
   }
 }

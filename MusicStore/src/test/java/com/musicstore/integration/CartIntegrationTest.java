@@ -3,6 +3,7 @@ package com.musicstore.integration;
 import com.musicstore.MusicStoreApplication;
 import com.musicstore.controller.CartController;
 import com.musicstore.entity.Cart;
+import com.musicstore.entity.User;
 import com.musicstore.request.CartRequest;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -35,7 +36,10 @@ public class CartIntegrationTest {
   @Order(1)
   @Sql("classpath:integration/cart.sql")
   public void getCartTest() {
-    List<Cart> cartList = cartController.getCart(FIRST_USER_MAIL);
+    User authUser =
+        UserIntegrationTest.buildUser(
+            UserIntegrationTest.FIRST_USER_ID, UserIntegrationTest.FIRST_USER_PASSWORD);
+    List<Cart> cartList = cartController.getCart(authUser);
     assertEquals(1, cartList.size());
   }
 
@@ -43,8 +47,11 @@ public class CartIntegrationTest {
   @Order(2)
   @Sql("classpath:integration/cart.sql")
   public void saveTest() {
-    cartController.save(SECOND_USER_MAIL, buildCartRequestList());
-    List<Cart> cartList = cartController.getCart(SECOND_USER_MAIL);
+    User authUser =
+        UserIntegrationTest.buildUser(
+            UserIntegrationTest.SECOND_USER_ID, UserIntegrationTest.SECOND_USER_PASSWORD);
+    cartController.save(authUser, buildCartRequestList());
+    List<Cart> cartList = cartController.getCart(authUser);
     assertEquals(buildCartRequestList().size(), cartList.size());
   }
 
@@ -52,8 +59,11 @@ public class CartIntegrationTest {
   @Order(3)
   @Sql("classpath:integration/cart.sql")
   public void deleteTest() {
-    cartController.delete(FIRST_USER_MAIL);
-    List<Cart> cartList = cartController.getCart(FIRST_USER_MAIL);
+    User authUser =
+        UserIntegrationTest.buildUser(
+            UserIntegrationTest.FIRST_USER_ID, UserIntegrationTest.FIRST_USER_PASSWORD);
+    cartController.delete(authUser);
+    List<Cart> cartList = cartController.getCart(authUser);
     assertEquals(0, cartList.size());
   }
 
