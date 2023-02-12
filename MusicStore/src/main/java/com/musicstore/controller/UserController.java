@@ -26,13 +26,13 @@ public class UserController {
     this.userService = userService;
   }
 
-  @GetMapping(value = "/all/{admin-id}")
-  public ResponseEntity<List<UserResponse>> getAll(@PathVariable String adminId) {
-    adminService.isAdmin(adminId);
+  @GetMapping(value = "/all")
+  public ResponseEntity<List<UserResponse>> getAll(@RequestHeader User user) {
+    adminService.isAdmin(user);
     List<User> userList = userService.getAll();
     List<UserResponse> userResponseList = new ArrayList<>();
-    for (User user : userList) {
-      userResponseList.add(getUserResponse(user));
+    for (User foundUser : userList) {
+      userResponseList.add(getUserResponse(foundUser));
     }
     return ResponseEntity.ok(userResponseList);
   }

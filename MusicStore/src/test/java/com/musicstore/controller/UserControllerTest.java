@@ -36,7 +36,7 @@ class UserControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              userController.getAll(NOT_ADMIN_ID);
+              userController.getAll(AdminControllerTest.ADMIN_AUTH_USER);
             });
     AdminServiceTest.assertNotAdminException(actualException);
   }
@@ -45,7 +45,7 @@ class UserControllerTest {
   void getAllTest() {
     mockIsAdmin();
     mockUserList();
-    ResponseEntity<List<UserResponse>> userListResponseEntity = userController.getAll(ADMIN_ID);
+    ResponseEntity<List<UserResponse>> userListResponseEntity = userController.getAll(AdminControllerTest.ADMIN_AUTH_USER);
     List<UserResponse> userResponseList = userListResponseEntity.getBody();
     assertEquals(buildUserResponseList(), userResponseList);
   }
@@ -101,11 +101,11 @@ class UserControllerTest {
   private void mockIsNotAdmin() {
     ResponseStatusException expectedException =
         new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
-    BDDMockito.given(adminService.isAdmin(Mockito.anyString())).willThrow(expectedException);
+    BDDMockito.given(adminService.isAdmin(Mockito.any())).willThrow(expectedException);
   }
 
   private void mockIsAdmin() {
-    BDDMockito.given(adminService.isAdmin(Mockito.anyString()))
+    BDDMockito.given(adminService.isAdmin(Mockito.any()))
         .willReturn(AdminServiceTest.buildAdmin());
   }
 
