@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Timestamp;
@@ -37,7 +38,9 @@ class CartControllerTest {
   void getCartTest() {
     mockIsUser();
     mockGetCartByMail();
-    List<Cart> cartList = cartController.getCart(UserServiceTest.buildUser());
+    ResponseEntity<List<Cart>> cartListResponseEntity =
+        cartController.getCart(UserServiceTest.buildUser());
+    List<Cart> cartList = cartListResponseEntity.getBody();
     for (Integer i = START_LIST; i < END_LIST; i++) {
       assertCart(cartList.get(i), i);
     }
