@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -39,7 +41,8 @@ public class CartIntegrationTest {
     User authUser =
         UserIntegrationTest.buildUser(
             UserIntegrationTest.FIRST_USER_ID, UserIntegrationTest.FIRST_USER_PASSWORD);
-    List<Cart> cartList = cartController.getCart(authUser);
+    ResponseEntity<List<Cart>> cartListResponseEntity = cartController.getCart(authUser);
+    List<Cart> cartList = cartListResponseEntity.getBody();
     assertEquals(1, cartList.size());
   }
 
@@ -50,8 +53,10 @@ public class CartIntegrationTest {
     User authUser =
         UserIntegrationTest.buildUser(
             UserIntegrationTest.SECOND_USER_ID, UserIntegrationTest.SECOND_USER_PASSWORD);
-    cartController.save(authUser, buildCartRequestList());
-    List<Cart> cartList = cartController.getCart(authUser);
+    ResponseEntity<Void> responseEntity = cartController.save(authUser, buildCartRequestList());
+    assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    ResponseEntity<List<Cart>> cartListResponseEntity = cartController.getCart(authUser);
+    List<Cart> cartList = cartListResponseEntity.getBody();
     assertEquals(buildCartRequestList().size(), cartList.size());
   }
 
@@ -62,8 +67,10 @@ public class CartIntegrationTest {
     User authUser =
         UserIntegrationTest.buildUser(
             UserIntegrationTest.FIRST_USER_ID, UserIntegrationTest.FIRST_USER_PASSWORD);
-    cartController.delete(authUser);
-    List<Cart> cartList = cartController.getCart(authUser);
+    ResponseEntity<Void> responseEntity = cartController.delete(authUser);
+    assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    ResponseEntity<List<Cart>> cartListResponseEntity = cartController.getCart(authUser);
+    List<Cart> cartList = cartListResponseEntity.getBody();
     assertEquals(0, cartList.size());
   }
 
