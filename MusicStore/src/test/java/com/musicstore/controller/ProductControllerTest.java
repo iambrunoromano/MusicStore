@@ -1,11 +1,13 @@
 package com.musicstore.controller;
 
 import com.musicstore.constant.ReasonsConstant;
+import com.musicstore.entity.Product;
 import com.musicstore.service.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -26,9 +28,10 @@ class ProductControllerTest {
   void createAsProducerTest() {
     mockIsProducer();
     mockSave();
-    assertEquals(
-        ProductServiceTest.createProduct(),
-        productController.createAsProducer(MAIL, ProductServiceTest.createProduct()));
+    ResponseEntity<Product> productResponseEntity =
+        productController.createAsProducer(MAIL, ProductServiceTest.createProduct());
+    Product product = productResponseEntity.getBody();
+    assertEquals(ProductServiceTest.createProduct(), product);
   }
 
   @Test
@@ -49,9 +52,10 @@ class ProductControllerTest {
   void createAsAdminTest() {
     mockIsAdmin();
     mockSave();
-    assertEquals(
-        ProductServiceTest.createProduct(),
-        productController.createAsAdmin(MAIL, ProductServiceTest.createProduct()));
+    ResponseEntity<Product> productResponseEntity =
+        productController.createAsAdmin(MAIL, ProductServiceTest.createProduct());
+    Product product = productResponseEntity.getBody();
+    assertEquals(ProductServiceTest.createProduct(), product);
   }
 
   @Test
