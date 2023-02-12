@@ -2,6 +2,7 @@ package com.musicstore.controller;
 
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Producer;
+import com.musicstore.integration.ProducerIntegrationTest;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.AdminServiceTest;
 import com.musicstore.service.ProducerService;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -33,7 +35,10 @@ class ProducerControllerTest {
   void getAllTest() {
     mockIsAdmin();
     mockGetAll();
-    assertEquals(createProducerList(), producerController.getAll(AdminControllerTest.ADMIN_ID));
+    ResponseEntity<List<Producer>> producerListResponseEntity =
+        producerController.getAll(AdminControllerTest.ADMIN_ID);
+    List<Producer> producerList = producerListResponseEntity.getBody();
+    assertEquals(createProducerList(), producerList);
   }
 
   @Test
@@ -52,9 +57,10 @@ class ProducerControllerTest {
   void getByIdTest() {
     mockIsAdmin();
     mockGetByMailFound();
-    assertEquals(
-        ProducerServiceTest.createProducer(),
-        producerController.getByName(AdminControllerTest.ADMIN_ID, ProducerServiceTest.MAIL));
+    ResponseEntity<Producer> producerResponseEntity =
+        producerController.getByName(AdminControllerTest.ADMIN_ID, ProducerServiceTest.MAIL);
+    Producer producer = producerResponseEntity.getBody();
+    assertEquals(ProducerServiceTest.createProducer(), producer);
   }
 
   @Test
@@ -87,10 +93,10 @@ class ProducerControllerTest {
   void createTest() {
     mockIsAdmin();
     mockSave();
-    assertEquals(
-        ProducerServiceTest.createProducer(),
-        producerController.save(
-            AdminControllerTest.ADMIN_ID, ProducerServiceTest.createProducer()));
+    ResponseEntity<Producer> producerResponseEntity =
+        producerController.save(AdminControllerTest.ADMIN_ID, ProducerServiceTest.createProducer());
+    Producer producer = producerResponseEntity.getBody();
+    assertEquals(ProducerServiceTest.createProducer(), producer);
   }
 
   @Test
