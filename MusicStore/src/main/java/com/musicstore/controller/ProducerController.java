@@ -2,6 +2,7 @@ package com.musicstore.controller;
 
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Producer;
+import com.musicstore.entity.User;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.ProducerService;
 import lombok.extern.slf4j.Slf4j;
@@ -30,16 +31,15 @@ public class ProducerController {
     this.producerService = producerService;
   }
 
-  @GetMapping(value = "/all/{admin-id}")
-  public ResponseEntity<List<Producer>> getAll(@PathVariable String adminId) {
-    adminService.isAdmin(adminId);
+  @GetMapping(value = "/all")
+  public ResponseEntity<List<Producer>> getAll(@RequestHeader User user) {
+    adminService.isAdmin(user);
     return ResponseEntity.ok(producerService.getAll());
   }
 
-  @GetMapping(value = "/{admin-id}")
-  public ResponseEntity<Producer> getByName(
-      @PathVariable String adminId, @RequestBody String mail) {
-    adminService.isAdmin(adminId);
+  @GetMapping
+  public ResponseEntity<Producer> getByName(@RequestHeader User user, @RequestBody String mail) {
+    adminService.isAdmin(user);
     Optional<Producer> optionalProducer = producerService.getByMail(mail);
     if (!optionalProducer.isPresent()) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCER_NOT_FOUND);
@@ -47,16 +47,15 @@ public class ProducerController {
     return ResponseEntity.ok(optionalProducer.get());
   }
 
-  @PostMapping(value = "/{admin-id}")
-  public ResponseEntity<Producer> save(
-      @PathVariable String adminId, @RequestBody Producer producer) {
-    adminService.isAdmin(adminId);
+  @PostMapping
+  public ResponseEntity<Producer> save(@RequestHeader User user, @RequestBody Producer producer) {
+    adminService.isAdmin(user);
     return ResponseEntity.ok(producerService.save(producer));
   }
 
-  @DeleteMapping(value = "/{admin-id}")
-  public ResponseEntity<Void> delete(@PathVariable String adminId, @RequestBody String mail) {
-    adminService.isAdmin(adminId);
+  @DeleteMapping
+  public ResponseEntity<Void> delete(@RequestHeader User user, @RequestBody String mail) {
+    adminService.isAdmin(user);
     producerService.delete(mail);
     return ResponseEntity.ok().build();
   }

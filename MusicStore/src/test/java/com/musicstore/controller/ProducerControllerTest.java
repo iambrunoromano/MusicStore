@@ -2,7 +2,6 @@ package com.musicstore.controller;
 
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Producer;
-import com.musicstore.integration.ProducerIntegrationTest;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.AdminServiceTest;
 import com.musicstore.service.ProducerService;
@@ -36,7 +35,7 @@ class ProducerControllerTest {
     mockIsAdmin();
     mockGetAll();
     ResponseEntity<List<Producer>> producerListResponseEntity =
-        producerController.getAll(AdminControllerTest.ADMIN_ID);
+        producerController.getAll(AdminControllerTest.ADMIN_AUTH_USER);
     List<Producer> producerList = producerListResponseEntity.getBody();
     assertEquals(createProducerList(), producerList);
   }
@@ -48,7 +47,7 @@ class ProducerControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              producerController.getAll(AdminControllerTest.ADMIN_ID);
+              producerController.getAll(AdminControllerTest.ADMIN_AUTH_USER);
             });
     AdminServiceTest.assertNotAdminException(actualException);
   }
@@ -58,7 +57,7 @@ class ProducerControllerTest {
     mockIsAdmin();
     mockGetByMailFound();
     ResponseEntity<Producer> producerResponseEntity =
-        producerController.getByName(AdminControllerTest.ADMIN_ID, ProducerServiceTest.MAIL);
+        producerController.getByName(AdminControllerTest.ADMIN_AUTH_USER, ProducerServiceTest.MAIL);
     Producer producer = producerResponseEntity.getBody();
     assertEquals(ProducerServiceTest.createProducer(), producer);
   }
@@ -70,7 +69,7 @@ class ProducerControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              producerController.getByName(AdminControllerTest.ADMIN_ID, ProducerServiceTest.MAIL);
+              producerController.getByName(AdminControllerTest.ADMIN_AUTH_USER, ProducerServiceTest.MAIL);
             });
     AdminServiceTest.assertNotAdminException(actualException);
   }
@@ -83,7 +82,7 @@ class ProducerControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              producerController.getByName(AdminControllerTest.ADMIN_ID, ProducerServiceTest.MAIL);
+              producerController.getByName(AdminControllerTest.ADMIN_AUTH_USER, ProducerServiceTest.MAIL);
             });
     ProducerServiceTest.assertProducerNotFoundException(
         actualException, HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCER_NOT_FOUND);
@@ -94,7 +93,7 @@ class ProducerControllerTest {
     mockIsAdmin();
     mockSave();
     ResponseEntity<Producer> producerResponseEntity =
-        producerController.save(AdminControllerTest.ADMIN_ID, ProducerServiceTest.createProducer());
+        producerController.save(AdminControllerTest.ADMIN_AUTH_USER, ProducerServiceTest.createProducer());
     Producer producer = producerResponseEntity.getBody();
     assertEquals(ProducerServiceTest.createProducer(), producer);
   }
@@ -107,7 +106,7 @@ class ProducerControllerTest {
             ResponseStatusException.class,
             () -> {
               producerController.save(
-                  AdminControllerTest.ADMIN_ID, ProducerServiceTest.createProducer());
+                  AdminControllerTest.ADMIN_AUTH_USER, ProducerServiceTest.createProducer());
             });
     AdminServiceTest.assertNotAdminException(actualException);
   }
@@ -119,19 +118,19 @@ class ProducerControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              producerController.delete(AdminControllerTest.ADMIN_ID, ProducerServiceTest.MAIL);
+              producerController.delete(AdminControllerTest.ADMIN_AUTH_USER, ProducerServiceTest.MAIL);
             });
     AdminServiceTest.assertNotAdminException(actualException);
   }
 
   private void mockNotAdmin() {
-    BDDMockito.given(adminService.isAdmin(Mockito.anyString()))
+    BDDMockito.given(adminService.isAdmin(Mockito.any()))
         .willThrow(
             new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN));
   }
 
   private void mockIsAdmin() {
-    BDDMockito.given(adminService.isAdmin(Mockito.anyString()))
+    BDDMockito.given(adminService.isAdmin(Mockito.any()))
         .willReturn(AdminServiceTest.buildAdmin());
   }
 
