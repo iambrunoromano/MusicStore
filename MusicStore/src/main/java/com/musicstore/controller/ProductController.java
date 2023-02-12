@@ -8,6 +8,7 @@ import com.musicstore.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -33,44 +34,46 @@ public class ProductController {
   }
 
   @GetMapping(value = "/category/{category-id}")
-  public List<Product> getByCategory(@PathVariable int categoryId) {
-    return productService.getByCategory(categoryId);
+  public ResponseEntity<List<Product>> getByCategory(@PathVariable int categoryId) {
+    return ResponseEntity.ok(productService.getByCategory(categoryId));
   }
 
   @GetMapping(value = "/producer/{mail}")
-  public List<Product> getByProducer(@PathVariable String mail) {
-    return productService.getByProducer(mail);
+  public ResponseEntity<List<Product>> getByProducer(@PathVariable String mail) {
+    return ResponseEntity.ok(productService.getByProducer(mail));
   }
 
   @GetMapping(value = "/best")
-  public List<Product> getBest() {
-    return productService.getMostSold();
+  public ResponseEntity<List<Product>> getBest() {
+    return ResponseEntity.ok(productService.getMostSold());
   }
 
   @GetMapping
-  public List<Product> getAll() {
-    return productService.getAll();
+  public ResponseEntity<List<Product>> getAll() {
+    return ResponseEntity.ok(productService.getAll());
   }
 
   @GetMapping(value = "/product/{product-id}")
-  public Product getById(@PathVariable int productId) {
-    return productService.getById(productId);
+  public ResponseEntity<Product> getById(@PathVariable int productId) {
+    return ResponseEntity.ok(productService.getById(productId));
   }
 
   @PostMapping(value = "/producer/{mail}")
-  public Product createAsProducer(@PathVariable String mail, @RequestBody Product product) {
+  public ResponseEntity<Product> createAsProducer(
+      @PathVariable String mail, @RequestBody Product product) {
     producerService.isProducer(mail);
-    return productService.save(product);
+    return ResponseEntity.ok(productService.save(product));
   }
 
   @PostMapping(value = "/admin/{mail}")
-  public Product createAsAdmin(@PathVariable String mail, @RequestBody Product product) {
+  public ResponseEntity<Product> createAsAdmin(
+      @PathVariable String mail, @RequestBody Product product) {
     adminService.isAdmin(mail);
-    return productService.save(product);
+    return ResponseEntity.ok(productService.save(product));
   }
 
   @DeleteMapping(value = "/producer/{mail}")
-  public void delete(@PathVariable String mail, @RequestBody int productId) {
+  public ResponseEntity<Void> delete(@PathVariable String mail, @RequestBody int productId) {
     producerService.isProducer(mail);
     Product product = productService.getById(productId);
     if (mail == null || !mail.equals(product.getProducer())) {
@@ -78,5 +81,6 @@ public class ProductController {
           HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCT_PRODUCER_MISMATCH);
     }
     productService.delete(productId);
+    return ResponseEntity.ok().build();
   }
 }
