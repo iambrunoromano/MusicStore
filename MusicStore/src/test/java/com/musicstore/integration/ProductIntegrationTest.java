@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -35,7 +36,8 @@ public class ProductIntegrationTest {
   @Order(1)
   @Sql("classpath:integration/product.sql")
   void getByCategoryTest() {
-    List<Product> productList = productController.getByCategory(1);
+    ResponseEntity<List<Product>> productListResponseEntity = productController.getByCategory(1);
+    List<Product> productList = productListResponseEntity.getBody();
     assertEquals(1, productList.size());
     Product actualProduct = productList.get(0);
     assertEquals(FIRST_PRODUCT_NAME, actualProduct.getName());
@@ -45,7 +47,9 @@ public class ProductIntegrationTest {
   @Order(2)
   @Sql("classpath:integration/product.sql")
   void getByProducerTest() {
-    List<Product> productList = productController.getByProducer(FIRST_PRODUCER_MAIL);
+    ResponseEntity<List<Product>> productListResponseEntity =
+        productController.getByProducer(FIRST_PRODUCER_MAIL);
+    List<Product> productList = productListResponseEntity.getBody();
     assertEquals(1, productList.size());
     Product actualProduct = productList.get(0);
     assertEquals(FIRST_PRODUCT_NAME, actualProduct.getName());
@@ -55,7 +59,8 @@ public class ProductIntegrationTest {
   @Order(3)
   @Sql("classpath:integration/product.sql")
   void getBestTest() {
-    List<Product> productList = productController.getBest();
+    ResponseEntity<List<Product>> productListResponseEntity = productController.getBest();
+    List<Product> productList = productListResponseEntity.getBody();
     assertEquals(2, productList.size());
     Product actualProduct = productList.get(1);
     assertEquals(FIRST_PRODUCT_NAME, actualProduct.getName());
@@ -65,7 +70,8 @@ public class ProductIntegrationTest {
   @Order(4)
   @Sql("classpath:integration/product.sql")
   void getAllTest() {
-    List<Product> productList = productController.getAll();
+    ResponseEntity<List<Product>> productListResponseEntity = productController.getAll();
+    List<Product> productList = productListResponseEntity.getBody();
     assertEquals(2, productList.size());
   }
 
@@ -73,7 +79,8 @@ public class ProductIntegrationTest {
   @Order(5)
   @Sql("classpath:integration/product.sql")
   void getByIdTest() {
-    Product product = productController.getById(1);
+    ResponseEntity<Product> productResponseEntity = productController.getById(1);
+    Product product = productResponseEntity.getBody();
     assertEquals(FIRST_PRODUCT_NAME, product.getName());
   }
 
@@ -81,8 +88,9 @@ public class ProductIntegrationTest {
   @Order(6)
   @Sql("classpath:integration/product.sql")
   void createAsProducerTest() {
-    Product product =
+    ResponseEntity<Product> productResponseEntity =
         productController.createAsProducer(FIRST_PRODUCER_MAIL, ProductServiceTest.createProduct());
+    Product product = productResponseEntity.getBody();
     product.setId(ProductServiceTest.createProduct().getId());
     product.setInsertDate(null);
     product.setUpdateDate(null);
@@ -93,8 +101,9 @@ public class ProductIntegrationTest {
   @Order(7)
   @Sql("classpath:integration/product.sql")
   void createAsAdminTest() {
-    Product product =
+    ResponseEntity<Product> productResponseEntity =
         productController.createAsAdmin(FIRST_ADMIN_ID, ProductServiceTest.createProduct());
+    Product product = productResponseEntity.getBody();
     product.setId(ProductServiceTest.createProduct().getId());
     product.setInsertDate(null);
     product.setUpdateDate(null);
@@ -106,7 +115,8 @@ public class ProductIntegrationTest {
   @Sql("classpath:integration/product.sql")
   void deleteTest() {
     productController.delete(FIRST_PRODUCER_MAIL, 1);
-    List<Product> productList = productController.getAll();
+    ResponseEntity<List<Product>> productListResponseEntity = productController.getAll();
+    List<Product> productList = productListResponseEntity.getBody();
     assertEquals(1, productList.size());
     Product leftProduct = productList.get(0);
     assertEquals(2, leftProduct.getId());
