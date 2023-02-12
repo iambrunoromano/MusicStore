@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -44,14 +45,18 @@ class UserControllerTest {
   void getAllTest() {
     mockIsAdmin();
     mockUserList();
-    assertEquals(buildUserResponseList(), userController.getAll(ADMIN_ID));
+    ResponseEntity<List<UserResponse>> userListResponseEntity = userController.getAll(ADMIN_ID);
+    List<UserResponse> userResponseList = userListResponseEntity.getBody();
+    assertEquals(buildUserResponseList(), userResponseList);
   }
 
   @Test
   void getByIdTest() {
     mockIsAuthentic();
-    assertEquals(
-        UserServiceTest.buildUserResponse(), userController.getById(UserServiceTest.buildUser()));
+    ResponseEntity<UserResponse> userResponseEntity =
+        userController.getById(UserServiceTest.buildUser());
+    UserResponse userResponse = userResponseEntity.getBody();
+    assertEquals(UserServiceTest.buildUserResponse(), userResponse);
   }
 
   @Test
@@ -69,8 +74,10 @@ class UserControllerTest {
   @Test
   void saveTest() {
     mockSave();
-    assertEquals(
-        UserServiceTest.buildUserResponse(), userController.save(UserServiceTest.buildUser()));
+    ResponseEntity<UserResponse> userResponseEntity =
+        userController.save(UserServiceTest.buildUser());
+    UserResponse userResponse = userResponseEntity.getBody();
+    assertEquals(UserServiceTest.buildUserResponse(), userResponse);
   }
 
   @Test
