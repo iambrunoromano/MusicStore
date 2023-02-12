@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.web.server.ResponseStatusException;
@@ -39,7 +41,9 @@ public class CustomerIntegrationTest {
   @Order(1)
   @Sql("classpath:integration/customer.sql")
   void getAllTest() {
-    List<Customer> customerList = customerController.getAll(buildAdminUser());
+    ResponseEntity<List<Customer>> customerListResponseEntity =
+        customerController.getAll(buildAdminUser());
+    List<Customer> customerList = customerListResponseEntity.getBody();
     assertEquals(2, customerList.size());
   }
 
@@ -47,7 +51,9 @@ public class CustomerIntegrationTest {
   @Order(2)
   @Sql("classpath:integration/customer.sql")
   void getByIdTest() {
-    Customer customer = customerController.getById(buildAuthenticUser());
+    ResponseEntity<Customer> customerResponseEntity =
+        customerController.getById(buildAuthenticUser());
+    Customer customer = customerResponseEntity.getBody();
     assertEquals(USER_ID, customer.getMail());
   }
 
@@ -55,8 +61,9 @@ public class CustomerIntegrationTest {
   @Order(3)
   @Sql("classpath:integration/customer.sql")
   void createTest() {
-    Customer customer =
+    ResponseEntity<Customer> customerResponseEntity =
         customerController.create(buildAuthenticUser(), CustomerServiceTest.buildCustomer());
+    Customer customer = customerResponseEntity.getBody();
     customer.setInsertDate(null);
     customer.setUpdateDate(null);
     assertEquals(CustomerServiceTest.buildCustomer(), customer);
@@ -66,7 +73,8 @@ public class CustomerIntegrationTest {
   @Order(4)
   @Sql("classpath:integration/customer.sql")
   void deleteTest() {
-    customerController.delete(USER_ID, buildAuthenticUser());
+    ResponseEntity<Void> responseEntity = customerController.delete(USER_ID, buildAuthenticUser());
+    assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     ResponseStatusException actualException =
         assertThrows(
             ResponseStatusException.class,
