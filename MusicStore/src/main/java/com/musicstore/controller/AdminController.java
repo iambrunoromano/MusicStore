@@ -1,6 +1,7 @@
 package com.musicstore.controller;
 
 import com.musicstore.entity.Admin;
+import com.musicstore.entity.User;
 import com.musicstore.service.AdminService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,29 +22,29 @@ public class AdminController {
     this.adminService = adminService;
   }
 
-  @GetMapping(value = "/all/{admin-id}")
-  public ResponseEntity<List<Admin>> getAll(@PathVariable String adminId) {
-    adminService.isAdmin(adminId);
+  // TODO: STANDARDIZE GET METHODS: /all for getAll, /{id} with @PathVariable for getById for all controllers
+
+  @GetMapping(value = "/all")
+  public ResponseEntity<List<Admin>> getAll(@RequestHeader User user) {
+    adminService.isAdmin(user);
     return ResponseEntity.ok(adminService.getAll());
   }
 
-  @GetMapping(value = "/{admin-id}")
-  public ResponseEntity<Admin> getById(
-      @PathVariable String adminId, @RequestBody String requestAdmin) {
-    adminService.isAdmin(adminId);
-    return ResponseEntity.ok(adminService.isAdmin(requestAdmin));
+  @GetMapping
+  public ResponseEntity<Admin> getById(@RequestHeader User user, @RequestBody String requestAdmin) {
+    adminService.isAdmin(user);
+    return ResponseEntity.ok(adminService.getAdmin(requestAdmin));
   }
 
-  @PostMapping(value = "/{admin-id}")
-  public ResponseEntity<Admin> save(@PathVariable String adminId, @RequestBody Admin newAdmin) {
-    adminService.isAdmin(adminId);
+  @PostMapping
+  public ResponseEntity<Admin> save(@RequestHeader User user, @RequestBody Admin newAdmin) {
+    adminService.isAdmin(user);
     return ResponseEntity.ok(adminService.save(newAdmin));
   }
 
-  @DeleteMapping(value = "/{admin-id}")
-  public ResponseEntity<Void> delete(
-      @PathVariable String adminId, @RequestBody String adminToDelete) {
-    adminService.isAdmin(adminId);
+  @DeleteMapping
+  public ResponseEntity<Void> delete(@RequestHeader User user, @RequestBody String adminToDelete) {
+    adminService.isAdmin(user);
     adminService.delete(adminToDelete);
     return ResponseEntity.ok().build();
   }

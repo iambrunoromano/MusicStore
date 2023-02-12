@@ -2,6 +2,7 @@ package com.musicstore.controller;
 
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Admin;
+import com.musicstore.entity.User;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.AdminServiceTest;
 import org.junit.jupiter.api.Test;
@@ -16,9 +17,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class AdminControllerTest {
+public class AdminControllerTest {
 
   public static final String ADMIN_ID = "admin-id";
+  public static final User ADMIN_AUTH_USER = User.builder().mail(ADMIN_ID).build();
 
   private AdminService adminService = Mockito.mock(AdminService.class);
   private AdminController adminController = new AdminController(adminService);
@@ -30,7 +32,7 @@ class AdminControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              adminController.getAll(ADMIN_ID);
+              adminController.getAll(ADMIN_AUTH_USER);
             });
     AdminServiceTest.assertNotAdminException(actualException);
   }
@@ -38,7 +40,7 @@ class AdminControllerTest {
   @Test
   void getAllAuthorizedTest() {
     List<Admin> adminList = mockAdminList();
-    assertEquals(ResponseEntity.ok(adminList), adminController.getAll(ADMIN_ID));
+    assertEquals(ResponseEntity.ok(adminList), adminController.getAll(ADMIN_AUTH_USER));
   }
 
   @Test
@@ -48,7 +50,7 @@ class AdminControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              adminController.getById(ADMIN_ID, ADMIN_ID);
+              adminController.getById(ADMIN_AUTH_USER, ADMIN_ID);
             });
     AdminServiceTest.assertNotAdminException(actualException);
   }
@@ -56,7 +58,8 @@ class AdminControllerTest {
   @Test
   void getByIdAuthorizedTest() {
     Admin admin = mockAdmin();
-    assertEquals(ResponseEntity.ok(admin), adminController.getById(ADMIN_ID, ADMIN_ID));
+    mockGetAdmin();
+    assertEquals(ResponseEntity.ok(admin), adminController.getById(ADMIN_AUTH_USER, ADMIN_ID));
   }
 
   @Test
@@ -66,7 +69,7 @@ class AdminControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              adminController.save(ADMIN_ID, AdminServiceTest.buildAdmin());
+              adminController.save(ADMIN_AUTH_USER, AdminServiceTest.buildAdmin());
             });
     AdminServiceTest.assertNotAdminException(actualException);
   }
@@ -76,7 +79,8 @@ class AdminControllerTest {
     Admin admin = mockAdmin();
     BDDMockito.given(adminService.save(Mockito.any())).willReturn(AdminServiceTest.buildAdmin());
     assertEquals(
-        ResponseEntity.ok(admin), adminController.save(ADMIN_ID, AdminServiceTest.buildAdmin()));
+        ResponseEntity.ok(admin),
+        adminController.save(ADMIN_AUTH_USER, AdminServiceTest.buildAdmin()));
   }
 
   @Test
@@ -86,7 +90,7 @@ class AdminControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              adminController.delete(ADMIN_ID, ADMIN_ID);
+              adminController.delete(ADMIN_AUTH_USER, ADMIN_ID);
             });
     AdminServiceTest.assertNotAdminException(actualException);
   }
@@ -94,7 +98,7 @@ class AdminControllerTest {
   private void mockExceptionThrown() {
     ResponseStatusException expectedException =
         new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
-    BDDMockito.given(adminService.isAdmin(Mockito.anyString())).willThrow(expectedException);
+    BDDMockito.given(adminService.isAdmin(Mockito.any())).willThrow(expectedException);
   }
 
   private List<Admin> mockAdminList() {
@@ -108,7 +112,12 @@ class AdminControllerTest {
 
   private Admin mockAdmin() {
     Admin admin = AdminServiceTest.buildAdmin();
-    BDDMockito.given(adminService.isAdmin(Mockito.anyString())).willReturn(admin);
+    BDDMockito.given(adminService.isAdmin(Mockito.any())).willReturn(admin);
     return admin;
+  }
+
+  private void mockGetAdmin() {
+    BDDMockito.given(adminService.getAdmin(Mockito.anyString()))
+        .willReturn(AdminServiceTest.buildAdmin());
   }
 }
