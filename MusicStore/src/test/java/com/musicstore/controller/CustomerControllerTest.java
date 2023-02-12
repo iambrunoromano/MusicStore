@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -42,9 +43,10 @@ class CustomerControllerTest {
   void getAllTest() {
     mockIsAdmin();
     mockGetAll();
-    assertEquals(
-        CustomerServiceTest.buildCustomerList(),
-        customerController.getAll(UserServiceTest.buildUser()));
+    ResponseEntity<List<Customer>> customerListResponseEntity =
+        customerController.getAll(UserServiceTest.buildUser());
+    List<Customer> customerList = customerListResponseEntity.getBody();
+    assertEquals(CustomerServiceTest.buildCustomerList(), customerList);
   }
 
   @Test
@@ -63,9 +65,10 @@ class CustomerControllerTest {
   void getByIdTest() {
     mockIsAuthentic();
     mockGetById();
-    assertEquals(
-        CustomerServiceTest.buildCustomer(),
-        customerController.getById(UserServiceTest.buildUser()));
+    ResponseEntity<Customer> customerResponseEntity =
+        customerController.getById(UserServiceTest.buildUser());
+    Customer customer = customerResponseEntity.getBody();
+    assertEquals(CustomerServiceTest.buildCustomer(), customer);
   }
 
   @Test
@@ -85,10 +88,10 @@ class CustomerControllerTest {
   void createTest() {
     mockIsAuthentic();
     mockSave();
-    assertEquals(
-        CustomerServiceTest.buildCustomer(),
-        customerController.create(
-            UserServiceTest.buildUser(), CustomerServiceTest.buildCustomer()));
+    ResponseEntity<Customer> customerResponseEntity =
+        customerController.create(UserServiceTest.buildUser(), CustomerServiceTest.buildCustomer());
+    Customer customer = customerResponseEntity.getBody();
+    assertEquals(CustomerServiceTest.buildCustomer(), customer);
   }
 
   @Test
