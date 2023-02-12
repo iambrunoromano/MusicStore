@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -39,7 +40,9 @@ public class UserIntegrationTest {
   @Order(1)
   @Sql("classpath:integration/user.sql")
   void getAllTest() {
-    List<UserResponse> userResponseList = userController.getAll(FIRST_ADMIN_ID);
+    ResponseEntity<List<UserResponse>> userResponseListResponseEntity =
+        userController.getAll(FIRST_ADMIN_ID);
+    List<UserResponse> userResponseList = userResponseListResponseEntity.getBody();
     assertEquals(2, userResponseList.size());
   }
 
@@ -47,8 +50,9 @@ public class UserIntegrationTest {
   @Order(2)
   @Sql("classpath:integration/user.sql")
   void getByIdTest() {
-    UserResponse userResponse =
+    ResponseEntity<UserResponse> userResponseEntity =
         userController.getById(buildUser(FIRST_USER_ID, FIRST_USER_PASSWORD));
+    UserResponse userResponse = userResponseEntity.getBody();
     assertEquals(FIRST_USER_ID, userResponse.getMail());
   }
 
@@ -56,7 +60,9 @@ public class UserIntegrationTest {
   @Order(3)
   @Sql("classpath:integration/user.sql")
   void saveTest() {
-    UserResponse userResponse = userController.save(buildUser(THIRD_USER_ID, SECOND_USER_PASSWORD));
+    ResponseEntity<UserResponse> userResponseEntity =
+        userController.save(buildUser(THIRD_USER_ID, SECOND_USER_PASSWORD));
+    UserResponse userResponse = userResponseEntity.getBody();
     assertEquals(THIRD_USER_ID, userResponse.getMail());
   }
 
@@ -65,7 +71,9 @@ public class UserIntegrationTest {
   @Sql("classpath:integration/user.sql")
   void deleteTest() {
     userController.delete(buildUser(FIRST_USER_ID, FIRST_USER_PASSWORD));
-    List<UserResponse> userResponseList = userController.getAll(FIRST_ADMIN_ID);
+    ResponseEntity<List<UserResponse>> userResponseListResponseEntity =
+        userController.getAll(FIRST_ADMIN_ID);
+    List<UserResponse> userResponseList = userResponseListResponseEntity.getBody();
     assertEquals(1, userResponseList.size());
     UserResponse leftUserResponse = userResponseList.get(0);
     assertEquals(SECOND_USER_ID, leftUserResponse.getMail());
