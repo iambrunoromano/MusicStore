@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -32,7 +33,9 @@ public class ShipmentIntegrationTest {
   @Order(1)
   @Sql("classpath:integration/shipment.sql")
   void getAllTest() {
-    List<Shipment> shipmentList = shipmentController.getAll(FIRST_ADMIN_ID);
+    ResponseEntity<List<Shipment>> shipmentListResponseEntity =
+        shipmentController.getAll(FIRST_ADMIN_ID);
+    List<Shipment> shipmentList = shipmentListResponseEntity.getBody();
     assertEquals(2, shipmentList.size());
   }
 
@@ -40,7 +43,8 @@ public class ShipmentIntegrationTest {
   @Order(2)
   @Sql("classpath:integration/shipment.sql")
   void getByIdTest() {
-    Shipment shipment = shipmentController.getById(1, FIRST_ADMIN_ID);
+    ResponseEntity<Shipment> shipmentResponseEntity = shipmentController.getById(1, FIRST_ADMIN_ID);
+    Shipment shipment = shipmentResponseEntity.getBody();
     assertEquals(1, shipment.getId());
   }
 
@@ -48,7 +52,8 @@ public class ShipmentIntegrationTest {
   @Order(3)
   @Sql("classpath:integration/shipment.sql")
   void saveTest() {
-    Shipment shipment = shipmentController.save(FIRST_ADMIN_ID, 2);
+    ResponseEntity<Shipment> shipmentResponseEntity = shipmentController.save(FIRST_ADMIN_ID, 2);
+    Shipment shipment = shipmentResponseEntity.getBody();
     assertEquals(2, shipment.getOrderId());
   }
 
@@ -57,7 +62,9 @@ public class ShipmentIntegrationTest {
   @Sql("classpath:integration/shipment.sql")
   void deleteTest() {
     shipmentController.delete(FIRST_ADMIN_ID, 1);
-    List<Shipment> shipmentList = shipmentController.getAll(FIRST_ADMIN_ID);
+    ResponseEntity<List<Shipment>> shipmentListResponseEntity =
+        shipmentController.getAll(FIRST_ADMIN_ID);
+    List<Shipment> shipmentList = shipmentListResponseEntity.getBody();
     assertEquals(1, shipmentList.size());
     Shipment leftShipment = shipmentList.get(0);
     assertEquals(2, leftShipment.getId());
