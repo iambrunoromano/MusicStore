@@ -16,7 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CategoryControllerTest {
 
@@ -53,7 +53,7 @@ class CategoryControllerTest {
     mockSave();
     ResponseEntity<Category> actualCategory =
         categoryController.update(
-            AdminControllerTest.ADMIN_ID, CategoryServiceTest.buildCategory());
+            AdminControllerTest.ADMIN_AUTH_USER, CategoryServiceTest.buildCategory());
     CategoryServiceTest.assertCategory(actualCategory.getBody());
   }
 
@@ -64,7 +64,7 @@ class CategoryControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              categoryController.update(AdminControllerTest.ADMIN_ID, new Category());
+              categoryController.update(AdminControllerTest.ADMIN_AUTH_USER, new Category());
             });
     AdminServiceTest.assertNotAdminException(actualException);
   }
@@ -99,12 +99,12 @@ class CategoryControllerTest {
   }
 
   private void mockIsAdmin() {
-    BDDMockito.given(adminService.isAdmin(Mockito.anyString()))
+    BDDMockito.given(adminService.isAdmin(Mockito.any()))
         .willReturn(AdminServiceTest.buildAdmin());
   }
 
   private void mockNotAdmin() {
-    BDDMockito.given(adminService.isAdmin(Mockito.anyString()))
+    BDDMockito.given(adminService.isAdmin(Mockito.any()))
         .willThrow(
             new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN));
   }

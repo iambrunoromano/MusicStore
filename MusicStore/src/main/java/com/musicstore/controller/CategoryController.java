@@ -40,16 +40,16 @@ public class CategoryController {
     return ResponseEntity.ok(category.get());
   }
 
-  @PostMapping(value = "/{admin-id}")
+  @PostMapping
   public ResponseEntity<Category> update(
-      @PathVariable String adminId, @RequestBody Category category) {
-    adminService.isAdmin(adminId);
+          @RequestHeader User user, @RequestBody Category category) {
+    adminService.isAdmin(user);
     return ResponseEntity.ok(categoryService.save(category));
   }
 
   @DeleteMapping(value = "/{category-id}")
   public ResponseEntity<Void> delete(@PathVariable int categoryId, @RequestBody User user) {
-    adminService.isAdmin(user.getMail());
+    adminService.isAdmin(user);
     categoryService.delete(categoryId);
     return ResponseEntity.ok().build();
   }
