@@ -7,13 +7,12 @@ import com.musicstore.service.CustomerService;
 import com.musicstore.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
-// TODO: external test
-// TODO: Returned Response Entity HTTP Status
 // TODO: understand how the customer route differs in the usage from user route
 
 @RestController
@@ -34,31 +33,31 @@ public class CustomerController {
   }
 
   @GetMapping(value = "/all")
-  public List<Customer> getAll(@RequestBody User user) {
+  public ResponseEntity<List<Customer>> getAll(@RequestBody User user) {
     adminService.isAdmin(user.getMail());
-    return customerService.getAll();
+    return ResponseEntity.ok(customerService.getAll());
   }
 
   @GetMapping
-  public Customer getById(@RequestBody User user) {
+  public ResponseEntity<Customer> getById(@RequestBody User user) {
     userService.isAuthentic(user);
     Optional<Customer> optionalCustomer = customerService.getById(user.getMail());
-    return optionalCustomer.get();
+    return ResponseEntity.ok(optionalCustomer.get());
   }
 
   @PostMapping
-  public Customer create(@RequestBody User user, @RequestBody Customer customer) {
+  public ResponseEntity<Customer> create(@RequestBody User user, @RequestBody Customer customer) {
     // TODO: needed here to verify that the user is posting the his own customer by asserting
     // user.mail = customer.mail
     userService.isAuthentic(user);
-    return customerService.save(customer);
+    return ResponseEntity.ok(customerService.save(customer));
   }
 
   @DeleteMapping(value = "/{customer-id}")
-  public void delete(@PathVariable String customerId, @RequestBody User user) {
+  public ResponseEntity<Void> delete(@PathVariable String customerId, @RequestBody User user) {
     userService.isAuthentic(user);
     // TODO: needed here to verify that the user is deleting his own customer by asserting user.mail
     // = customer.mail
     customerService.delete(customerId);
-  }
+    return  ResponseEntity.ok().build();  }
 }
