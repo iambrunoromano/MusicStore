@@ -135,13 +135,13 @@ class CustomerControllerTest {
   private void mockIsAdmin() {
     // TODO: refactor all the mock methods in tests and make them parametrized to receive in input
     // mocked objects
-    BDDMockito.given(adminService.isAdmin(Mockito.anyString()))
+    BDDMockito.given(adminService.isAdmin(Mockito.any()))
         .willReturn(AdminServiceTest.buildAdmin());
   }
 
   private void mockIsNotAdmin() {
     ResponseStatusException expectedException =
         new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
-    BDDMockito.given(adminService.isAdmin(Mockito.anyString())).willThrow(expectedException);
+    BDDMockito.given(adminService.isAdmin(Mockito.any())).willThrow(expectedException);
   }
 }

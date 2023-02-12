@@ -34,7 +34,7 @@ public class CustomerController {
 
   @GetMapping(value = "/all")
   public ResponseEntity<List<Customer>> getAll(@RequestBody User user) {
-    adminService.isAdmin(user.getMail());
+    adminService.isAdmin(user);
     return ResponseEntity.ok(customerService.getAll());
   }
 
@@ -59,5 +59,6 @@ public class CustomerController {
     // TODO: needed here to verify that the user is deleting his own customer by asserting user.mail
     // = customer.mail
     customerService.delete(customerId);
-    return  ResponseEntity.ok().build();  }
+    return ResponseEntity.ok().build();
+  }
 }
