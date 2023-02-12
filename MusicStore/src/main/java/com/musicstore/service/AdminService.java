@@ -1,28 +1,31 @@
 package com.musicstore.service;
 
+import com.musicstore.constant.ReasonsConstant;
+import com.musicstore.entity.Admin;
+import com.musicstore.entity.User;
+import com.musicstore.repository.AdminRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-
-import com.musicstore.constant.ReasonsConstant;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.musicstore.repository.AdminRepository;
-import com.musicstore.entity.Admin;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Slf4j
 public class AdminService {
 
   private final AdminRepository adminRepository;
+  private final UserService userService;
 
   @Autowired
-  public AdminService(AdminRepository AdminRepository) {
+  public AdminService(AdminRepository AdminRepository, UserService userService) {
     this.adminRepository = AdminRepository;
+    this.userService = userService;
   }
 
   public List<Admin> getAll() {
@@ -47,16 +50,19 @@ public class AdminService {
     adminRepository.delete(optionalAdminBean.get());
   }
 
-  public Admin isAdmin(String adminId) {
-    // TODO: this method should authenticate a user verifying:
-    // 1. The user isAuthentic using userService method
-    // 2. The userMail is present on the admin table as adminId
-    Optional<Admin> optionalAdminBean = this.getById(adminId);
-    if (optionalAdminBean.isPresent()) {
-      log.info("User with Id [{}] is admin", adminId);
-      return optionalAdminBean.get();
+  public Admin isAdmin(User user) {
+    userService.isAuthentic(user);
+    String adminId = user.getMail();
+    return getAdmin(adminId);
+  }
+
+  public Admin getAdmin(String adminId) {
+    Optional<Admin> optionalAdminBean = getById(adminId);
+    if (!optionalAdminBean.isPresent()) {
+      log.warn("User with Id [{}] is not an admin", adminId);
+      throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
     }
-    log.warn("User with Id [{}] is not an admin", adminId);
-    throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
+    log.info("User with Id [{}] is admin", adminId);
+    return optionalAdminBean.get();
   }
 }
