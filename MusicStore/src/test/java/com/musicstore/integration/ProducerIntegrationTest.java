@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -39,7 +41,9 @@ public class ProducerIntegrationTest {
   @Order(1)
   @Sql("classpath:integration/producer.sql")
   void getAllTest() {
-    List<Producer> producerList = producerController.getAll(FIRST_ADMIN_ID);
+    ResponseEntity<List<Producer>> producerListResponseEntity =
+        producerController.getAll(FIRST_ADMIN_ID);
+    List<Producer> producerList = producerListResponseEntity.getBody();
     assertEquals(2, producerList.size());
   }
 
@@ -47,7 +51,9 @@ public class ProducerIntegrationTest {
   @Order(2)
   @Sql("classpath:integration/producer.sql")
   void getByNameTest() {
-    Producer producer = producerController.getByName(FIRST_ADMIN_ID, FIRST_PRODUCER_MAIL);
+    ResponseEntity<Producer> producerResponseEntity =
+        producerController.getByName(FIRST_ADMIN_ID, FIRST_PRODUCER_MAIL);
+    Producer producer = producerResponseEntity.getBody();
     assertEquals(FIRST_PRODUCER_NAME, producer.getName());
   }
 
@@ -55,7 +61,9 @@ public class ProducerIntegrationTest {
   @Order(3)
   @Sql("classpath:integration/producer.sql")
   void saveTest() {
-    Producer producer = producerController.save(FIRST_ADMIN_ID, buildProducer());
+    ResponseEntity<Producer> producerResponseEntity =
+        producerController.save(FIRST_ADMIN_ID, buildProducer());
+    Producer producer = producerResponseEntity.getBody();
     producer.setInsertDate(null);
     producer.setUpdateDate(null);
     assertEquals(buildProducer(), producer);
@@ -65,8 +73,12 @@ public class ProducerIntegrationTest {
   @Order(4)
   @Sql("classpath:integration/producer.sql")
   void deleteTest() {
-    producerController.delete(FIRST_ADMIN_ID, FIRST_PRODUCER_MAIL);
-    List<Producer> producerList = producerController.getAll(FIRST_ADMIN_ID);
+    ResponseEntity<Void> responseEntity =
+        producerController.delete(FIRST_ADMIN_ID, FIRST_PRODUCER_MAIL);
+    assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    ResponseEntity<List<Producer>> producerListResponseEntity =
+        producerController.getAll(FIRST_ADMIN_ID);
+    List<Producer> producerList = producerListResponseEntity.getBody();
     assertEquals(1, producerList.size());
     Producer leftProducer = producerList.get(0);
     assertEquals(SECOND_PRODUCER_MAIL, leftProducer.getMail());
