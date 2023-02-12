@@ -7,13 +7,15 @@ import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ShipmentControllerTest {
 
@@ -27,7 +29,10 @@ class ShipmentControllerTest {
   void getAllTest() {
     mockIsAdmin();
     mockGetAll();
-    assertEquals(createShipmentList(), shipmentController.getAll(AdminControllerTest.ADMIN_ID));
+    ResponseEntity<List<Shipment>> shipmentListResponseEntity =
+        shipmentController.getAll(AdminControllerTest.ADMIN_ID);
+    List<Shipment> shipmentList = shipmentListResponseEntity.getBody();
+    assertEquals(createShipmentList(), shipmentList);
   }
 
   @Test
@@ -47,9 +52,10 @@ class ShipmentControllerTest {
   void getByIdTest() {
     mockGetById();
     mockGetVerifiedOrder();
-    assertEquals(
-        ShipmentServiceTest.createShipment(),
-        shipmentController.getById(ShipmentServiceTest.SHIPMENT_ID, OrderServiceTest.MAIL));
+    ResponseEntity<Shipment> shipmentResponseEntity =
+        shipmentController.getById(ShipmentServiceTest.SHIPMENT_ID, OrderServiceTest.MAIL);
+    Shipment shipment = shipmentResponseEntity.getBody();
+    assertEquals(ShipmentServiceTest.createShipment(), shipment);
   }
 
   @Test
@@ -83,9 +89,10 @@ class ShipmentControllerTest {
     mockIsAdmin();
     mockGetOrder();
     mockSave();
-    assertEquals(
-        ShipmentServiceTest.createShipment(),
-        shipmentController.save(AdminControllerTest.ADMIN_ID, OrderServiceTest.ID));
+    ResponseEntity<Shipment> shipmentResponseEntity =
+        shipmentController.save(AdminControllerTest.ADMIN_ID, OrderServiceTest.ID);
+    Shipment shipment = shipmentResponseEntity.getBody();
+    assertEquals(ShipmentServiceTest.createShipment(), shipment);
   }
 
   @Test
