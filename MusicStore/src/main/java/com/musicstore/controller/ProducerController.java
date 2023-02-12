@@ -7,6 +7,7 @@ import com.musicstore.service.ProducerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -14,8 +15,6 @@ import java.util.List;
 import java.util.Optional;
 
 // TODO: logs in all controllers because we have the @Slf4j but not logging anything now
-// TODO: external test
-// TODO: Returned Response Entity HTTP Status
 
 @RestController
 @Slf4j
@@ -32,30 +31,33 @@ public class ProducerController {
   }
 
   @GetMapping(value = "/all/{admin-id}")
-  public List<Producer> getAll(@PathVariable String adminId) {
+  public ResponseEntity<List<Producer>> getAll(@PathVariable String adminId) {
     adminService.isAdmin(adminId);
-    return producerService.getAll();
+    return ResponseEntity.ok(producerService.getAll());
   }
 
   @GetMapping(value = "/{admin-id}")
-  public Producer getByName(@PathVariable String adminId, @RequestBody String mail) {
+  public ResponseEntity<Producer> getByName(
+      @PathVariable String adminId, @RequestBody String mail) {
     adminService.isAdmin(adminId);
     Optional<Producer> optionalProducer = producerService.getByMail(mail);
     if (!optionalProducer.isPresent()) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCER_NOT_FOUND);
     }
-    return optionalProducer.get();
+    return ResponseEntity.ok(optionalProducer.get());
   }
 
   @PostMapping(value = "/{admin-id}")
-  public Producer save(@PathVariable String adminId, @RequestBody Producer producer) {
+  public ResponseEntity<Producer> save(
+      @PathVariable String adminId, @RequestBody Producer producer) {
     adminService.isAdmin(adminId);
-    return producerService.save(producer);
+    return ResponseEntity.ok(producerService.save(producer));
   }
 
   @DeleteMapping(value = "/{admin-id}")
-  public void delete(@PathVariable String adminId, @RequestBody String mail) {
+  public ResponseEntity<Void> delete(@PathVariable String adminId, @RequestBody String mail) {
     adminService.isAdmin(adminId);
     producerService.delete(mail);
+    return ResponseEntity.ok().build();
   }
 }
