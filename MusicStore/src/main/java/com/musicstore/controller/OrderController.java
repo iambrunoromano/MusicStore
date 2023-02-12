@@ -7,13 +7,11 @@ import com.musicstore.service.CartService;
 import com.musicstore.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
-
-// TODO: external test
-// TODO: Returned Response Entity HTTP Status
 
 @RestController
 @Slf4j
@@ -36,31 +34,33 @@ public class OrderController {
   }
 
   @GetMapping(value = "/all/{admin-id}")
-  public List<Order> getAll(@PathVariable String adminId) {
+  public ResponseEntity<List<Order>> getAll(@PathVariable String adminId) {
     adminService.isAdmin(adminId);
-    return orderService.getAll();
+    return ResponseEntity.ok(orderService.getAll());
   }
 
   @GetMapping(value = "/{order-id}")
-  public Order getById(@PathVariable int orderId, @RequestBody String mail) {
-    return orderService.getVerifiedOrder(orderId, mail);
+  public ResponseEntity<Order> getById(@PathVariable int orderId, @RequestBody String mail) {
+    return ResponseEntity.ok(orderService.getVerifiedOrder(orderId, mail));
   }
 
   @PostMapping(value = "/{mail}")
-  public HashMap<String, Object> create(@PathVariable String mail, @RequestBody String address) {
+  public ResponseEntity<HashMap<String, Object>> create(
+      @PathVariable String mail, @RequestBody String address) {
     // TODO: return response instead of map
     Order order = orderService.create(mail, address);
     order = orderService.save(order);
     HashMap<String, Object> orderMap = new HashMap<>();
     orderMap.put(ORDER, order);
     orderMap.put(DETAIL, getCartList(order.getId()));
-    return orderMap;
+    return ResponseEntity.ok(orderMap);
   }
 
   @DeleteMapping(value = "/{order-id}")
-  public void delete(@PathVariable int orderId, @RequestBody String adminId) {
+  public ResponseEntity<Void> delete(@PathVariable int orderId, @RequestBody String adminId) {
     adminService.isAdmin(adminId);
     orderService.delete(orderId);
+    return ResponseEntity.ok().build();
   }
 
   private List<Cart> getCartList(int orderId) {
