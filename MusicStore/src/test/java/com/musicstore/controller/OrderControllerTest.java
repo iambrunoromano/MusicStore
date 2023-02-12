@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -32,7 +33,9 @@ class OrderControllerTest {
   void getAllTest() {
     mockIsAdmin();
     mockGetAll();
-    assertEquals(createOrderList(), orderController.getAll(ADMIN_ID));
+    ResponseEntity<List<Order>> orderListResponseEntity = orderController.getAll(ADMIN_ID);
+    List<Order> orderList = orderListResponseEntity.getBody();
+    assertEquals(createOrderList(), orderList);
   }
 
   @Test
@@ -50,9 +53,10 @@ class OrderControllerTest {
   @Test
   void getByIdTest() {
     mockGetVerifiedOrder();
-    assertEquals(
-        OrderServiceTest.createOrder(),
-        orderController.getById(OrderServiceTest.ID, OrderServiceTest.MAIL));
+    ResponseEntity<Order> orderResponseEntity =
+        orderController.getById(OrderServiceTest.ID, OrderServiceTest.MAIL);
+    Order order = orderResponseEntity.getBody();
+    assertEquals(OrderServiceTest.createOrder(), order);
   }
 
   @Test
@@ -82,7 +86,9 @@ class OrderControllerTest {
   @Test
   void createTest() {
     mockCreate();
-    HashMap<String, Object> actualMap = orderController.create(OrderServiceTest.MAIL,OrderServiceTest.ADDRESS);
+    ResponseEntity<HashMap<String, Object>> mapResponseEntity =
+        orderController.create(OrderServiceTest.MAIL, OrderServiceTest.ADDRESS);
+    HashMap<String, Object> actualMap = mapResponseEntity.getBody();
     assertEquals(OrderServiceTest.createOrder(), actualMap.get(OrderController.ORDER));
     List<Cart> expectedCartList = OrderServiceTest.createCartList();
     for (Cart cart : expectedCartList) {
@@ -140,13 +146,13 @@ class OrderControllerTest {
   }
 
   void mockCreateNoCartFound() {
-    BDDMockito.given(orderService.create(Mockito.anyString(),Mockito.anyString()))
+    BDDMockito.given(orderService.create(Mockito.anyString(), Mockito.anyString()))
         .willThrow(
             new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.CART_NOT_FOUND));
   }
 
   void mockCreate() {
-    BDDMockito.given(orderService.create(Mockito.anyString(),Mockito.anyString()))
+    BDDMockito.given(orderService.create(Mockito.anyString(), Mockito.anyString()))
         .willReturn(OrderServiceTest.createOrder());
     BDDMockito.given(orderService.save(Mockito.any())).willReturn(OrderServiceTest.createOrder());
     BDDMockito.given(cartService.getByOrderId(Mockito.anyInt()))
