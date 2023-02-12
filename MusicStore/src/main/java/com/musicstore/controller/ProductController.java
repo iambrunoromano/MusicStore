@@ -2,6 +2,7 @@ package com.musicstore.controller;
 
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Product;
+import com.musicstore.entity.User;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.ProducerService;
 import com.musicstore.service.ProductService;
@@ -65,10 +66,10 @@ public class ProductController {
     return ResponseEntity.ok(productService.save(product));
   }
 
-  @PostMapping(value = "/admin/{mail}")
+  @PostMapping(value = "/admin")
   public ResponseEntity<Product> createAsAdmin(
-      @PathVariable String mail, @RequestBody Product product) {
-    adminService.isAdmin(mail);
+          @RequestHeader User user, @RequestBody Product product) {
+    adminService.isAdmin(user);
     return ResponseEntity.ok(productService.save(product));
   }
 

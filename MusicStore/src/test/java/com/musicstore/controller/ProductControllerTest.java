@@ -53,7 +53,7 @@ class ProductControllerTest {
     mockIsAdmin();
     mockSave();
     ResponseEntity<Product> productResponseEntity =
-        productController.createAsAdmin(MAIL, ProductServiceTest.createProduct());
+        productController.createAsAdmin(AdminControllerTest.ADMIN_AUTH_USER, ProductServiceTest.createProduct());
     Product product = productResponseEntity.getBody();
     assertEquals(ProductServiceTest.createProduct(), product);
   }
@@ -66,7 +66,7 @@ class ProductControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              productController.createAsAdmin(MAIL, ProductServiceTest.createProduct());
+              productController.createAsAdmin(AdminControllerTest.ADMIN_AUTH_USER, ProductServiceTest.createProduct());
             });
     AdminServiceTest.assertNotAdminException(actualException);
   }
@@ -114,13 +114,13 @@ class ProductControllerTest {
   }
 
   private void mockNotAdmin() {
-    BDDMockito.given(adminService.isAdmin(Mockito.anyString()))
+    BDDMockito.given(adminService.isAdmin(Mockito.any()))
         .willThrow(
             new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN));
   }
 
   private void mockIsAdmin() {
-    BDDMockito.given(adminService.isAdmin(Mockito.anyString()))
+    BDDMockito.given(adminService.isAdmin(Mockito.any()))
         .willReturn(AdminServiceTest.buildAdmin());
   }
 
