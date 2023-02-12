@@ -7,12 +7,10 @@ import com.musicstore.service.CartService;
 import com.musicstore.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-// TODO: external test
-// TODO: Returned Response Entity HTTP Status
 
 @RestController
 @Slf4j
@@ -29,21 +27,24 @@ public class CartController {
   }
 
   @GetMapping
-  public List<Cart> getCart(@RequestBody User user) {
+  public ResponseEntity<List<Cart>> getCart(@RequestBody User user) {
     userService.isAuthentic(user);
-    return cartService.getByMail(user.getMail());
+    return ResponseEntity.ok(cartService.getByMail(user.getMail()));
   }
 
   @PostMapping
-  public void save(@RequestHeader User user, @RequestBody List<CartRequest> cartRequestList) {
+  public ResponseEntity<Void> save(
+      @RequestHeader User user, @RequestBody List<CartRequest> cartRequestList) {
     userService.isAuthentic(user);
     cartService.save(cartRequestList);
+    return ResponseEntity.ok().build();
   }
 
   @DeleteMapping
-  public void delete(@RequestBody User user) {
+  public ResponseEntity<Void> delete(@RequestBody User user) {
     // TODO: make @RequestHeader User and Admin when passed to Rest API methods
     userService.isAuthentic(user);
     cartService.deleteByMail(user.getMail());
+    return ResponseEntity.ok().build();
   }
 }
