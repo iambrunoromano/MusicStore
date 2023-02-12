@@ -9,14 +9,12 @@ import com.musicstore.service.ShipmentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
-
-// TODO: external test
-// TODO: Returned Response Entity HTTP Status
 
 @RestController
 @Slf4j
@@ -36,13 +34,13 @@ public class ShipmentController {
   }
 
   @GetMapping(value = "/all/{admin-id}")
-  public List<Shipment> getAll(@PathVariable String adminId) {
+  public ResponseEntity<List<Shipment>> getAll(@PathVariable String adminId) {
     adminService.isAdmin(adminId);
-    return shipmentService.getAll();
+    return ResponseEntity.ok(shipmentService.getAll());
   }
 
   @GetMapping(value = "/{id}")
-  public Shipment getById(@PathVariable int id, @RequestBody String mail) {
+  public ResponseEntity<Shipment> getById(@PathVariable int id, @RequestBody String mail) {
     Optional<Shipment> optionalShipment = shipmentService.getById(id);
     if (!optionalShipment.isPresent()) {
       log.warn("Shipment with id [{}] not found", id);
@@ -50,19 +48,20 @@ public class ShipmentController {
     }
     Shipment shipment = optionalShipment.get();
     orderService.getVerifiedOrder(shipment.getOrderId(), mail);
-    return shipment;
+    return ResponseEntity.ok(shipment);
   }
 
   @PostMapping(value = "/{admin-id}")
-  public Shipment save(@PathVariable String adminId, @RequestBody int orderId) {
+  public ResponseEntity<Shipment> save(@PathVariable String adminId, @RequestBody int orderId) {
     adminService.isAdmin(adminId);
     Order order = orderService.getOrder(orderId);
-    return shipmentService.save(order);
+    return ResponseEntity.ok(shipmentService.save(order));
   }
 
   @DeleteMapping(value = "/{admin-id}")
-  public void delete(@PathVariable String adminId, @RequestBody int id) {
+  public ResponseEntity<Void> delete(@PathVariable String adminId, @RequestBody int id) {
     adminService.isAdmin(adminId);
     shipmentService.delete(id);
+    return ResponseEntity.ok().build();
   }
 }
