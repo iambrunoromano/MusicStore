@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ class AdminControllerTest {
   @Test
   void getAllAuthorizedTest() {
     List<Admin> adminList = mockAdminList();
-    assertEquals(adminList, adminController.getAll(ADMIN_ID));
+    assertEquals(ResponseEntity.ok(adminList), adminController.getAll(ADMIN_ID));
   }
 
   @Test
@@ -55,7 +56,7 @@ class AdminControllerTest {
   @Test
   void getByIdAuthorizedTest() {
     Admin admin = mockAdmin();
-    assertEquals(admin, adminController.getById(ADMIN_ID, ADMIN_ID));
+    assertEquals(ResponseEntity.ok(admin), adminController.getById(ADMIN_ID, ADMIN_ID));
   }
 
   @Test
@@ -74,7 +75,8 @@ class AdminControllerTest {
   void updateAuthorizedTest() {
     Admin admin = mockAdmin();
     BDDMockito.given(adminService.save(Mockito.any())).willReturn(AdminServiceTest.buildAdmin());
-    assertEquals(admin, adminController.save(ADMIN_ID, AdminServiceTest.buildAdmin()));
+    assertEquals(
+        ResponseEntity.ok(admin), adminController.save(ADMIN_ID, AdminServiceTest.buildAdmin()));
   }
 
   @Test
