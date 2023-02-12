@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
@@ -30,8 +31,8 @@ class CategoryControllerTest {
   @Test
   void getByIdFoundTest() {
     mockFound();
-    Category actualCategory = categoryController.getById(CategoryServiceTest.ID);
-    CategoryServiceTest.assertCategory(actualCategory);
+    ResponseEntity<Category> actualCategory = categoryController.getById(CategoryServiceTest.ID);
+    CategoryServiceTest.assertCategory(actualCategory.getBody());
   }
 
   @Test
@@ -50,10 +51,10 @@ class CategoryControllerTest {
   void updateByAdminTest() {
     mockIsAdmin();
     mockSave();
-    Category actualCategory =
+    ResponseEntity<Category> actualCategory =
         categoryController.update(
             AdminControllerTest.ADMIN_ID, CategoryServiceTest.buildCategory());
-    CategoryServiceTest.assertCategory(actualCategory);
+    CategoryServiceTest.assertCategory(actualCategory.getBody());
   }
 
   @Test
