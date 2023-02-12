@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -37,7 +39,8 @@ public class CategoryIntegrationTest {
   @Order(1)
   @Sql("classpath:integration/category.sql")
   public void getAllTest() {
-    List<Category> categoryList = categoryController.getAll();
+    ResponseEntity<List<Category>> categoryListResponseEntity = categoryController.getAll();
+    List<Category> categoryList = categoryListResponseEntity.getBody();
     assertEquals(1, categoryList.size());
   }
 
@@ -45,7 +48,8 @@ public class CategoryIntegrationTest {
   @Order(2)
   @Sql("classpath:integration/category.sql")
   public void getByIdTest() {
-    Category category = categoryController.getById(1);
+    ResponseEntity<Category> categoryResponseEntity = categoryController.getById(1);
+    Category category = categoryResponseEntity.getBody();
     assertEquals(CATEGORY_NAME, category.getName());
   }
 
@@ -53,7 +57,9 @@ public class CategoryIntegrationTest {
   @Order(3)
   @Sql("classpath:integration/category.sql")
   public void updateTest() {
-    Category category = categoryController.update(FIRST_ADMIN_ID, buildCategory());
+    ResponseEntity<Category> categoryResponseEntity =
+        categoryController.update(FIRST_ADMIN_ID, buildCategory());
+    Category category = categoryResponseEntity.getBody();
     assertEquals(NEW_NAME, category.getName());
   }
 
@@ -61,8 +67,11 @@ public class CategoryIntegrationTest {
   @Order(4)
   @Sql("classpath:integration/category.sql")
   public void deleteTest() {
-    categoryController.delete(1, User.builder().mail(FIRST_ADMIN_ID).build());
-    List<Category> categoryList = categoryController.getAll();
+    ResponseEntity<Void> responseEntity =
+        categoryController.delete(1, User.builder().mail(FIRST_ADMIN_ID).build());
+    assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    ResponseEntity<List<Category>> categoryListResponseEntity = categoryController.getAll();
+    List<Category> categoryList = categoryListResponseEntity.getBody();
     assertEquals(0, categoryList.size());
   }
 
@@ -70,7 +79,9 @@ public class CategoryIntegrationTest {
   @Order(5)
   @Sql("classpath:integration/category.sql")
   public void getByProducerTest() {
-    List<Category> categoryList = categoryController.getByProducer(PRODUCER_ID);
+    ResponseEntity<List<Category>> categoryListResponseEntity =
+        categoryController.getByProducer(PRODUCER_ID);
+    List<Category> categoryList = categoryListResponseEntity.getBody();
     assertEquals(1, categoryList.size());
   }
 
