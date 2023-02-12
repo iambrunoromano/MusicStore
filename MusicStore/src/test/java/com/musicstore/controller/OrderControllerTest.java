@@ -33,7 +33,8 @@ class OrderControllerTest {
   void getAllTest() {
     mockIsAdmin();
     mockGetAll();
-    ResponseEntity<List<Order>> orderListResponseEntity = orderController.getAll(ADMIN_ID);
+    ResponseEntity<List<Order>> orderListResponseEntity =
+        orderController.getAll(AdminControllerTest.ADMIN_AUTH_USER);
     List<Order> orderList = orderListResponseEntity.getBody();
     assertEquals(createOrderList(), orderList);
   }
@@ -45,7 +46,7 @@ class OrderControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              orderController.getAll(ADMIN_ID);
+              orderController.getAll(AdminControllerTest.ADMIN_AUTH_USER);
             });
     AdminServiceTest.assertNotAdminException(actualException);
   }
@@ -117,7 +118,7 @@ class OrderControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              orderController.delete(OrderServiceTest.ID, ADMIN_ID);
+              orderController.delete(OrderServiceTest.ID, AdminControllerTest.ADMIN_AUTH_USER);
             });
     AdminServiceTest.assertNotAdminException(actualException);
   }
@@ -129,20 +130,19 @@ class OrderControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              orderController.delete(OrderServiceTest.ID, ADMIN_ID);
+              orderController.delete(OrderServiceTest.ID, AdminControllerTest.ADMIN_AUTH_USER);
             });
     OrderServiceTest.assertOrderNotFoundException(actualException, HttpStatus.NOT_FOUND);
   }
 
   void mockIsNotAdmin() {
-    BDDMockito.given(adminService.isAdmin(Mockito.anyString()))
+    BDDMockito.given(adminService.isAdmin(Mockito.any()))
         .willThrow(
             new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN));
   }
 
   void mockIsAdmin() {
-    BDDMockito.given(adminService.isAdmin(Mockito.anyString()))
-        .willReturn(AdminServiceTest.buildAdmin());
+    BDDMockito.given(adminService.isAdmin(Mockito.any())).willReturn(AdminServiceTest.buildAdmin());
   }
 
   void mockCreateNoCartFound() {

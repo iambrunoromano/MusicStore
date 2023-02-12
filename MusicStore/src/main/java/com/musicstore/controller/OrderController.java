@@ -2,6 +2,7 @@ package com.musicstore.controller;
 
 import com.musicstore.entity.Cart;
 import com.musicstore.entity.Order;
+import com.musicstore.entity.User;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.CartService;
 import com.musicstore.service.OrderService;
@@ -33,9 +34,9 @@ public class OrderController {
     this.orderService = orderService;
   }
 
-  @GetMapping(value = "/all/{admin-id}")
-  public ResponseEntity<List<Order>> getAll(@PathVariable String adminId) {
-    adminService.isAdmin(adminId);
+  @GetMapping
+  public ResponseEntity<List<Order>> getAll(@RequestHeader User user) {
+    adminService.isAdmin(user);
     return ResponseEntity.ok(orderService.getAll());
   }
 
@@ -57,8 +58,8 @@ public class OrderController {
   }
 
   @DeleteMapping(value = "/{order-id}")
-  public ResponseEntity<Void> delete(@PathVariable int orderId, @RequestBody String adminId) {
-    adminService.isAdmin(adminId);
+  public ResponseEntity<Void> delete(@PathVariable int orderId, @RequestHeader User user) {
+    adminService.isAdmin(user);
     orderService.delete(orderId);
     return ResponseEntity.ok().build();
   }
