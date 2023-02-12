@@ -3,6 +3,7 @@ package com.musicstore.controller;
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Order;
 import com.musicstore.entity.Shipment;
+import com.musicstore.entity.User;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.OrderService;
 import com.musicstore.service.ShipmentService;
@@ -33,9 +34,9 @@ public class ShipmentController {
     this.shipmentService = shipmentService;
   }
 
-  @GetMapping(value = "/all/{admin-id}")
-  public ResponseEntity<List<Shipment>> getAll(@PathVariable String adminId) {
-    adminService.isAdmin(adminId);
+  @GetMapping
+  public ResponseEntity<List<Shipment>> getAll(@RequestHeader User user) {
+    adminService.isAdmin(user);
     return ResponseEntity.ok(shipmentService.getAll());
   }
 
@@ -51,16 +52,16 @@ public class ShipmentController {
     return ResponseEntity.ok(shipment);
   }
 
-  @PostMapping(value = "/{admin-id}")
-  public ResponseEntity<Shipment> save(@PathVariable String adminId, @RequestBody int orderId) {
-    adminService.isAdmin(adminId);
+  @PostMapping
+  public ResponseEntity<Shipment> save(@RequestHeader User user, @RequestBody int orderId) {
+    adminService.isAdmin(user);
     Order order = orderService.getOrder(orderId);
     return ResponseEntity.ok(shipmentService.save(order));
   }
 
-  @DeleteMapping(value = "/{admin-id}")
-  public ResponseEntity<Void> delete(@PathVariable String adminId, @RequestBody int id) {
-    adminService.isAdmin(adminId);
+  @DeleteMapping
+  public ResponseEntity<Void> delete(@RequestHeader User user, @RequestBody int id) {
+    adminService.isAdmin(user);
     shipmentService.delete(id);
     return ResponseEntity.ok().build();
   }

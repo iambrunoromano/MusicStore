@@ -30,7 +30,7 @@ class ShipmentControllerTest {
     mockIsAdmin();
     mockGetAll();
     ResponseEntity<List<Shipment>> shipmentListResponseEntity =
-        shipmentController.getAll(AdminControllerTest.ADMIN_ID);
+        shipmentController.getAll(AdminControllerTest.ADMIN_AUTH_USER);
     List<Shipment> shipmentList = shipmentListResponseEntity.getBody();
     assertEquals(createShipmentList(), shipmentList);
   }
@@ -43,7 +43,7 @@ class ShipmentControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              shipmentController.getAll(AdminControllerTest.ADMIN_ID);
+              shipmentController.getAll(AdminControllerTest.ADMIN_AUTH_USER);
             });
     AdminServiceTest.assertNotAdminException(actualException);
   }
@@ -90,7 +90,7 @@ class ShipmentControllerTest {
     mockGetOrder();
     mockSave();
     ResponseEntity<Shipment> shipmentResponseEntity =
-        shipmentController.save(AdminControllerTest.ADMIN_ID, OrderServiceTest.ID);
+        shipmentController.save(AdminControllerTest.ADMIN_AUTH_USER, OrderServiceTest.ID);
     Shipment shipment = shipmentResponseEntity.getBody();
     assertEquals(ShipmentServiceTest.createShipment(), shipment);
   }
@@ -104,7 +104,7 @@ class ShipmentControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              shipmentController.save(AdminControllerTest.ADMIN_ID, OrderServiceTest.ID);
+              shipmentController.save(AdminControllerTest.ADMIN_AUTH_USER, OrderServiceTest.ID);
             });
     AdminServiceTest.assertNotAdminException(actualException);
   }
@@ -118,7 +118,7 @@ class ShipmentControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              shipmentController.save(AdminControllerTest.ADMIN_ID, OrderServiceTest.ID);
+              shipmentController.save(AdminControllerTest.ADMIN_AUTH_USER, OrderServiceTest.ID);
             });
     OrderServiceTest.assertOrderNotFoundException(actualException, HttpStatus.METHOD_NOT_ALLOWED);
   }
@@ -131,19 +131,19 @@ class ShipmentControllerTest {
             ResponseStatusException.class,
             () -> {
               shipmentController.delete(
-                  AdminControllerTest.ADMIN_ID, ShipmentServiceTest.SHIPMENT_ID);
+                  AdminControllerTest.ADMIN_AUTH_USER, ShipmentServiceTest.SHIPMENT_ID);
             });
     AdminServiceTest.assertNotAdminException(actualException);
   }
 
   private void mockNotAdmin() {
-    BDDMockito.given(adminService.isAdmin(Mockito.anyString()))
+    BDDMockito.given(adminService.isAdmin(Mockito.any()))
         .willThrow(
             new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN));
   }
 
   private void mockIsAdmin() {
-    BDDMockito.given(adminService.isAdmin(Mockito.anyString()))
+    BDDMockito.given(adminService.isAdmin(Mockito.any()))
         .willReturn(AdminServiceTest.buildAdmin());
   }
 
