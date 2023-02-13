@@ -3,6 +3,7 @@ package com.musicstore.integration;
 import com.musicstore.MusicStoreApplication;
 import com.musicstore.controller.ShipmentController;
 import com.musicstore.entity.Shipment;
+import com.musicstore.entity.User;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(ContainerExtender.class)
 public class ShipmentIntegrationTest {
 
-  private static final String FIRST_ADMIN_ID = "mail1@test";
+  private static final User FIRST_ADMIN_USER =
+      User.builder().mail("mail1@test").password("password1").build();
   private final ShipmentController shipmentController;
 
   @Autowired
@@ -34,7 +36,7 @@ public class ShipmentIntegrationTest {
   @Sql("classpath:integration/shipment.sql")
   void getAllTest() {
     ResponseEntity<List<Shipment>> shipmentListResponseEntity =
-        shipmentController.getAll(FIRST_ADMIN_ID);
+        shipmentController.getAll(FIRST_ADMIN_USER);
     List<Shipment> shipmentList = shipmentListResponseEntity.getBody();
     assertEquals(2, shipmentList.size());
   }
@@ -43,7 +45,8 @@ public class ShipmentIntegrationTest {
   @Order(2)
   @Sql("classpath:integration/shipment.sql")
   void getByIdTest() {
-    ResponseEntity<Shipment> shipmentResponseEntity = shipmentController.getById(1, FIRST_ADMIN_ID);
+    ResponseEntity<Shipment> shipmentResponseEntity =
+        shipmentController.getById(1, FIRST_ADMIN_USER.getMail());
     Shipment shipment = shipmentResponseEntity.getBody();
     assertEquals(1, shipment.getId());
   }
@@ -52,7 +55,7 @@ public class ShipmentIntegrationTest {
   @Order(3)
   @Sql("classpath:integration/shipment.sql")
   void saveTest() {
-    ResponseEntity<Shipment> shipmentResponseEntity = shipmentController.save(FIRST_ADMIN_ID, 2);
+    ResponseEntity<Shipment> shipmentResponseEntity = shipmentController.save(FIRST_ADMIN_USER, 2);
     Shipment shipment = shipmentResponseEntity.getBody();
     assertEquals(2, shipment.getOrderId());
   }
@@ -61,9 +64,9 @@ public class ShipmentIntegrationTest {
   @Order(4)
   @Sql("classpath:integration/shipment.sql")
   void deleteTest() {
-    shipmentController.delete(FIRST_ADMIN_ID, 1);
+    shipmentController.delete(FIRST_ADMIN_USER, 1);
     ResponseEntity<List<Shipment>> shipmentListResponseEntity =
-        shipmentController.getAll(FIRST_ADMIN_ID);
+        shipmentController.getAll(FIRST_ADMIN_USER);
     List<Shipment> shipmentList = shipmentListResponseEntity.getBody();
     assertEquals(1, shipmentList.size());
     Shipment leftShipment = shipmentList.get(0);
