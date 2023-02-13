@@ -26,7 +26,7 @@ public class UserIntegrationTest {
       User.builder().mail("mail1@test").password("password1").build();
   public static final String FIRST_USER_ID = "usermail1@test";
   public static final String FIRST_USER_PASSWORD = "password1";
-  public static final String SECOND_USER_ID = "usermail2@test";
+  public static final String SECOND_USER_IMG_URL = "img_url2";
   public static final String SECOND_USER_PASSWORD = "password2";
   private static final String THIRD_USER_ID = "usermail3@test";
 
@@ -44,7 +44,7 @@ public class UserIntegrationTest {
     ResponseEntity<List<UserResponse>> userResponseListResponseEntity =
         userController.getAll(FIRST_ADMIN_USER);
     List<UserResponse> userResponseList = userResponseListResponseEntity.getBody();
-    assertEquals(2, userResponseList.size());
+    assertEquals(3, userResponseList.size());
   }
 
   @Test
@@ -75,9 +75,11 @@ public class UserIntegrationTest {
     ResponseEntity<List<UserResponse>> userResponseListResponseEntity =
         userController.getAll(FIRST_ADMIN_USER);
     List<UserResponse> userResponseList = userResponseListResponseEntity.getBody();
-    assertEquals(1, userResponseList.size());
-    UserResponse leftUserResponse = userResponseList.get(0);
-    assertEquals(SECOND_USER_ID, leftUserResponse.getMail());
+    assertEquals(2, userResponseList.size());
+    UserResponse firstUserResponse = userResponseList.get(0);
+    assertEquals(SECOND_USER_IMG_URL, firstUserResponse.getImgUrl());
+    UserResponse secondUserResponse = userResponseList.get(1);
+    assertEquals(SECOND_USER_IMG_URL, secondUserResponse.getImgUrl());
   }
 
   public static User buildUser(String userId, String userPassword) {
