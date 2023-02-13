@@ -85,7 +85,7 @@ public class CustomerIntegrationTest {
   }
 
   private User buildAdminUser() {
-    return User.builder().mail(FIRST_ADMIN_ID).build();
+    return User.builder().mail(FIRST_ADMIN_ID).password(USER_PASSWORD).build();
   }
 
   private User buildAuthenticUser() {
