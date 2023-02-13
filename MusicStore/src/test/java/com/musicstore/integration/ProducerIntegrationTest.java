@@ -3,6 +3,7 @@ package com.musicstore.integration;
 import com.musicstore.MusicStoreApplication;
 import com.musicstore.controller.ProducerController;
 import com.musicstore.entity.Producer;
+import com.musicstore.entity.User;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(ContainerExtender.class)
 public class ProducerIntegrationTest {
 
-  private static final String FIRST_ADMIN_ID = "mail1@test";
+  private static final User FIRST_ADMIN_USER =
+      User.builder().mail("mail1@test").password("password1").build();
   private static final String FIRST_PRODUCER_MAIL = "producermail1@test";
   private static final String FIRST_PRODUCER_NAME = "producer_name1";
   private static final String SECOND_PRODUCER_MAIL = "producermail2@test";
@@ -42,7 +44,7 @@ public class ProducerIntegrationTest {
   @Sql("classpath:integration/producer.sql")
   void getAllTest() {
     ResponseEntity<List<Producer>> producerListResponseEntity =
-        producerController.getAll(FIRST_ADMIN_ID);
+        producerController.getAll(FIRST_ADMIN_USER);
     List<Producer> producerList = producerListResponseEntity.getBody();
     assertEquals(2, producerList.size());
   }
@@ -52,7 +54,7 @@ public class ProducerIntegrationTest {
   @Sql("classpath:integration/producer.sql")
   void getByNameTest() {
     ResponseEntity<Producer> producerResponseEntity =
-        producerController.getByName(FIRST_ADMIN_ID, FIRST_PRODUCER_MAIL);
+        producerController.getByName(FIRST_ADMIN_USER, FIRST_PRODUCER_MAIL);
     Producer producer = producerResponseEntity.getBody();
     assertEquals(FIRST_PRODUCER_NAME, producer.getName());
   }
@@ -62,7 +64,7 @@ public class ProducerIntegrationTest {
   @Sql("classpath:integration/producer.sql")
   void saveTest() {
     ResponseEntity<Producer> producerResponseEntity =
-        producerController.save(FIRST_ADMIN_ID, buildProducer());
+        producerController.save(FIRST_ADMIN_USER, buildProducer());
     Producer producer = producerResponseEntity.getBody();
     producer.setInsertDate(null);
     producer.setUpdateDate(null);
@@ -74,10 +76,10 @@ public class ProducerIntegrationTest {
   @Sql("classpath:integration/producer.sql")
   void deleteTest() {
     ResponseEntity<Void> responseEntity =
-        producerController.delete(FIRST_ADMIN_ID, FIRST_PRODUCER_MAIL);
+        producerController.delete(FIRST_ADMIN_USER, FIRST_PRODUCER_MAIL);
     assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     ResponseEntity<List<Producer>> producerListResponseEntity =
-        producerController.getAll(FIRST_ADMIN_ID);
+        producerController.getAll(FIRST_ADMIN_USER);
     List<Producer> producerList = producerListResponseEntity.getBody();
     assertEquals(1, producerList.size());
     Producer leftProducer = producerList.get(0);
