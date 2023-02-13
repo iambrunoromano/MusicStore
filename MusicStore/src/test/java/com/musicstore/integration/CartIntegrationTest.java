@@ -26,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class CartIntegrationTest {
 
   private final CartController cartController;
-  private static final String FIRST_USER_MAIL = "usermail1@test";
   private static final String SECOND_USER_MAIL = "usermail2@test";
 
   @Autowired
@@ -51,8 +50,7 @@ public class CartIntegrationTest {
   @Sql("classpath:integration/cart.sql")
   public void saveTest() {
     User authUser =
-        UserIntegrationTest.buildUser(
-            UserIntegrationTest.SECOND_USER_ID, UserIntegrationTest.SECOND_USER_PASSWORD);
+        UserIntegrationTest.buildUser(SECOND_USER_MAIL, UserIntegrationTest.SECOND_USER_PASSWORD);
     ResponseEntity<Void> responseEntity = cartController.save(authUser, buildCartRequestList());
     assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     ResponseEntity<List<Cart>> cartListResponseEntity = cartController.getCart(authUser);
