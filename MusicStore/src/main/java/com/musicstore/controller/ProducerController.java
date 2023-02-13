@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @RestController
 @Slf4j
-@RequestMapping(value = "producer")
+@RequestMapping(value = "producers")
 public class ProducerController {
 
   private final AdminService adminService;
@@ -37,8 +37,8 @@ public class ProducerController {
     return ResponseEntity.ok(producerService.getAll());
   }
 
-  @GetMapping
-  public ResponseEntity<Producer> getByName(@RequestHeader User user, @RequestBody String mail) {
+  @GetMapping(value = "/{mail}")
+  public ResponseEntity<Producer> getByName(@RequestHeader User user, @PathVariable String mail) {
     adminService.isAdmin(user);
     Optional<Producer> optionalProducer = producerService.getByMail(mail);
     if (!optionalProducer.isPresent()) {
@@ -53,8 +53,8 @@ public class ProducerController {
     return ResponseEntity.ok(producerService.save(producer));
   }
 
-  @DeleteMapping
-  public ResponseEntity<Void> delete(@RequestHeader User user, @RequestBody String mail) {
+  @DeleteMapping(value = "/{mail}")
+  public ResponseEntity<Void> delete(@RequestHeader User user, @PathVariable String mail) {
     adminService.isAdmin(user);
     producerService.delete(mail);
     return ResponseEntity.ok().build();
