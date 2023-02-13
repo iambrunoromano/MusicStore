@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @RestController
 @Slf4j
-@RequestMapping(value = "customer")
+@RequestMapping(value = "customers")
 public class CustomerController {
 
   private final AdminService adminService;
