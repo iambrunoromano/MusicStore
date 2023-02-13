@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @RestController
 @Slf4j
-@RequestMapping(value = "category")
+@RequestMapping(value = "categories")
 public class CategoryController {
 
   private final AdminService adminService;
