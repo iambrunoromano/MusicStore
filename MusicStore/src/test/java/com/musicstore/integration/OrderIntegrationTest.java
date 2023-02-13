@@ -3,6 +3,7 @@ package com.musicstore.integration;
 import com.musicstore.MusicStoreApplication;
 import com.musicstore.controller.OrderController;
 import com.musicstore.entity.Cart;
+import com.musicstore.entity.User;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(ContainerExtender.class)
 public class OrderIntegrationTest {
 
-  private static final String FIRST_ADMIN_ID = "mail1@test";
+  private static final User FIRST_ADMIN_USER =
+      User.builder().mail("mail1@test").password("password1").build();
   private static final String CREATE_ORDER_MAIL = "mail3@test";
   private static final String CREATE_ORDER_ADDRESS = "address_3";
 
@@ -38,7 +40,7 @@ public class OrderIntegrationTest {
   @Sql("classpath:integration/order.sql")
   void getAllTest() {
     ResponseEntity<List<com.musicstore.entity.Order>> orderListResponseEntity =
-        orderController.getAll(FIRST_ADMIN_ID);
+        orderController.getAll(FIRST_ADMIN_USER);
     List<com.musicstore.entity.Order> orderList = orderListResponseEntity.getBody();
     assertEquals(2, orderList.size());
   }
@@ -48,7 +50,7 @@ public class OrderIntegrationTest {
   @Sql("classpath:integration/order.sql")
   void getByIdTest() {
     ResponseEntity<com.musicstore.entity.Order> orderResponseEntity =
-        orderController.getById(3, FIRST_ADMIN_ID);
+        orderController.getById(3, FIRST_ADMIN_USER.getMail());
     com.musicstore.entity.Order order = orderResponseEntity.getBody();
     assertEquals("address_1", order.getAddress());
   }
@@ -70,9 +72,9 @@ public class OrderIntegrationTest {
   @Order(4)
   @Sql("classpath:integration/order.sql")
   void deleteTest() {
-    orderController.delete(3, FIRST_ADMIN_ID);
+    orderController.delete(3, FIRST_ADMIN_USER);
     ResponseEntity<List<com.musicstore.entity.Order>> orderListResponseEntity =
-        orderController.getAll(FIRST_ADMIN_ID);
+        orderController.getAll(FIRST_ADMIN_USER);
     List<com.musicstore.entity.Order> orderList = orderListResponseEntity.getBody();
     assertEquals(1, orderList.size());
     com.musicstore.entity.Order leftOrder = orderList.get(0);
