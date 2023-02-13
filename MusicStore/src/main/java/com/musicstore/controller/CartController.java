@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @Slf4j
-@RequestMapping(value = "cart")
+@RequestMapping(value = "carts")
 public class CartController {
 
   private final UserService userService;
