@@ -1,5 +1,6 @@
 package com.musicstore.service;
 
+import com.musicstore.TestUtility;
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Customer;
 import com.musicstore.repository.CustomerRepository;
@@ -15,7 +16,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CustomerServiceTest {
+public class CustomerServiceTest extends TestUtility {
 
   private static final String CUSTOMER_ID = "customer-id";
 
@@ -81,18 +82,8 @@ public class CustomerServiceTest {
   }
 
   public static void assertCustomerNotFoundException(ResponseStatusException actualException) {
-    assertGenericCustomerException(
+    assertReasonException(
         actualException, HttpStatus.NOT_FOUND, ReasonsConstant.CUSTOMER_NOT_FOUND);
-  }
-
-  private static void assertGenericCustomerException(
-      ResponseStatusException actualException, HttpStatus httpStatus, String reasonsConstant) {
-    // TODO: refactor deleting all those assertGeneric_Exception methods and put them in a test
-    // utility class aside as assertReasonException
-    ResponseStatusException expectedException =
-        new ResponseStatusException(httpStatus, reasonsConstant);
-    assertEquals(expectedException.getReason(), actualException.getReason());
-    assertEquals(expectedException.getStatus(), actualException.getStatus());
   }
 
   public static List<Customer> buildCustomerList() {
