@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @RestController
 @Slf4j
-@RequestMapping(value = "shipment")
+@RequestMapping(value = "shipments")
 public class ShipmentController {
 
   private final AdminService adminService;
@@ -34,7 +34,7 @@ public class ShipmentController {
     this.shipmentService = shipmentService;
   }
 
-  @GetMapping
+  @GetMapping(value = "/all")
   public ResponseEntity<List<Shipment>> getAll(@RequestHeader User user) {
     adminService.isAdmin(user);
     return ResponseEntity.ok(shipmentService.getAll());
@@ -52,17 +52,17 @@ public class ShipmentController {
     return ResponseEntity.ok(shipment);
   }
 
-  @PostMapping
-  public ResponseEntity<Shipment> save(@RequestHeader User user, @RequestBody int orderId) {
+  @PostMapping(value = "/order-id")
+  public ResponseEntity<Shipment> save(@RequestHeader User user, @PathVariable int orderId) {
     adminService.isAdmin(user);
     Order order = orderService.getOrder(orderId);
     return ResponseEntity.ok(shipmentService.save(order));
   }
 
-  @DeleteMapping
-  public ResponseEntity<Void> delete(@RequestHeader User user, @RequestBody int id) {
+  @DeleteMapping(value = "/order-id")
+  public ResponseEntity<Void> delete(@RequestHeader User user, @PathVariable int orderId) {
     adminService.isAdmin(user);
-    shipmentService.delete(id);
+    shipmentService.delete(orderId);
     return ResponseEntity.ok().build();
   }
 }
