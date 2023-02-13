@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @Slf4j
-@RequestMapping(value = "product")
+@RequestMapping(value = "products")
 public class ProductController {
 
   private final AdminService adminService;
@@ -49,7 +49,7 @@ public class ProductController {
     return ResponseEntity.ok(productService.getMostSold());
   }
 
-  @GetMapping
+  @GetMapping(value = "/all")
   public ResponseEntity<List<Product>> getAll() {
     return ResponseEntity.ok(productService.getAll());
   }
