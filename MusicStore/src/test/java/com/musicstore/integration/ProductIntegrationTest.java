@@ -3,6 +3,7 @@ package com.musicstore.integration;
 import com.musicstore.MusicStoreApplication;
 import com.musicstore.controller.ProductController;
 import com.musicstore.entity.Product;
+import com.musicstore.entity.User;
 import com.musicstore.service.ProductServiceTest;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(ContainerExtender.class)
 public class ProductIntegrationTest {
 
-  private static final String FIRST_ADMIN_ID = "mail1@test";
+  private static final User FIRST_ADMIN_USER =
+      User.builder().mail("mail1@test").password("password1").build();
   private static final String FIRST_PRODUCT_NAME = "product_1";
   private static final String FIRST_PRODUCER_MAIL = "producermail1@test";
   private final ProductController productController;
@@ -102,7 +104,7 @@ public class ProductIntegrationTest {
   @Sql("classpath:integration/product.sql")
   void createAsAdminTest() {
     ResponseEntity<Product> productResponseEntity =
-        productController.createAsAdmin(FIRST_ADMIN_ID, ProductServiceTest.createProduct());
+        productController.createAsAdmin(FIRST_ADMIN_USER, ProductServiceTest.createProduct());
     Product product = productResponseEntity.getBody();
     product.setId(ProductServiceTest.createProduct().getId());
     product.setInsertDate(null);
