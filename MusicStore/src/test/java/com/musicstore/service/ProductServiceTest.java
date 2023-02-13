@@ -1,5 +1,6 @@
 package com.musicstore.service;
 
+import com.musicstore.TestUtility;
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Product;
 import com.musicstore.repository.ProductRepository;
@@ -14,7 +15,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ProductServiceTest {
+public class ProductServiceTest extends TestUtility {
 
   public static final Integer PRODUCT_ID = 0;
 
@@ -75,8 +76,7 @@ public class ProductServiceTest {
   }
 
   public static void assertProductNotFoundException(ResponseStatusException actualException) {
-    UserServiceTest.assertGenericUserException(
-        actualException, HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCT_NOT_FOUND);
+    assertReasonException(actualException, HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCT_NOT_FOUND);
   }
 
   public static Product createProduct() {
