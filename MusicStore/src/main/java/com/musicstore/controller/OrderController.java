@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @Slf4j
-@RequestMapping(value = "order")
+@RequestMapping(value = "orders")
 public class OrderController {
 
   public static final String ORDER = "order";
@@ -34,7 +34,7 @@ public class OrderController {
     this.orderService = orderService;
   }
 
-  @GetMapping
+  @GetMapping(value = "/all")
   public ResponseEntity<List<Order>> getAll(@RequestHeader User user) {
     adminService.isAdmin(user);
     return ResponseEntity.ok(orderService.getAll());
