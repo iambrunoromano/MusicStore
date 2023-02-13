@@ -1,5 +1,6 @@
 package com.musicstore.service;
 
+import com.musicstore.TestUtility;
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.User;
 import com.musicstore.repository.UserRepository;
@@ -15,7 +16,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class UserServiceTest {
+public class UserServiceTest extends TestUtility {
   public static final String MAIL = "mail";
   private static final String PASSWORD = "password";
   private static final String IMG_URL = "img-url";
@@ -77,21 +78,12 @@ public class UserServiceTest {
   }
 
   public static void assertNotAuthenticException(ResponseStatusException actualException) {
-    assertGenericUserException(
+    assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_AUTHENTIC);
   }
 
   public static void assertNotUserException(ResponseStatusException actualException) {
-    assertGenericUserException(
-        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_USER);
-  }
-
-  public static void assertGenericUserException(
-      ResponseStatusException actualException, HttpStatus httpStatus, String reasonsConstant) {
-    ResponseStatusException expectedException =
-        new ResponseStatusException(httpStatus, reasonsConstant);
-    assertEquals(expectedException.getReason(), actualException.getReason());
-    assertEquals(expectedException.getStatus(), actualException.getStatus());
+    assertReasonException(actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_USER);
   }
 
   public static User buildUser() {
