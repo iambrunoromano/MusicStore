@@ -26,6 +26,9 @@ public class CategoryIntegrationTest {
   private final CategoryController categoryController;
 
   private static final String FIRST_ADMIN_ID = "mail1@test";
+
+  private static final User FIRST_ADMIN_USER =
+      User.builder().mail(FIRST_ADMIN_ID).password("password1").build();
   private static final String CATEGORY_NAME = "category_1";
   private static final String NEW_NAME = "new_name";
   private static final String PRODUCER_ID = "producer_1";
@@ -58,7 +61,7 @@ public class CategoryIntegrationTest {
   @Sql("classpath:integration/category.sql")
   public void updateTest() {
     ResponseEntity<Category> categoryResponseEntity =
-        categoryController.update(FIRST_ADMIN_ID, buildCategory());
+        categoryController.update(FIRST_ADMIN_USER, buildCategory());
     Category category = categoryResponseEntity.getBody();
     assertEquals(NEW_NAME, category.getName());
   }
@@ -67,8 +70,7 @@ public class CategoryIntegrationTest {
   @Order(4)
   @Sql("classpath:integration/category.sql")
   public void deleteTest() {
-    ResponseEntity<Void> responseEntity =
-        categoryController.delete(1, User.builder().mail(FIRST_ADMIN_ID).build());
+    ResponseEntity<Void> responseEntity = categoryController.delete(1, FIRST_ADMIN_USER);
     assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     ResponseEntity<List<Category>> categoryListResponseEntity = categoryController.getAll();
     List<Category> categoryList = categoryListResponseEntity.getBody();
