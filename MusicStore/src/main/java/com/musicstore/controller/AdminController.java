@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @Slf4j
-@RequestMapping(value = "admin")
+@RequestMapping(value = "admins")
 public class AdminController {
 
   private final AdminService adminService;
@@ -22,18 +22,16 @@ public class AdminController {
     this.adminService = adminService;
   }
 
-  // TODO: STANDARDIZE GET METHODS: /all for getAll, /{id} with @PathVariable for getById for all controllers
-
   @GetMapping(value = "/all")
   public ResponseEntity<List<Admin>> getAll(@RequestHeader User user) {
     adminService.isAdmin(user);
     return ResponseEntity.ok(adminService.getAll());
   }
 
-  @GetMapping
-  public ResponseEntity<Admin> getById(@RequestHeader User user, @RequestBody String requestAdmin) {
+  @GetMapping(value = "/{admin-id}")
+  public ResponseEntity<Admin> getById(@RequestHeader User user, @PathVariable String adminId) {
     adminService.isAdmin(user);
-    return ResponseEntity.ok(adminService.getAdmin(requestAdmin));
+    return ResponseEntity.ok(adminService.getAdmin(adminId));
   }
 
   @PostMapping
@@ -42,10 +40,10 @@ public class AdminController {
     return ResponseEntity.ok(adminService.save(newAdmin));
   }
 
-  @DeleteMapping
-  public ResponseEntity<Void> delete(@RequestHeader User user, @RequestBody String adminToDelete) {
+  @DeleteMapping(value = "/{admin-id}")
+  public ResponseEntity<Void> delete(@RequestHeader User user, @PathVariable String adminId) {
     adminService.isAdmin(user);
-    adminService.delete(adminToDelete);
+    adminService.delete(adminId);
     return ResponseEntity.ok().build();
   }
 }
