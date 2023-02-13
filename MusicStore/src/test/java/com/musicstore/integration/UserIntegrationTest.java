@@ -22,7 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(ContainerExtender.class)
 public class UserIntegrationTest {
 
-  private static final String FIRST_ADMIN_ID = "mail1@test";
+  private static final User FIRST_ADMIN_USER =
+      User.builder().mail("mail1@test").password("password1").build();
   public static final String FIRST_USER_ID = "usermail1@test";
   public static final String FIRST_USER_PASSWORD = "password1";
   public static final String SECOND_USER_ID = "usermail2@test";
@@ -41,7 +42,7 @@ public class UserIntegrationTest {
   @Sql("classpath:integration/user.sql")
   void getAllTest() {
     ResponseEntity<List<UserResponse>> userResponseListResponseEntity =
-        userController.getAll(FIRST_ADMIN_ID);
+        userController.getAll(FIRST_ADMIN_USER);
     List<UserResponse> userResponseList = userResponseListResponseEntity.getBody();
     assertEquals(2, userResponseList.size());
   }
@@ -72,7 +73,7 @@ public class UserIntegrationTest {
   void deleteTest() {
     userController.delete(buildUser(FIRST_USER_ID, FIRST_USER_PASSWORD));
     ResponseEntity<List<UserResponse>> userResponseListResponseEntity =
-        userController.getAll(FIRST_ADMIN_ID);
+        userController.getAll(FIRST_ADMIN_USER);
     List<UserResponse> userResponseList = userResponseListResponseEntity.getBody();
     assertEquals(1, userResponseList.size());
     UserResponse leftUserResponse = userResponseList.get(0);
