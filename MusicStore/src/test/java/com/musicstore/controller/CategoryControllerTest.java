@@ -1,5 +1,6 @@
 package com.musicstore.controller;
 
+import com.musicstore.TestUtility;
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Category;
 import com.musicstore.entity.User;
@@ -18,9 +19,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class CategoryControllerTest {
-
-  // TODO: collect all the constants used for testing under a UtilityTest class
+class CategoryControllerTest extends TestUtility {
 
   private final AdminService adminService = Mockito.mock(AdminService.class);
   private final CategoryService categoryService = Mockito.mock(CategoryService.class);
@@ -32,7 +31,7 @@ class CategoryControllerTest {
   void getByIdFoundTest() {
     mockFound();
     ResponseEntity<Category> actualCategory = categoryController.getById(CategoryServiceTest.ID);
-    CategoryServiceTest.assertCategory(actualCategory.getBody());
+    assertCategory(actualCategory.getBody());
   }
 
   @Test
@@ -44,7 +43,8 @@ class CategoryControllerTest {
             () -> {
               categoryController.getById(CategoryServiceTest.ID);
             });
-    CategoryServiceTest.assertCategoryNotFoundException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.NOT_FOUND, ReasonsConstant.CATEGORY_NOT_FOUND);
   }
 
   @Test
@@ -52,9 +52,8 @@ class CategoryControllerTest {
     mockIsAdmin();
     mockSave();
     ResponseEntity<Category> actualCategory =
-        categoryController.update(
-            AdminControllerTest.ADMIN_AUTH_USER, CategoryServiceTest.buildCategory());
-    CategoryServiceTest.assertCategory(actualCategory.getBody());
+        categoryController.update(FIRST_ADMIN_USER, CategoryServiceTest.buildCategory());
+    assertCategory(actualCategory.getBody());
   }
 
   @Test
@@ -64,9 +63,10 @@ class CategoryControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              categoryController.update(AdminControllerTest.ADMIN_AUTH_USER, new Category());
+              categoryController.update(FIRST_ADMIN_USER, new Category());
             });
-    AdminServiceTest.assertNotAdminException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
   }
 
   @Test
@@ -79,7 +79,8 @@ class CategoryControllerTest {
             () -> {
               categoryController.delete(CategoryServiceTest.ID, user);
             });
-    AdminServiceTest.assertNotAdminException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
   }
 
   private void mockFound() {
@@ -99,8 +100,7 @@ class CategoryControllerTest {
   }
 
   private void mockIsAdmin() {
-    BDDMockito.given(adminService.isAdmin(Mockito.any()))
-        .willReturn(AdminServiceTest.buildAdmin());
+    BDDMockito.given(adminService.isAdmin(Mockito.any())).willReturn(AdminServiceTest.buildAdmin());
   }
 
   private void mockNotAdmin() {
