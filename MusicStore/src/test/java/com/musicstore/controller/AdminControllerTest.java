@@ -1,8 +1,8 @@
 package com.musicstore.controller;
 
+import com.musicstore.TestUtility;
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Admin;
-import com.musicstore.entity.User;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.AdminServiceTest;
 import org.junit.jupiter.api.Test;
@@ -15,12 +15,10 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class AdminControllerTest {
-
-  public static final String ADMIN_ID = "admin-id";
-  public static final User ADMIN_AUTH_USER = User.builder().mail(ADMIN_ID).build();
+public class AdminControllerTest extends TestUtility {
 
   private AdminService adminService = Mockito.mock(AdminService.class);
   private AdminController adminController = new AdminController(adminService);
@@ -32,15 +30,16 @@ public class AdminControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              adminController.getAll(ADMIN_AUTH_USER);
+              adminController.getAll(FIRST_ADMIN_USER);
             });
-    AdminServiceTest.assertNotAdminException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
   }
 
   @Test
   void getAllAuthorizedTest() {
     List<Admin> adminList = mockAdminList();
-    assertEquals(ResponseEntity.ok(adminList), adminController.getAll(ADMIN_AUTH_USER));
+    assertEquals(ResponseEntity.ok(adminList), adminController.getAll(FIRST_ADMIN_USER));
   }
 
   @Test
@@ -50,16 +49,17 @@ public class AdminControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              adminController.getById(ADMIN_AUTH_USER, ADMIN_ID);
+              adminController.getById(FIRST_ADMIN_USER, MAIL);
             });
-    AdminServiceTest.assertNotAdminException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
   }
 
   @Test
   void getByIdAuthorizedTest() {
     Admin admin = mockAdmin();
     mockGetAdmin();
-    assertEquals(ResponseEntity.ok(admin), adminController.getById(ADMIN_AUTH_USER, ADMIN_ID));
+    assertEquals(ResponseEntity.ok(admin), adminController.getById(FIRST_ADMIN_USER, MAIL));
   }
 
   @Test
@@ -69,9 +69,10 @@ public class AdminControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              adminController.save(ADMIN_AUTH_USER, AdminServiceTest.buildAdmin());
+              adminController.save(FIRST_ADMIN_USER, AdminServiceTest.buildAdmin());
             });
-    AdminServiceTest.assertNotAdminException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
   }
 
   @Test
@@ -80,7 +81,7 @@ public class AdminControllerTest {
     BDDMockito.given(adminService.save(Mockito.any())).willReturn(AdminServiceTest.buildAdmin());
     assertEquals(
         ResponseEntity.ok(admin),
-        adminController.save(ADMIN_AUTH_USER, AdminServiceTest.buildAdmin()));
+        adminController.save(FIRST_ADMIN_USER, AdminServiceTest.buildAdmin()));
   }
 
   @Test
@@ -90,9 +91,10 @@ public class AdminControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              adminController.delete(ADMIN_AUTH_USER, ADMIN_ID);
+              adminController.delete(FIRST_ADMIN_USER, MAIL);
             });
-    AdminServiceTest.assertNotAdminException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
   }
 
   private void mockExceptionThrown() {
