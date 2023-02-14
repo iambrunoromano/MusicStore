@@ -1,5 +1,6 @@
 package com.musicstore.controller;
 
+import com.musicstore.TestUtility;
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Customer;
 import com.musicstore.service.*;
@@ -13,12 +14,10 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class CustomerControllerTest {
-
-  // TODO: put all the static constants in a constant test class and use only them
-  private static final String CUSTOMER_ID = "customer-id";
+class CustomerControllerTest extends TestUtility {
 
   private final AdminService adminService = Mockito.mock(AdminService.class);
   private final UserService userService = Mockito.mock(UserService.class);
@@ -36,7 +35,8 @@ class CustomerControllerTest {
             () -> {
               customerController.getAll(UserServiceTest.buildUser());
             });
-    AdminServiceTest.assertNotAdminException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
   }
 
   @Test
@@ -58,7 +58,9 @@ class CustomerControllerTest {
             () -> {
               customerController.getById(UserServiceTest.buildUser());
             });
-    UserServiceTest.assertNotAuthenticException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_AUTHENTIC);
+    ;
   }
 
   @Test
@@ -81,7 +83,9 @@ class CustomerControllerTest {
               customerController.create(
                   UserServiceTest.buildUser(), CustomerServiceTest.buildCustomer());
             });
-    UserServiceTest.assertNotAuthenticException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_AUTHENTIC);
+    ;
   }
 
   @Test
@@ -103,7 +107,9 @@ class CustomerControllerTest {
             () -> {
               customerController.delete(CUSTOMER_ID, UserServiceTest.buildUser());
             });
-    UserServiceTest.assertNotAuthenticException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_AUTHENTIC);
+    ;
   }
 
   private void mockGetById() {
@@ -135,8 +141,7 @@ class CustomerControllerTest {
   private void mockIsAdmin() {
     // TODO: refactor all the mock methods in tests and make them parametrized to receive in input
     // mocked objects
-    BDDMockito.given(adminService.isAdmin(Mockito.any()))
-        .willReturn(AdminServiceTest.buildAdmin());
+    BDDMockito.given(adminService.isAdmin(Mockito.any())).willReturn(buildAdmin());
   }
 
   private void mockIsNotAdmin() {
