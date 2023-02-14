@@ -1,5 +1,6 @@
 package com.musicstore.service;
 
+import com.musicstore.TestUtility;
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Category;
 import com.musicstore.repository.CategoryRepository;
@@ -16,13 +17,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CategoryServiceTest {
-
-  public static final Integer ID = 1;
-  private static final String NAME = "category-name";
-  private static final Integer PARENT = 0;
-  private static final String IMG_URL = "img-url";
-  private static final String PRODUCER = "producer";
+public class CategoryServiceTest extends TestUtility {
 
   private final CategoryRepository categoryRepository = Mockito.mock(CategoryRepository.class);
   private final ProductRepository productRepository = Mockito.mock(ProductRepository.class);
@@ -44,7 +39,8 @@ public class CategoryServiceTest {
             () -> {
               categoryService.delete(ID);
             });
-    assertCategoryNotFoundException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.NOT_FOUND, ReasonsConstant.CATEGORY_NOT_FOUND);
   }
 
   @Test
@@ -65,21 +61,8 @@ public class CategoryServiceTest {
             () -> {
               categoryService.getByProducer(PRODUCER);
             });
-    assertCategoryNotFoundException(actualException);
-  }
-
-  public static void assertCategory(Category expectedCategory) {
-    assertEquals(expectedCategory.getId(), ID);
-    assertEquals(expectedCategory.getName(), NAME);
-    assertEquals(expectedCategory.getParent(), PARENT);
-    assertEquals(expectedCategory.getImgUrl(), IMG_URL);
-  }
-
-  public static void assertCategoryNotFoundException(ResponseStatusException actualException) {
-    ResponseStatusException expectedException =
-        new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.CATEGORY_NOT_FOUND);
-    assertEquals(expectedException.getReason(), actualException.getReason());
-    assertEquals(expectedException.getStatus(), actualException.getStatus());
+    assertReasonException(
+        actualException, HttpStatus.NOT_FOUND, ReasonsConstant.CATEGORY_NOT_FOUND);
   }
 
   private void mockFindCategoryByProducerNotFound() {
@@ -101,9 +84,5 @@ public class CategoryServiceTest {
   private void mockFindById() {
     BDDMockito.given(categoryRepository.findById(Mockito.anyInt()))
         .willReturn(Optional.of(buildCategory()));
-  }
-
-  public static Category buildCategory() {
-    return Category.builder().id(ID).name(NAME).parent(PARENT).imgUrl(IMG_URL).build();
   }
 }
