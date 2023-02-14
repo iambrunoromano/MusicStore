@@ -1,7 +1,7 @@
 package com.musicstore.service;
 
+import com.musicstore.TestUtility;
 import com.musicstore.constant.ReasonsConstant;
-import com.musicstore.entity.Cart;
 import com.musicstore.entity.Order;
 import com.musicstore.repository.CartRepository;
 import com.musicstore.repository.OrderRepository;
@@ -11,31 +11,21 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class OrderServiceTest {
-
-  public static final int ID = 0;
-  public static final String MAIL = "mail";
-  private static final Timestamp DATE = Timestamp.from(Instant.now());
-  public static final double TOTAL = 1.0;
-  public static final String ADDRESS = "address";
+public class OrderServiceTest extends TestUtility {
 
   private OrderRepository orderRepository = Mockito.mock(OrderRepository.class);
   private CartRepository cartRepository = Mockito.mock(CartRepository.class);
-  private OrderService orderService =
-      new OrderService(orderRepository, cartRepository);
+  private OrderService orderService = new OrderService(orderRepository, cartRepository);
 
   @Test
   void getVerifiedOrderTest() {
     mockFindOrderById();
-    assertEquals(createOrder(), orderService.getVerifiedOrder(ID, MAIL));
+    assertEquals(buildOrder(), orderService.getVerifiedOrder(ID, MAIL));
   }
 
   @Test
@@ -57,13 +47,14 @@ public class OrderServiceTest {
             () -> {
               orderService.getVerifiedOrder(ID, MAIL);
             });
-    assertOrderNotFoundException(actualException, HttpStatus.METHOD_NOT_ALLOWED);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.ORDER_NOT_FOUND);
   }
 
   @Test
   void getAdminOrderTest() {
     mockFindOrderById();
-    assertEquals(createOrder(), orderService.getOrder(ID));
+    assertEquals(buildOrder(), orderService.getOrder(ID));
   }
 
   @Test
@@ -83,7 +74,7 @@ public class OrderServiceTest {
             () -> {
               orderService.create(MAIL, ADDRESS);
             });
-    CartServiceTest.assertCartNotFoundException(actualException);
+    assertReasonException(actualException, HttpStatus.NOT_FOUND, ReasonsConstant.CART_NOT_FOUND);
   }
 
   @Test
@@ -101,7 +92,7 @@ public class OrderServiceTest {
             () -> {
               orderService.delete(ID);
             });
-    assertOrderNotFoundException(actualException, HttpStatus.NOT_FOUND);
+    assertReasonException(actualException, HttpStatus.NOT_FOUND, ReasonsConstant.ORDER_NOT_FOUND);
   }
 
   void doMailTest(String mail) {
@@ -112,7 +103,8 @@ public class OrderServiceTest {
             () -> {
               orderService.getVerifiedOrder(ID, mail);
             });
-    assertOrderUserMismatchException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.ORDER_USER_MISMATCH);
   }
 
   private void mockCartListNotFound() {
@@ -120,7 +112,7 @@ public class OrderServiceTest {
   }
 
   private void mockCartListFound() {
-    BDDMockito.given(cartRepository.findByMail(Mockito.anyString())).willReturn(createCartList());
+    BDDMockito.given(cartRepository.findByMail(Mockito.anyString())).willReturn(buildCartList());
   }
 
   private void mockNotFoundOrderById() {
@@ -129,33 +121,6 @@ public class OrderServiceTest {
 
   private void mockFindOrderById() {
     BDDMockito.given(orderRepository.findById(Mockito.anyInt()))
-        .willReturn(Optional.of(createOrder()));
-  }
-
-  public static List<Cart> createCartList() {
-    List<Cart> cartList = new ArrayList<>();
-    cartList.add(CartServiceTest.createCart());
-    cartList.add(CartServiceTest.createCart());
-    return cartList;
-  }
-
-  public static Order createOrder() {
-    return Order.builder().id(ID).mail(MAIL).date(DATE).total(TOTAL).address(ADDRESS).build();
-  }
-
-  public static void assertOrderUserMismatchException(ResponseStatusException actualException) {
-    ResponseStatusException expectedException =
-        new ResponseStatusException(
-            HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.ORDER_USER_MISMATCH);
-    assertEquals(expectedException.getReason(), actualException.getReason());
-    assertEquals(expectedException.getStatus(), actualException.getStatus());
-  }
-
-  public static void assertOrderNotFoundException(
-      ResponseStatusException actualException, HttpStatus expectedHttpStatus) {
-    ResponseStatusException expectedException =
-        new ResponseStatusException(expectedHttpStatus, ReasonsConstant.ORDER_NOT_FOUND);
-    assertEquals(expectedException.getReason(), actualException.getReason());
-    assertEquals(expectedException.getStatus(), actualException.getStatus());
+        .willReturn(Optional.of(buildOrder()));
   }
 }
