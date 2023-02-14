@@ -1,19 +1,16 @@
 package com.musicstore.service;
 
+import com.musicstore.TestUtility;
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Cart;
-import com.musicstore.entity.Product;
 import com.musicstore.repository.CartRepository;
 import com.musicstore.repository.ProductRepository;
-import com.musicstore.request.CartRequest;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,12 +18,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class CartServiceTest {
-
-  private static final int QUANTITY = 2;
-  private static final Timestamp DATE = Timestamp.from(Instant.now());
-  private static final Double PRICE = 1.0;
-  private static final Double OVERALL_PRICE = 2.0;
+public class CartServiceTest extends TestUtility {
 
   private CartRepository cartRepository = Mockito.mock(CartRepository.class);
   private ProductRepository productRepository = Mockito.mock(ProductRepository.class);
@@ -45,15 +37,15 @@ public class CartServiceTest {
             () -> {
               cartService.deleteByMail("not_found_mail");
             });
-    assertCartNotFoundException(actualException);
+    assertReasonException(actualException, HttpStatus.NOT_FOUND, ReasonsConstant.CART_NOT_FOUND);
   }
 
   @Test
   void createCartTest() {
     mockProductFound(ProductServiceTest.PRODUCT_ID, PRICE);
-    Cart actualCart = cartService.createCart(createCartRequest());
+    Cart actualCart = cartService.createCart(buildCartRequest());
     actualCart.setDate(DATE);
-    assertEquals(createCart(), actualCart);
+    assertEquals(buildCart(), actualCart);
   }
 
   @Test
@@ -73,9 +65,9 @@ public class CartServiceTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              cartService.createCart(createCartRequest());
+              cartService.createCart(buildCartRequest());
             });
-    assertProductNotFoundException(actualException);
+    assertReasonException(actualException, HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCT_NOT_FOUND);
   }
 
   private void mockCartRepository(List<Cart> cartList) {
@@ -85,49 +77,10 @@ public class CartServiceTest {
 
   private void mockProductFound(int productId, Double price) {
     BDDMockito.given(productRepository.findById(productId))
-        .willReturn(Optional.of(createProduct(price)));
+        .willReturn(Optional.of(buildProduct(price)));
   }
 
   private void mockProductNotFound(int productId) {
     BDDMockito.given(productRepository.findById(productId)).willReturn(Optional.empty());
-  }
-
-  public static void assertCartNotFoundException(ResponseStatusException actualException) {
-    ResponseStatusException expectedException =
-        new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.CART_NOT_FOUND);
-    assertEquals(expectedException.getReason(), actualException.getReason());
-    assertEquals(expectedException.getStatus(), actualException.getStatus());
-  }
-
-  public static void assertProductNotFoundException(ResponseStatusException actualException) {
-    ResponseStatusException expectedException =
-        new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCT_NOT_FOUND);
-    assertEquals(expectedException.getReason(), actualException.getReason());
-    assertEquals(expectedException.getStatus(), actualException.getStatus());
-  }
-
-  // TODO: move all constants and createSomething() methods under a test utility class
-
-  private CartRequest createCartRequest() {
-    return CartRequest.builder()
-        .productId(ProductServiceTest.PRODUCT_ID)
-        .quantity(QUANTITY)
-        .mail(UserServiceTest.MAIL)
-        .build();
-  }
-
-  private Product createProduct(Double price) {
-    return Product.builder().id(ProductServiceTest.PRODUCT_ID).price(price).build();
-  }
-
-  public static Cart createCart() {
-    return Cart.builder()
-        .productId(ProductServiceTest.PRODUCT_ID)
-        .quantity(QUANTITY)
-        .mail(UserServiceTest.MAIL)
-        .date(DATE)
-        .bought(false)
-        .overallPrice(OVERALL_PRICE)
-        .build();
   }
 }
