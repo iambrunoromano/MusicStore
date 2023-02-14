@@ -1,5 +1,6 @@
 package com.musicstore.controller;
 
+import com.musicstore.TestUtility;
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Shipment;
 import com.musicstore.service.*;
@@ -17,7 +18,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class ShipmentControllerTest {
+class ShipmentControllerTest extends TestUtility {
 
   private AdminService adminService = Mockito.mock(AdminService.class);
   private OrderService orderService = Mockito.mock(OrderService.class);
@@ -30,9 +31,9 @@ class ShipmentControllerTest {
     mockIsAdmin();
     mockGetAll();
     ResponseEntity<List<Shipment>> shipmentListResponseEntity =
-        shipmentController.getAll(AdminControllerTest.ADMIN_AUTH_USER);
+        shipmentController.getAll(FIRST_ADMIN_USER);
     List<Shipment> shipmentList = shipmentListResponseEntity.getBody();
-    assertEquals(createShipmentList(), shipmentList);
+    assertEquals(buildShipmentList(), shipmentList);
   }
 
   @Test
@@ -43,9 +44,10 @@ class ShipmentControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              shipmentController.getAll(AdminControllerTest.ADMIN_AUTH_USER);
+              shipmentController.getAll(FIRST_ADMIN_USER);
             });
-    AdminServiceTest.assertNotAdminException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
   }
 
   @Test
@@ -55,7 +57,7 @@ class ShipmentControllerTest {
     ResponseEntity<Shipment> shipmentResponseEntity =
         shipmentController.getById(ShipmentServiceTest.SHIPMENT_ID, OrderServiceTest.MAIL);
     Shipment shipment = shipmentResponseEntity.getBody();
-    assertEquals(ShipmentServiceTest.createShipment(), shipment);
+    assertEquals(ShipmentServiceTest.buildShipment(), shipment);
   }
 
   @Test
@@ -68,7 +70,8 @@ class ShipmentControllerTest {
             () -> {
               shipmentController.getById(ShipmentServiceTest.SHIPMENT_ID, OrderServiceTest.MAIL);
             });
-    ShipmentServiceTest.assertShipmentNotFoundException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.NOT_FOUND, ReasonsConstant.SHIPMENT_NOT_FOUND);
   }
 
   @Test
@@ -81,7 +84,8 @@ class ShipmentControllerTest {
             () -> {
               shipmentController.getById(ShipmentServiceTest.SHIPMENT_ID, OrderServiceTest.MAIL);
             });
-    OrderServiceTest.assertOrderUserMismatchException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.ORDER_USER_MISMATCH);
   }
 
   @Test
@@ -90,9 +94,9 @@ class ShipmentControllerTest {
     mockGetOrder();
     mockSave();
     ResponseEntity<Shipment> shipmentResponseEntity =
-        shipmentController.save(AdminControllerTest.ADMIN_AUTH_USER, OrderServiceTest.ID);
+        shipmentController.save(FIRST_ADMIN_USER, OrderServiceTest.ID);
     Shipment shipment = shipmentResponseEntity.getBody();
-    assertEquals(ShipmentServiceTest.createShipment(), shipment);
+    assertEquals(ShipmentServiceTest.buildShipment(), shipment);
   }
 
   @Test
@@ -104,9 +108,10 @@ class ShipmentControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              shipmentController.save(AdminControllerTest.ADMIN_AUTH_USER, OrderServiceTest.ID);
+              shipmentController.save(FIRST_ADMIN_USER, OrderServiceTest.ID);
             });
-    AdminServiceTest.assertNotAdminException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
   }
 
   @Test
@@ -118,9 +123,10 @@ class ShipmentControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              shipmentController.save(AdminControllerTest.ADMIN_AUTH_USER, OrderServiceTest.ID);
+              shipmentController.save(FIRST_ADMIN_USER, OrderServiceTest.ID);
             });
-    OrderServiceTest.assertOrderNotFoundException(actualException, HttpStatus.METHOD_NOT_ALLOWED);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.ORDER_NOT_FOUND);
   }
 
   @Test
@@ -130,10 +136,10 @@ class ShipmentControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              shipmentController.delete(
-                  AdminControllerTest.ADMIN_AUTH_USER, ShipmentServiceTest.SHIPMENT_ID);
+              shipmentController.delete(FIRST_ADMIN_USER, ShipmentServiceTest.SHIPMENT_ID);
             });
-    AdminServiceTest.assertNotAdminException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
   }
 
   private void mockNotAdmin() {
@@ -143,17 +149,16 @@ class ShipmentControllerTest {
   }
 
   private void mockIsAdmin() {
-    BDDMockito.given(adminService.isAdmin(Mockito.any()))
-        .willReturn(AdminServiceTest.buildAdmin());
+    BDDMockito.given(adminService.isAdmin(Mockito.any())).willReturn(AdminServiceTest.buildAdmin());
   }
 
   private void mockGetAll() {
-    BDDMockito.given(shipmentService.getAll()).willReturn(createShipmentList());
+    BDDMockito.given(shipmentService.getAll()).willReturn(buildShipmentList());
   }
 
   private void mockGetById() {
     BDDMockito.given(shipmentService.getById(Mockito.anyInt()))
-        .willReturn(Optional.of(ShipmentServiceTest.createShipment()));
+        .willReturn(Optional.of(ShipmentServiceTest.buildShipment()));
   }
 
   private void mockGetByIdNotFound() {
@@ -162,12 +167,12 @@ class ShipmentControllerTest {
 
   private void mockSave() {
     BDDMockito.given(shipmentService.save(Mockito.any()))
-        .willReturn(ShipmentServiceTest.createShipment());
+        .willReturn(ShipmentServiceTest.buildShipment());
   }
 
   private void mockGetVerifiedOrder() {
     BDDMockito.given(orderService.getVerifiedOrder(Mockito.anyInt(), Mockito.anyString()))
-        .willReturn(OrderServiceTest.createOrder());
+        .willReturn(OrderServiceTest.buildOrder());
   }
 
   private void mockGetVerifiedOrderNotFound() {
@@ -179,7 +184,7 @@ class ShipmentControllerTest {
 
   private void mockGetOrder() {
     BDDMockito.given(orderService.getOrder(Mockito.anyInt()))
-        .willReturn(OrderServiceTest.createOrder());
+        .willReturn(OrderServiceTest.buildOrder());
   }
 
   private void mockGetOrderNotFound() {
@@ -187,12 +192,5 @@ class ShipmentControllerTest {
         .willThrow(
             new ResponseStatusException(
                 HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.ORDER_NOT_FOUND));
-  }
-
-  private List<Shipment> createShipmentList() {
-    List<Shipment> shipmentList = new ArrayList<>();
-    shipmentList.add(ShipmentServiceTest.createShipment());
-    shipmentList.add(ShipmentServiceTest.createShipment());
-    return shipmentList;
   }
 }
