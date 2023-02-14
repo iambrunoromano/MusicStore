@@ -1,5 +1,6 @@
 package com.musicstore.controller;
 
+import com.musicstore.TestUtility;
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.User;
 import com.musicstore.response.UserResponse;
@@ -14,16 +15,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class UserControllerTest {
-
-  public static final String NOT_ADMIN_ID = "not-admin-id";
-  public static final String ADMIN_ID = "admin-id";
+class UserControllerTest extends TestUtility {
 
   private AdminService adminService = Mockito.mock(AdminService.class);
   private UserService userService = Mockito.mock(UserService.class);
@@ -36,16 +33,18 @@ class UserControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              userController.getAll(AdminControllerTest.ADMIN_AUTH_USER);
+              userController.getAll(FIRST_ADMIN_USER);
             });
-    AdminServiceTest.assertNotAdminException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
   }
 
   @Test
   void getAllTest() {
     mockIsAdmin();
     mockUserList();
-    ResponseEntity<List<UserResponse>> userListResponseEntity = userController.getAll(AdminControllerTest.ADMIN_AUTH_USER);
+    ResponseEntity<List<UserResponse>> userListResponseEntity =
+        userController.getAll(FIRST_ADMIN_USER);
     List<UserResponse> userResponseList = userListResponseEntity.getBody();
     assertEquals(buildUserResponseList(), userResponseList);
   }
@@ -68,7 +67,9 @@ class UserControllerTest {
             () -> {
               userController.getById(UserServiceTest.buildUser());
             });
-    UserServiceTest.assertNotAuthenticException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_AUTHENTIC);
+    ;
   }
 
   @Test
@@ -89,7 +90,7 @@ class UserControllerTest {
             () -> {
               userController.delete(UserServiceTest.buildUser());
             });
-    UserServiceTest.assertNotUserException(actualException);
+    assertReasonException(actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_USER);
   }
 
   private void mockIsNotUser() {
@@ -105,27 +106,12 @@ class UserControllerTest {
   }
 
   private void mockIsAdmin() {
-    BDDMockito.given(adminService.isAdmin(Mockito.any()))
-        .willReturn(AdminServiceTest.buildAdmin());
+    BDDMockito.given(adminService.isAdmin(Mockito.any())).willReturn(AdminServiceTest.buildAdmin());
   }
 
   private void mockUserList() {
     List<User> userList = buildUserList();
     BDDMockito.given(userService.getAll()).willReturn(userList);
-  }
-
-  private List<User> buildUserList() {
-    List<User> userList = new ArrayList<>();
-    userList.add(UserServiceTest.buildUser());
-    userList.add(UserServiceTest.buildUser());
-    return userList;
-  }
-
-  private List<UserResponse> buildUserResponseList() {
-    List<UserResponse> userResponseList = new ArrayList<>();
-    userResponseList.add(UserServiceTest.buildUserResponse());
-    userResponseList.add(UserServiceTest.buildUserResponse());
-    return userResponseList;
   }
 
   private void mockIsAuthentic() {
