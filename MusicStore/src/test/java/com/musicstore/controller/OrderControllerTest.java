@@ -1,9 +1,13 @@
 package com.musicstore.controller;
 
+import com.musicstore.TestUtility;
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Cart;
 import com.musicstore.entity.Order;
-import com.musicstore.service.*;
+import com.musicstore.service.AdminService;
+import com.musicstore.service.CartService;
+import com.musicstore.service.OrderService;
+import com.musicstore.service.OrderServiceTest;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
@@ -18,9 +22,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class OrderControllerTest {
-
-  private static final String ADMIN_ID = "admin-id";
+class OrderControllerTest extends TestUtility {
 
   private AdminService adminService = Mockito.mock(AdminService.class);
   private CartService cartService = Mockito.mock(CartService.class);
@@ -33,10 +35,9 @@ class OrderControllerTest {
   void getAllTest() {
     mockIsAdmin();
     mockGetAll();
-    ResponseEntity<List<Order>> orderListResponseEntity =
-        orderController.getAll(AdminControllerTest.ADMIN_AUTH_USER);
+    ResponseEntity<List<Order>> orderListResponseEntity = orderController.getAll(FIRST_ADMIN_USER);
     List<Order> orderList = orderListResponseEntity.getBody();
-    assertEquals(createOrderList(), orderList);
+    assertEquals(buildOrderList(), orderList);
   }
 
   @Test
@@ -46,9 +47,10 @@ class OrderControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              orderController.getAll(AdminControllerTest.ADMIN_AUTH_USER);
+              orderController.getAll(FIRST_ADMIN_USER);
             });
-    AdminServiceTest.assertNotAdminException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
   }
 
   @Test
@@ -57,7 +59,7 @@ class OrderControllerTest {
     ResponseEntity<Order> orderResponseEntity =
         orderController.getById(OrderServiceTest.ID, OrderServiceTest.MAIL);
     Order order = orderResponseEntity.getBody();
-    assertEquals(OrderServiceTest.createOrder(), order);
+    assertEquals(OrderServiceTest.buildOrder(), order);
   }
 
   @Test
@@ -69,7 +71,8 @@ class OrderControllerTest {
             () -> {
               orderController.getById(OrderServiceTest.ID, OrderServiceTest.MAIL);
             });
-    OrderServiceTest.assertOrderNotFoundException(actualException, HttpStatus.METHOD_NOT_ALLOWED);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.ORDER_NOT_FOUND);
   }
 
   @Test
@@ -81,7 +84,8 @@ class OrderControllerTest {
             () -> {
               orderController.getById(OrderServiceTest.ID, OrderServiceTest.MAIL);
             });
-    OrderServiceTest.assertOrderUserMismatchException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.ORDER_USER_MISMATCH);
   }
 
   @Test
@@ -90,8 +94,8 @@ class OrderControllerTest {
     ResponseEntity<HashMap<String, Object>> mapResponseEntity =
         orderController.create(OrderServiceTest.MAIL, OrderServiceTest.ADDRESS);
     HashMap<String, Object> actualMap = mapResponseEntity.getBody();
-    assertEquals(OrderServiceTest.createOrder(), actualMap.get(OrderController.ORDER));
-    List<Cart> expectedCartList = OrderServiceTest.createCartList();
+    assertEquals(OrderServiceTest.buildOrder(), actualMap.get(OrderController.ORDER));
+    List<Cart> expectedCartList = OrderServiceTest.buildCartList();
     for (Cart cart : expectedCartList) {
       cart.setBought(true);
       cart.setOrderId(OrderServiceTest.ID);
@@ -108,7 +112,7 @@ class OrderControllerTest {
             () -> {
               orderController.create(OrderServiceTest.MAIL, OrderServiceTest.ADDRESS);
             });
-    CartServiceTest.assertCartNotFoundException(actualException);
+    assertReasonException(actualException, HttpStatus.NOT_FOUND, ReasonsConstant.CART_NOT_FOUND);
   }
 
   @Test
@@ -118,9 +122,10 @@ class OrderControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              orderController.delete(OrderServiceTest.ID, AdminControllerTest.ADMIN_AUTH_USER);
+              orderController.delete(OrderServiceTest.ID, FIRST_ADMIN_USER);
             });
-    AdminServiceTest.assertNotAdminException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
   }
 
   @Test
@@ -130,9 +135,9 @@ class OrderControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              orderController.delete(OrderServiceTest.ID, AdminControllerTest.ADMIN_AUTH_USER);
+              orderController.delete(OrderServiceTest.ID, FIRST_ADMIN_USER);
             });
-    OrderServiceTest.assertOrderNotFoundException(actualException, HttpStatus.NOT_FOUND);
+    assertReasonException(actualException, HttpStatus.NOT_FOUND, ReasonsConstant.ORDER_NOT_FOUND);
   }
 
   void mockIsNotAdmin() {
@@ -142,7 +147,7 @@ class OrderControllerTest {
   }
 
   void mockIsAdmin() {
-    BDDMockito.given(adminService.isAdmin(Mockito.any())).willReturn(AdminServiceTest.buildAdmin());
+    BDDMockito.given(adminService.isAdmin(Mockito.any())).willReturn(buildAdmin());
   }
 
   void mockCreateNoCartFound() {
@@ -153,10 +158,10 @@ class OrderControllerTest {
 
   void mockCreate() {
     BDDMockito.given(orderService.create(Mockito.anyString(), Mockito.anyString()))
-        .willReturn(OrderServiceTest.createOrder());
-    BDDMockito.given(orderService.save(Mockito.any())).willReturn(OrderServiceTest.createOrder());
+        .willReturn(OrderServiceTest.buildOrder());
+    BDDMockito.given(orderService.save(Mockito.any())).willReturn(OrderServiceTest.buildOrder());
     BDDMockito.given(cartService.getByOrderId(Mockito.anyInt()))
-        .willReturn(OrderServiceTest.createCartList());
+        .willReturn(OrderServiceTest.buildCartList());
   }
 
   void mockGetVerifiedOrderOrderUserMismatchException() {
@@ -181,17 +186,10 @@ class OrderControllerTest {
 
   void mockGetVerifiedOrder() {
     BDDMockito.given(orderService.getVerifiedOrder(Mockito.anyInt(), Mockito.anyString()))
-        .willReturn(OrderServiceTest.createOrder());
+        .willReturn(OrderServiceTest.buildOrder());
   }
 
   void mockGetAll() {
-    BDDMockito.given(orderService.getAll()).willReturn(createOrderList());
-  }
-
-  private List<Order> createOrderList() {
-    List<Order> orderList = new ArrayList<>();
-    orderList.add(OrderServiceTest.createOrder());
-    orderList.add(OrderServiceTest.createOrder());
-    return orderList;
+    BDDMockito.given(orderService.getAll()).willReturn(buildOrderList());
   }
 }
