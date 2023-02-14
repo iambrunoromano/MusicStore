@@ -1,7 +1,7 @@
 package com.musicstore.service;
 
+import com.musicstore.TestUtility;
 import com.musicstore.constant.ReasonsConstant;
-import com.musicstore.entity.Producer;
 import com.musicstore.repository.ProducerRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -14,11 +14,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ProducerServiceTest {
-
-  public static final String MAIL = "mail";
-  private static final String NAME = "name";
-  private static final String ADDRESS = "address";
+public class ProducerServiceTest extends TestUtility {
 
   private ProducerRepository producerRepository = Mockito.mock(ProducerRepository.class);
   private ProducerService producerService = new ProducerService(producerRepository);
@@ -32,14 +28,14 @@ public class ProducerServiceTest {
             () -> {
               producerService.delete(MAIL);
             });
-    assertProducerNotFoundException(
+    assertReasonException(
         actualException, HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCER_NOT_FOUND);
   }
 
   @Test
   void isProducerTest() {
     mockProducerFound();
-    assertEquals(createProducer(), producerService.isProducer(MAIL));
+    assertEquals(buildProducer(), producerService.isProducer(MAIL));
   }
 
   @Test
@@ -51,31 +47,17 @@ public class ProducerServiceTest {
             () -> {
               producerService.isProducer(MAIL);
             });
-    assertProducerNotFoundException(
+    assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_PRODUCER);
   }
 
   private void mockProducerFound() {
     BDDMockito.given(producerRepository.findByMail(Mockito.anyString()))
-        .willReturn(Optional.of(createProducer()));
+        .willReturn(Optional.of(buildProducer()));
   }
 
   private void mockProducerNotFound() {
     BDDMockito.given(producerRepository.findByMail(Mockito.anyString()))
         .willReturn(Optional.empty());
-  }
-
-  public static Producer createProducer() {
-    return Producer.builder().mail(MAIL).name(NAME).address(ADDRESS).build();
-  }
-
-  public static void assertProducerNotFoundException(
-      ResponseStatusException actualException,
-      HttpStatus expectedHttpStatus,
-      String expectedReason) {
-    ResponseStatusException expectedException =
-        new ResponseStatusException(expectedHttpStatus, expectedReason);
-    assertEquals(expectedException.getReason(), actualException.getReason());
-    assertEquals(expectedException.getStatus(), actualException.getStatus());
   }
 }
