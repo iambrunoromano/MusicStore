@@ -1,5 +1,6 @@
 package com.musicstore.controller;
 
+import com.musicstore.TestUtility;
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Product;
 import com.musicstore.service.*;
@@ -13,9 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class ProductControllerTest {
-
-  private static final String MAIL = "mail";
+class ProductControllerTest extends TestUtility {
 
   private final AdminService adminService = Mockito.mock(AdminService.class);
   private final ProducerService producerService = Mockito.mock(ProducerService.class);
@@ -29,9 +28,9 @@ class ProductControllerTest {
     mockIsProducer();
     mockSave();
     ResponseEntity<Product> productResponseEntity =
-        productController.createAsProducer(MAIL, ProductServiceTest.createProduct());
+        productController.createAsProducer(MAIL, ProductServiceTest.buildProduct());
     Product product = productResponseEntity.getBody();
-    assertEquals(ProductServiceTest.createProduct(), product);
+    assertEquals(ProductServiceTest.buildProduct(), product);
   }
 
   @Test
@@ -42,9 +41,9 @@ class ProductControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              productController.createAsProducer(MAIL, ProductServiceTest.createProduct());
+              productController.createAsProducer(MAIL, ProductServiceTest.buildProduct());
             });
-    ProducerServiceTest.assertProducerNotFoundException(
+    assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_PRODUCER);
   }
 
@@ -53,9 +52,9 @@ class ProductControllerTest {
     mockIsAdmin();
     mockSave();
     ResponseEntity<Product> productResponseEntity =
-        productController.createAsAdmin(AdminControllerTest.ADMIN_AUTH_USER, ProductServiceTest.createProduct());
+        productController.createAsAdmin(FIRST_ADMIN_USER, ProductServiceTest.buildProduct());
     Product product = productResponseEntity.getBody();
-    assertEquals(ProductServiceTest.createProduct(), product);
+    assertEquals(ProductServiceTest.buildProduct(), product);
   }
 
   @Test
@@ -66,9 +65,10 @@ class ProductControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              productController.createAsAdmin(AdminControllerTest.ADMIN_AUTH_USER, ProductServiceTest.createProduct());
+              productController.createAsAdmin(FIRST_ADMIN_USER, ProductServiceTest.buildProduct());
             });
-    AdminServiceTest.assertNotAdminException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
   }
 
   @Test
@@ -81,7 +81,7 @@ class ProductControllerTest {
             () -> {
               productController.delete(MAIL, ProductServiceTest.PRODUCT_ID);
             });
-    ProducerServiceTest.assertProducerNotFoundException(
+    assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_PRODUCER);
   }
 
@@ -95,7 +95,7 @@ class ProductControllerTest {
             () -> {
               productController.delete(null, ProductServiceTest.PRODUCT_ID);
             });
-    ProducerServiceTest.assertProducerNotFoundException(
+    assertReasonException(
         actualException, HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCT_PRODUCER_MISMATCH);
   }
 
@@ -109,7 +109,7 @@ class ProductControllerTest {
             () -> {
               productController.delete("some-email", ProductServiceTest.PRODUCT_ID);
             });
-    ProducerServiceTest.assertProducerNotFoundException(
+    assertReasonException(
         actualException, HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCT_PRODUCER_MISMATCH);
   }
 
@@ -120,8 +120,7 @@ class ProductControllerTest {
   }
 
   private void mockIsAdmin() {
-    BDDMockito.given(adminService.isAdmin(Mockito.any()))
-        .willReturn(AdminServiceTest.buildAdmin());
+    BDDMockito.given(adminService.isAdmin(Mockito.any())).willReturn(buildAdmin());
   }
 
   private void mockNotProducer() {
@@ -133,16 +132,16 @@ class ProductControllerTest {
 
   private void mockIsProducer() {
     BDDMockito.given(producerService.isProducer(Mockito.anyString()))
-        .willReturn(ProducerServiceTest.createProducer());
+        .willReturn(ProducerServiceTest.buildProducer());
   }
 
   private void mockSave() {
     BDDMockito.given(productService.save(Mockito.any()))
-        .willReturn(ProductServiceTest.createProduct());
+        .willReturn(ProductServiceTest.buildProduct());
   }
 
   private void mockFound() {
     BDDMockito.given(productService.getById(ProductServiceTest.PRODUCT_ID))
-        .willReturn(ProductServiceTest.createProduct());
+        .willReturn(ProductServiceTest.buildProduct());
   }
 }
