@@ -2,9 +2,7 @@ package com.musicstore.service;
 
 import com.musicstore.TestUtility;
 import com.musicstore.constant.ReasonsConstant;
-import com.musicstore.entity.User;
 import com.musicstore.repository.UserRepository;
-import com.musicstore.response.UserResponse;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
@@ -17,9 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserServiceTest extends TestUtility {
-  public static final String MAIL = "mail";
-  private static final String PASSWORD = "password";
-  private static final String IMG_URL = "img-url";
 
   private UserRepository userRepository = Mockito.mock(UserRepository.class);
   private UserService userService;
@@ -37,7 +32,7 @@ public class UserServiceTest extends TestUtility {
             () -> {
               userService.delete(MAIL);
             });
-    assertNotUserException(actualException);
+    assertReasonException(actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_USER);
   }
 
   @Test
@@ -49,7 +44,9 @@ public class UserServiceTest extends TestUtility {
             () -> {
               userService.isAuthentic(buildUser());
             });
-    assertNotAuthenticException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_AUTHENTIC);
+    ;
   }
 
   @Test
@@ -70,27 +67,5 @@ public class UserServiceTest extends TestUtility {
 
   private void mockNotFound() {
     BDDMockito.given(userRepository.findById(Mockito.anyString())).willReturn(Optional.empty());
-  }
-
-  private void mockFound() {
-    BDDMockito.given(userRepository.findById(Mockito.anyString()))
-        .willReturn(Optional.of(buildUser()));
-  }
-
-  public static void assertNotAuthenticException(ResponseStatusException actualException) {
-    assertReasonException(
-        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_AUTHENTIC);
-  }
-
-  public static void assertNotUserException(ResponseStatusException actualException) {
-    assertReasonException(actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_USER);
-  }
-
-  public static User buildUser() {
-    return User.builder().mail(MAIL).password(PASSWORD).imgUrl(IMG_URL).build();
-  }
-
-  public static UserResponse buildUserResponse() {
-    return UserResponse.builder().mail(MAIL).imgUrl(IMG_URL).build();
   }
 }
