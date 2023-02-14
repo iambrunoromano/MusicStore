@@ -1,9 +1,9 @@
 package com.musicstore.controller;
 
+import com.musicstore.TestUtility;
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Producer;
 import com.musicstore.service.AdminService;
-import com.musicstore.service.AdminServiceTest;
 import com.musicstore.service.ProducerService;
 import com.musicstore.service.ProducerServiceTest;
 import org.junit.jupiter.api.Test;
@@ -13,16 +13,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-// TODO: move in utilities mocks and respective methods to mock responses
-
-class ProducerControllerTest {
+class ProducerControllerTest extends TestUtility {
 
   private final AdminService adminService = Mockito.mock(AdminService.class);
   private final ProducerService producerService = Mockito.mock(ProducerService.class);
@@ -35,9 +32,9 @@ class ProducerControllerTest {
     mockIsAdmin();
     mockGetAll();
     ResponseEntity<List<Producer>> producerListResponseEntity =
-        producerController.getAll(AdminControllerTest.ADMIN_AUTH_USER);
+        producerController.getAll(FIRST_ADMIN_USER);
     List<Producer> producerList = producerListResponseEntity.getBody();
-    assertEquals(createProducerList(), producerList);
+    assertEquals(buildProducerList(), producerList);
   }
 
   @Test
@@ -47,9 +44,10 @@ class ProducerControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              producerController.getAll(AdminControllerTest.ADMIN_AUTH_USER);
+              producerController.getAll(FIRST_ADMIN_USER);
             });
-    AdminServiceTest.assertNotAdminException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
   }
 
   @Test
@@ -57,9 +55,9 @@ class ProducerControllerTest {
     mockIsAdmin();
     mockGetByMailFound();
     ResponseEntity<Producer> producerResponseEntity =
-        producerController.getByName(AdminControllerTest.ADMIN_AUTH_USER, ProducerServiceTest.MAIL);
+        producerController.getByName(FIRST_ADMIN_USER, ProducerServiceTest.MAIL);
     Producer producer = producerResponseEntity.getBody();
-    assertEquals(ProducerServiceTest.createProducer(), producer);
+    assertEquals(ProducerServiceTest.buildProducer(), producer);
   }
 
   @Test
@@ -69,9 +67,10 @@ class ProducerControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              producerController.getByName(AdminControllerTest.ADMIN_AUTH_USER, ProducerServiceTest.MAIL);
+              producerController.getByName(FIRST_ADMIN_USER, ProducerServiceTest.MAIL);
             });
-    AdminServiceTest.assertNotAdminException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
   }
 
   @Test
@@ -82,9 +81,9 @@ class ProducerControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              producerController.getByName(AdminControllerTest.ADMIN_AUTH_USER, ProducerServiceTest.MAIL);
+              producerController.getByName(FIRST_ADMIN_USER, ProducerServiceTest.MAIL);
             });
-    ProducerServiceTest.assertProducerNotFoundException(
+    assertReasonException(
         actualException, HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCER_NOT_FOUND);
   }
 
@@ -93,9 +92,9 @@ class ProducerControllerTest {
     mockIsAdmin();
     mockSave();
     ResponseEntity<Producer> producerResponseEntity =
-        producerController.save(AdminControllerTest.ADMIN_AUTH_USER, ProducerServiceTest.createProducer());
+        producerController.save(FIRST_ADMIN_USER, ProducerServiceTest.buildProducer());
     Producer producer = producerResponseEntity.getBody();
-    assertEquals(ProducerServiceTest.createProducer(), producer);
+    assertEquals(ProducerServiceTest.buildProducer(), producer);
   }
 
   @Test
@@ -105,10 +104,10 @@ class ProducerControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              producerController.save(
-                  AdminControllerTest.ADMIN_AUTH_USER, ProducerServiceTest.createProducer());
+              producerController.save(FIRST_ADMIN_USER, ProducerServiceTest.buildProducer());
             });
-    AdminServiceTest.assertNotAdminException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
   }
 
   @Test
@@ -118,9 +117,10 @@ class ProducerControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              producerController.delete(AdminControllerTest.ADMIN_AUTH_USER, ProducerServiceTest.MAIL);
+              producerController.delete(FIRST_ADMIN_USER, ProducerServiceTest.MAIL);
             });
-    AdminServiceTest.assertNotAdminException(actualException);
+    assertReasonException(
+        actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
   }
 
   private void mockNotAdmin() {
@@ -130,8 +130,7 @@ class ProducerControllerTest {
   }
 
   private void mockIsAdmin() {
-    BDDMockito.given(adminService.isAdmin(Mockito.any()))
-        .willReturn(AdminServiceTest.buildAdmin());
+    BDDMockito.given(adminService.isAdmin(Mockito.any())).willReturn(buildAdmin());
   }
 
   private void mockGetByMailNotFound() {
@@ -140,21 +139,15 @@ class ProducerControllerTest {
 
   private void mockGetByMailFound() {
     BDDMockito.given(producerService.getByMail(Mockito.anyString()))
-        .willReturn(Optional.of(ProducerServiceTest.createProducer()));
+        .willReturn(Optional.of(ProducerServiceTest.buildProducer()));
   }
 
   private void mockSave() {
     BDDMockito.given(producerService.save(Mockito.any()))
-        .willReturn(ProducerServiceTest.createProducer());
+        .willReturn(ProducerServiceTest.buildProducer());
   }
 
   private void mockGetAll() {
-    BDDMockito.given(producerService.getAll()).willReturn(createProducerList());
-  }
-
-  private List<Producer> createProducerList() {
-    List<Producer> producerList = new ArrayList<>();
-    producerList.add(ProducerServiceTest.createProducer());
-    return producerList;
+    BDDMockito.given(producerService.getAll()).willReturn(buildProducerList());
   }
 }
