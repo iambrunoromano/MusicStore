@@ -1,11 +1,11 @@
 package com.musicstore.controller;
 
+import com.musicstore.TestUtility;
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Cart;
 import com.musicstore.entity.User;
 import com.musicstore.service.CartService;
 import com.musicstore.service.UserService;
-import com.musicstore.service.UserServiceTest;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
@@ -13,22 +13,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class CartControllerTest {
-
-  private static final Integer START_LIST = 0;
-  private static final Integer END_LIST = 2;
-  private static final Integer PRODUCT_ID = 1;
-  private static final Integer QUANTITY = 2;
-  private static final String MAIL = "mail";
-  private static final Timestamp DATE = Timestamp.from(Instant.now());
+class CartControllerTest extends TestUtility {
 
   private UserService userService = Mockito.mock(UserService.class);
   private CartService cartService = Mockito.mock(CartService.class);
@@ -38,8 +27,7 @@ class CartControllerTest {
   void getCartTest() {
     mockIsUser();
     mockGetCartByMail();
-    ResponseEntity<List<Cart>> cartListResponseEntity =
-        cartController.getCart(UserServiceTest.buildUser());
+    ResponseEntity<List<Cart>> cartListResponseEntity = cartController.getCart(buildUser());
     List<Cart> cartList = cartListResponseEntity.getBody();
     for (Integer i = START_LIST; i < END_LIST; i++) {
       assertCart(cartList.get(i), i);
@@ -54,9 +42,9 @@ class CartControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              cartController.getCart(UserServiceTest.buildUser());
+              cartController.getCart(buildUser());
             });
-    UserServiceTest.assertNotUserException(actualException);
+    assertReasonException(actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_USER);
   }
 
   @Test
@@ -66,9 +54,9 @@ class CartControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              cartController.getCart(UserServiceTest.buildUser());
+              cartController.getCart(buildUser());
             });
-    UserServiceTest.assertNotUserException(actualException);
+    assertReasonException(actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_USER);
   }
 
   @Test
@@ -79,9 +67,9 @@ class CartControllerTest {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              cartController.getCart(UserServiceTest.buildUser());
+              cartController.getCart(buildUser());
             });
-    UserServiceTest.assertNotUserException(actualException);
+    assertReasonException(actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_USER);
   }
 
   private void mockDeleteCart() {
@@ -100,31 +88,5 @@ class CartControllerTest {
     BDDMockito.given(userService.isAuthentic(Mockito.any()))
         .willThrow(
             new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_USER));
-  }
-
-  private List<Cart> buildCartList() {
-    List<Cart> cartList = new ArrayList<>();
-    for (Integer i = START_LIST; i < END_LIST; ++i) {
-      cartList.add(buildCart(i));
-    }
-    return cartList;
-  }
-
-  private Cart buildCart(Integer i) {
-    return Cart.builder()
-        .id(i)
-        .productId(PRODUCT_ID + i)
-        .quantity(QUANTITY)
-        .mail(MAIL)
-        .date(DATE)
-        .build();
-  }
-
-  private void assertCart(Cart actualCart, Integer id) {
-    assertEquals(id, actualCart.getId());
-    assertEquals(PRODUCT_ID + id, actualCart.getProductId());
-    assertEquals(QUANTITY, actualCart.getQuantity());
-    assertEquals(MAIL, actualCart.getMail());
-    assertEquals(DATE, actualCart.getDate());
   }
 }
