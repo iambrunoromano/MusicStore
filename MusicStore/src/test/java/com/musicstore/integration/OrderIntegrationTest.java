@@ -1,9 +1,9 @@
 package com.musicstore.integration;
 
 import com.musicstore.MusicStoreApplication;
+import com.musicstore.TestUtility;
 import com.musicstore.controller.OrderController;
 import com.musicstore.entity.Cart;
-import com.musicstore.entity.User;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,12 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(classes = MusicStoreApplication.class)
 @ActiveProfiles(profiles = "test")
 @ExtendWith(ContainerExtender.class)
-public class OrderIntegrationTest {
-
-  private static final User FIRST_ADMIN_USER =
-      User.builder().mail("mail1@test").password("password1").build();
-  private static final String CREATE_ORDER_MAIL = "mail3@test";
-  private static final String CREATE_ORDER_ADDRESS = "address_3";
+public class OrderIntegrationTest extends TestUtility {
 
   private final OrderController orderController;
 

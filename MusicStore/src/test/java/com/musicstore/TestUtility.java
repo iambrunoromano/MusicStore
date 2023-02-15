@@ -28,20 +28,20 @@ public class TestUtility {
   protected static final String PAYMENT_CARD = "payment-card";
   protected static final String BILLING_ADDRESS = "billing-address";
 
-  protected static final int QUANTITY = 2;
+  protected static final int QUANTITY = 1;
   protected static final Timestamp DATE = Timestamp.from(Instant.now());
   protected static final Double PRICE = 1.0;
   protected static final Double OVERALL_PRICE = 2.0;
 
   protected static final Integer ID = 1;
-  protected static final Integer PARENT = 0;
-  protected static final String IMG_URL = "img-url";
+  protected static final Integer PARENT = 1;
+  protected static final String IMG_URL = "img_url1";
   protected static final String PRODUCER = "producer";
 
   protected static final double TOTAL = 1.0;
   protected static final String ADDRESS = "address";
 
-  protected static final Integer PRODUCT_ID = 0;
+  protected static final Integer PRODUCT_ID = 1;
   protected static final String PRODUCT_NAME = "product-name";
   protected static final Double PRODUCT_PRICE = 0.0;
   protected static final Integer LEFT_QUANTITY = 1;
@@ -65,14 +65,33 @@ public class TestUtility {
   protected static final Integer START_LIST = 0;
   protected static final Integer END_LIST = 2;
 
-  protected Optional<Admin> buildOptionalAdmin() {
-    Admin admin = buildAdmin();
-    return Optional.of(admin);
-  }
+  protected static final String SECOND_USER_MAIL = "usermail2@test";
 
-  protected static Admin buildAdmin() {
-    return Admin.builder().mail(MAIL).name(NAME).surname(SURNAME).phoneNumber(PHONE_NUMBER).build();
-  }
+  protected static final String FIRST_USER_ID = "usermail1@test";
+  protected static final String FIRST_USER_PASSWORD = "password1";
+  protected static final String SECOND_USER_IMG_URL = "img_url2";
+  protected static final String SECOND_USER_PASSWORD = "password2";
+  protected static final String THIRD_USER_ID = "usermail3@test";
+
+  protected static final String CATEGORY_NAME = "category_1";
+  protected static final String NEW_NAME = "new_name";
+  protected static final String PRODUCER_ID = "producer_1";
+
+  protected static final String FIRST_ADMIN_ID = "mail1@test";
+  protected static final String USER_ID = "usermail1@test";
+  protected static final String USER_PASSWORD = "password1";
+
+  protected static final String CREATE_ORDER_MAIL = "mail3@test";
+  protected static final String CREATE_ORDER_ADDRESS = "address_3";
+
+  protected static final String FIRST_PRODUCER_MAIL = "producermail1@test";
+  protected static final String FIRST_PRODUCER_NAME = "producer_name1";
+  protected static final String SECOND_PRODUCER_MAIL = "producermail2@test";
+  protected static final String THIRD_PRODUCER_MAIL = "producermail3@test";
+  protected static final String THIRD_PRODUCER_NAME = "producer_name3";
+  protected static final String THIRD_PRODUCER_ADDRESS = "producer_address3";
+
+  protected static final String FIRST_PRODUCT_NAME = "product_1";
 
   protected static void assertReasonException(
       ResponseStatusException actualException, HttpStatus httpStatus, String reasonsConstant) {
@@ -80,6 +99,15 @@ public class TestUtility {
         new ResponseStatusException(httpStatus, reasonsConstant);
     assertEquals(expectedException.getReason(), actualException.getReason());
     assertEquals(expectedException.getStatus(), actualException.getStatus());
+  }
+
+  protected Optional<Admin> buildOptionalAdmin() {
+    Admin admin = buildAdmin();
+    return Optional.of(admin);
+  }
+
+  protected static Admin buildAdmin() {
+    return Admin.builder().mail(MAIL).name(NAME).surname(SURNAME).phoneNumber(PHONE_NUMBER).build();
   }
 
   protected static Customer buildCustomer() {
@@ -103,7 +131,7 @@ public class TestUtility {
     return CartRequest.builder()
         .productId(ProductServiceTest.PRODUCT_ID)
         .quantity(QUANTITY)
-        .mail(UserServiceTest.MAIL)
+        .mail(SECOND_USER_MAIL)
         .build();
   }
 
@@ -111,28 +139,24 @@ public class TestUtility {
     return Product.builder().id(ProductServiceTest.PRODUCT_ID).price(price).build();
   }
 
-  protected static Cart buildCart() {
-    return buildCart(ProductServiceTest.PRODUCT_ID);
-  }
-
   protected static Cart buildCart(Integer i) {
     return Cart.builder()
         .id(i)
         .productId(PRODUCT_ID + i)
         .quantity(QUANTITY)
-        .mail(MAIL)
+        .mail(SECOND_USER_MAIL)
         .date(DATE)
         .overallPrice(QUANTITY * TOTAL)
         .build();
   }
 
   protected static Category buildCategory() {
-    return Category.builder().id(ID).name(NAME).parent(PARENT).imgUrl(IMG_URL).build();
+    return Category.builder().id(ID).name(CATEGORY_NAME).parent(PARENT).imgUrl(IMG_URL).build();
   }
 
   protected static void assertCategory(Category expectedCategory) {
     assertEquals(expectedCategory.getId(), ID);
-    assertEquals(expectedCategory.getName(), NAME);
+    assertEquals(expectedCategory.getName(), CATEGORY_NAME);
     assertEquals(expectedCategory.getParent(), PARENT);
     assertEquals(expectedCategory.getImgUrl(), IMG_URL);
   }
@@ -188,7 +212,7 @@ public class TestUtility {
     assertEquals(id, actualCart.getId());
     assertEquals(PRODUCT_ID + id, actualCart.getProductId());
     assertEquals(QUANTITY, actualCart.getQuantity());
-    assertEquals(MAIL, actualCart.getMail());
+    assertEquals(SECOND_USER_MAIL, actualCart.getMail());
     assertEquals(DATE, actualCart.getDate());
   }
 
@@ -224,5 +248,32 @@ public class TestUtility {
     userResponseList.add(UserServiceTest.buildUserResponse());
     userResponseList.add(UserServiceTest.buildUserResponse());
     return userResponseList;
+  }
+
+  protected static User genericBuildUser(String userId, String userPassword) {
+    return User.builder().mail(userId).password(userPassword).build();
+  }
+
+  protected List<CartRequest> buildCartRequestList() {
+    List<CartRequest> cartRequestList = new ArrayList<>();
+    cartRequestList.add(buildCartRequest());
+    cartRequestList.add(buildCartRequest());
+    return cartRequestList;
+  }
+
+  protected User buildAdminUser() {
+    return User.builder().mail(FIRST_ADMIN_ID).password(USER_PASSWORD).build();
+  }
+
+  protected User buildAuthenticUser() {
+    return User.builder().mail(USER_ID).password(USER_PASSWORD).build();
+  }
+
+  protected Producer buildThirdProducer() {
+    return Producer.builder()
+        .mail(THIRD_PRODUCER_MAIL)
+        .name(THIRD_PRODUCER_NAME)
+        .address(THIRD_PRODUCER_ADDRESS)
+        .build();
   }
 }

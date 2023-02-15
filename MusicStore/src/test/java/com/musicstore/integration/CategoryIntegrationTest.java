@@ -1,9 +1,9 @@
 package com.musicstore.integration;
 
 import com.musicstore.MusicStoreApplication;
+import com.musicstore.TestUtility;
 import com.musicstore.controller.CategoryController;
 import com.musicstore.entity.Category;
-import com.musicstore.entity.User;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,17 +21,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(classes = MusicStoreApplication.class)
 @ActiveProfiles(profiles = "test")
 @ExtendWith(ContainerExtender.class)
-public class CategoryIntegrationTest {
+public class CategoryIntegrationTest extends TestUtility {
 
   private final CategoryController categoryController;
-
-  private static final String FIRST_ADMIN_ID = "mail1@test";
-
-  private static final User FIRST_ADMIN_USER =
-      User.builder().mail(FIRST_ADMIN_ID).password("password1").build();
-  private static final String CATEGORY_NAME = "category_1";
-  private static final String NEW_NAME = "new_name";
-  private static final String PRODUCER_ID = "producer_1";
 
   @Autowired
   public CategoryIntegrationTest(CategoryController categoryController) {
@@ -60,8 +52,10 @@ public class CategoryIntegrationTest {
   @Order(3)
   @Sql("classpath:integration/category.sql")
   public void updateTest() {
+    Category updateCategory = buildCategory();
+    updateCategory.setName(NEW_NAME);
     ResponseEntity<Category> categoryResponseEntity =
-        categoryController.update(FIRST_ADMIN_USER, buildCategory());
+        categoryController.update(FIRST_ADMIN_USER, updateCategory);
     Category category = categoryResponseEntity.getBody();
     assertEquals(NEW_NAME, category.getName());
   }
@@ -85,9 +79,5 @@ public class CategoryIntegrationTest {
         categoryController.getByProducer(PRODUCER_ID);
     List<Category> categoryList = categoryListResponseEntity.getBody();
     assertEquals(1, categoryList.size());
-  }
-
-  private Category buildCategory() {
-    return Category.builder().id(1).name(NEW_NAME).parent(1).imgUrl("img_url1").build();
   }
 }

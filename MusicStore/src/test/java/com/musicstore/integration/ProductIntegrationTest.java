@@ -1,10 +1,9 @@
 package com.musicstore.integration;
 
 import com.musicstore.MusicStoreApplication;
+import com.musicstore.TestUtility;
 import com.musicstore.controller.ProductController;
 import com.musicstore.entity.Product;
-import com.musicstore.entity.User;
-import com.musicstore.service.ProductServiceTest;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,12 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(classes = MusicStoreApplication.class)
 @ActiveProfiles(profiles = "test")
 @ExtendWith(ContainerExtender.class)
-public class ProductIntegrationTest {
+public class ProductIntegrationTest extends TestUtility {
 
-  private static final User FIRST_ADMIN_USER =
-      User.builder().mail("mail1@test").password("password1").build();
-  private static final String FIRST_PRODUCT_NAME = "product_1";
-  private static final String FIRST_PRODUCER_MAIL = "producermail1@test";
   private final ProductController productController;
 
   @Autowired
@@ -91,12 +86,12 @@ public class ProductIntegrationTest {
   @Sql("classpath:integration/product.sql")
   void createAsProducerTest() {
     ResponseEntity<Product> productResponseEntity =
-        productController.createAsProducer(FIRST_PRODUCER_MAIL, ProductServiceTest.createProduct());
+        productController.createAsProducer(FIRST_PRODUCER_MAIL, buildProduct());
     Product product = productResponseEntity.getBody();
-    product.setId(ProductServiceTest.createProduct().getId());
+    product.setId(buildProduct().getId());
     product.setInsertDate(null);
     product.setUpdateDate(null);
-    assertEquals(ProductServiceTest.createProduct(), product);
+    assertEquals(buildProduct(), product);
   }
 
   @Test
@@ -104,12 +99,12 @@ public class ProductIntegrationTest {
   @Sql("classpath:integration/product.sql")
   void createAsAdminTest() {
     ResponseEntity<Product> productResponseEntity =
-        productController.createAsAdmin(FIRST_ADMIN_USER, ProductServiceTest.createProduct());
+        productController.createAsAdmin(FIRST_ADMIN_USER, buildProduct());
     Product product = productResponseEntity.getBody();
-    product.setId(ProductServiceTest.createProduct().getId());
+    product.setId(buildProduct().getId());
     product.setInsertDate(null);
     product.setUpdateDate(null);
-    assertEquals(ProductServiceTest.createProduct(), product);
+    assertEquals(buildProduct(), product);
   }
 
   @Test

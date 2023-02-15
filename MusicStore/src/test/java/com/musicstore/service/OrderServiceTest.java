@@ -62,7 +62,7 @@ public class OrderServiceTest extends TestUtility {
     mockCartListFound();
     Order actualOrder = orderService.create(MAIL, ADDRESS);
     assertEquals(MAIL, actualOrder.getMail());
-    assertEquals(4.0, actualOrder.getTotal());
+    assertEquals(OVERALL_PRICE, actualOrder.getTotal());
   }
 
   @Test

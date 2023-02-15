@@ -38,7 +38,7 @@ public class UserController {
   }
 
   @GetMapping
-  public ResponseEntity<UserResponse> getById(@RequestBody User user) {
+  public ResponseEntity<UserResponse> getById(@RequestHeader User user) {
     // TODO: since this method can be used as a login wrap the User object into a 200 HttpStatus
     // Response Obj
     // TODO: on the frontend when a user logs in and the response is positive the frontend logic
@@ -48,12 +48,12 @@ public class UserController {
   }
 
   @PostMapping
-  public ResponseEntity<UserResponse> save(@RequestBody User user) {
+  public ResponseEntity<UserResponse> save(@RequestHeader User user) {
     return ResponseEntity.ok(getUserResponse(userService.save(user)));
   }
 
   @DeleteMapping
-  public ResponseEntity<Void> delete(@RequestBody User user) {
+  public ResponseEntity<Void> delete(@RequestHeader User user) {
     userService.isAuthentic(user);
     userService.delete(user.getMail());
     return ResponseEntity.ok().build();

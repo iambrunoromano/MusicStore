@@ -1,10 +1,10 @@
 package com.musicstore.integration;
 
 import com.musicstore.MusicStoreApplication;
+import com.musicstore.TestUtility;
+import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.controller.CustomerController;
 import com.musicstore.entity.Customer;
-import com.musicstore.entity.User;
-import com.musicstore.service.CustomerServiceTest;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,11 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest(classes = MusicStoreApplication.class)
 @ActiveProfiles(profiles = "test")
 @ExtendWith(ContainerExtender.class)
-public class CustomerIntegrationTest {
-
-  private static final String FIRST_ADMIN_ID = "mail1@test";
-  private static final String USER_ID = "usermail1@test";
-  private static final String USER_PASSWORD = "password1";
+public class CustomerIntegrationTest extends TestUtility {
 
   private final CustomerController customerController;
 
@@ -62,11 +58,11 @@ public class CustomerIntegrationTest {
   @Sql("classpath:integration/customer.sql")
   void createTest() {
     ResponseEntity<Customer> customerResponseEntity =
-        customerController.create(buildAuthenticUser(), CustomerServiceTest.buildCustomer());
+        customerController.create(buildAuthenticUser(), buildCustomer());
     Customer customer = customerResponseEntity.getBody();
     customer.setInsertDate(null);
     customer.setUpdateDate(null);
-    assertEquals(CustomerServiceTest.buildCustomer(), customer);
+    assertEquals(buildCustomer(), customer);
   }
 
   @Test
@@ -81,14 +77,7 @@ public class CustomerIntegrationTest {
             () -> {
               customerController.getById(buildAuthenticUser());
             });
-    CustomerServiceTest.assertCustomerNotFoundException(actualException);
-  }
-
-  private User buildAdminUser() {
-    return User.builder().mail(FIRST_ADMIN_ID).password(USER_PASSWORD).build();
-  }
-
-  private User buildAuthenticUser() {
-    return User.builder().mail(USER_ID).password(USER_PASSWORD).build();
+    assertReasonException(
+        actualException, HttpStatus.NOT_FOUND, ReasonsConstant.CUSTOMER_NOT_FOUND);
   }
 }

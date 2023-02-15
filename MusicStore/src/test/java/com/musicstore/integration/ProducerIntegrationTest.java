@@ -1,9 +1,9 @@
 package com.musicstore.integration;
 
 import com.musicstore.MusicStoreApplication;
+import com.musicstore.TestUtility;
 import com.musicstore.controller.ProducerController;
 import com.musicstore.entity.Producer;
-import com.musicstore.entity.User;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,16 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(classes = MusicStoreApplication.class)
 @ActiveProfiles(profiles = "test")
 @ExtendWith(ContainerExtender.class)
-public class ProducerIntegrationTest {
-
-  private static final User FIRST_ADMIN_USER =
-      User.builder().mail("mail1@test").password("password1").build();
-  private static final String FIRST_PRODUCER_MAIL = "producermail1@test";
-  private static final String FIRST_PRODUCER_NAME = "producer_name1";
-  private static final String SECOND_PRODUCER_MAIL = "producermail2@test";
-  private static final String THIRD_PRODUCER_MAIL = "producermail3@test";
-  private static final String THIRD_PRODUCER_NAME = "producer_name3";
-  private static final String THIRD_PRODUCER_ADDRESS = "producer_address3";
+public class ProducerIntegrationTest extends TestUtility {
 
   private final ProducerController producerController;
 
@@ -64,11 +55,11 @@ public class ProducerIntegrationTest {
   @Sql("classpath:integration/producer.sql")
   void saveTest() {
     ResponseEntity<Producer> producerResponseEntity =
-        producerController.save(FIRST_ADMIN_USER, buildProducer());
+        producerController.save(FIRST_ADMIN_USER, buildThirdProducer());
     Producer producer = producerResponseEntity.getBody();
     producer.setInsertDate(null);
     producer.setUpdateDate(null);
-    assertEquals(buildProducer(), producer);
+    assertEquals(buildThirdProducer(), producer);
   }
 
   @Test
@@ -84,13 +75,5 @@ public class ProducerIntegrationTest {
     assertEquals(1, producerList.size());
     Producer leftProducer = producerList.get(0);
     assertEquals(SECOND_PRODUCER_MAIL, leftProducer.getMail());
-  }
-
-  private Producer buildProducer() {
-    return Producer.builder()
-        .mail(THIRD_PRODUCER_MAIL)
-        .name(THIRD_PRODUCER_NAME)
-        .address(THIRD_PRODUCER_ADDRESS)
-        .build();
   }
 }

@@ -27,7 +27,7 @@ public class CartController {
   }
 
   @GetMapping
-  public ResponseEntity<List<Cart>> getCart(@RequestBody User user) {
+  public ResponseEntity<List<Cart>> getCart(@RequestHeader User user) {
     userService.isAuthentic(user);
     return ResponseEntity.ok(cartService.getByMail(user.getMail()));
   }
@@ -41,8 +41,7 @@ public class CartController {
   }
 
   @DeleteMapping
-  public ResponseEntity<Void> delete(@RequestBody User user) {
-    // TODO: make @RequestHeader User and Admin when passed to Rest API methods
+  public ResponseEntity<Void> delete(@RequestHeader User user) {
     userService.isAuthentic(user);
     cartService.deleteByMail(user.getMail());
     return ResponseEntity.ok().build();

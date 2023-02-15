@@ -48,7 +48,7 @@ public class CategoryController {
   }
 
   @DeleteMapping(value = "/{category-id}")
-  public ResponseEntity<Void> delete(@PathVariable int categoryId, @RequestBody User user) {
+  public ResponseEntity<Void> delete(@PathVariable int categoryId, @RequestHeader User user) {
     adminService.isAdmin(user);
     categoryService.delete(categoryId);
     return ResponseEntity.ok().build();

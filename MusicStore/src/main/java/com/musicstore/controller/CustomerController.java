@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-// TODO: understand how the customer route differs in the usage from user route
-
 @RestController
 @Slf4j
 @RequestMapping(value = "customers")
@@ -33,20 +31,20 @@ public class CustomerController {
   }
 
   @GetMapping(value = "/all")
-  public ResponseEntity<List<Customer>> getAll(@RequestBody User user) {
+  public ResponseEntity<List<Customer>> getAll(@RequestHeader User user) {
     adminService.isAdmin(user);
     return ResponseEntity.ok(customerService.getAll());
   }
 
   @GetMapping
-  public ResponseEntity<Customer> getById(@RequestBody User user) {
+  public ResponseEntity<Customer> getById(@RequestHeader User user) {
     userService.isAuthentic(user);
     Optional<Customer> optionalCustomer = customerService.getById(user.getMail());
     return ResponseEntity.ok(optionalCustomer.get());
   }
 
   @PostMapping
-  public ResponseEntity<Customer> create(@RequestBody User user, @RequestBody Customer customer) {
+  public ResponseEntity<Customer> create(@RequestHeader User user, @RequestBody Customer customer) {
     // TODO: needed here to verify that the user is posting the his own customer by asserting
     // user.mail = customer.mail
     userService.isAuthentic(user);
@@ -54,7 +52,7 @@ public class CustomerController {
   }
 
   @DeleteMapping(value = "/{customer-id}")
-  public ResponseEntity<Void> delete(@PathVariable String customerId, @RequestBody User user) {
+  public ResponseEntity<Void> delete(@PathVariable String customerId, @RequestHeader User user) {
     userService.isAuthentic(user);
     // TODO: needed here to verify that the user is deleting his own customer by asserting user.mail
     // = customer.mail

@@ -139,8 +139,6 @@ class CustomerControllerTest extends TestUtility {
   }
 
   private void mockIsAdmin() {
-    // TODO: refactor all the mock methods in tests and make them parametrized to receive in input
-    // mocked objects
     BDDMockito.given(adminService.isAdmin(Mockito.any())).willReturn(buildAdmin());
   }
 
