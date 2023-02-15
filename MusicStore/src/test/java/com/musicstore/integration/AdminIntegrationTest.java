@@ -1,10 +1,9 @@
 package com.musicstore.integration;
 
 import com.musicstore.MusicStoreApplication;
+import com.musicstore.TestUtility;
 import com.musicstore.controller.AdminController;
 import com.musicstore.entity.Admin;
-import com.musicstore.entity.User;
-import com.musicstore.service.AdminServiceTest;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,15 +21,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(classes = MusicStoreApplication.class)
 @ActiveProfiles(profiles = "test")
 @ExtendWith(ContainerExtender.class)
-public class AdminIntegrationTest {
+public class AdminIntegrationTest extends TestUtility {
 
   private final AdminController adminController;
-
-  private static final User FIRST_ADMIN_USER =
-      User.builder().mail("mail1@test").password("password1").build();
-
-  private static final User SECOND_ADMIN_USER =
-      User.builder().mail("mail2@test").password("password2").build();
 
   @Autowired
   public AdminIntegrationTest(AdminController adminController) {
@@ -60,7 +53,7 @@ public class AdminIntegrationTest {
   @Order(3)
   @Sql("classpath:integration/admin.sql")
   public void updateTest() {
-    Admin adminToPost = AdminServiceTest.buildAdmin();
+    Admin adminToPost = buildAdmin();
     adminToPost.setMail(FIRST_ADMIN_USER.getMail());
     ResponseEntity<Admin> adminResponseEntity = adminController.save(FIRST_ADMIN_USER, adminToPost);
     Admin savedAdmin = adminResponseEntity.getBody();
