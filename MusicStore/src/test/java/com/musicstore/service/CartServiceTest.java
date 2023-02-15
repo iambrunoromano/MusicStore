@@ -45,7 +45,7 @@ public class CartServiceTest extends TestUtility {
     mockProductFound(ProductServiceTest.PRODUCT_ID, PRICE);
     Cart actualCart = cartService.createCart(buildCartRequest());
     actualCart.setDate(DATE);
-    Cart expectedCart = buildCart();
+    Cart expectedCart = buildCart(0);
     expectedCart.setId(null);
     assertEquals(expectedCart, actualCart);
   }
