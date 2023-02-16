@@ -58,7 +58,7 @@ public class CustomerIntegrationTest extends TestUtility {
   @Sql("classpath:integration/customer.sql")
   void createTest() {
     ResponseEntity<Customer> customerResponseEntity =
-        customerController.create(buildAuthenticUser(), buildCustomer());
+        customerController.create(genericBuildUser(CUSTOMER_ID, USER_PASSWORD), buildCustomer());
     Customer customer = customerResponseEntity.getBody();
     customer.setInsertDate(null);
     customer.setUpdateDate(null);

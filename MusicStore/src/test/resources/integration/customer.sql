@@ -6,3 +6,4 @@ INSERT INTO admin (mail,name,surname,phone_number) VALUES ("mail1@test","name1",
 TRUNCATE TABLE user;
 INSERT INTO user (mail,password,img_url) VALUES ("usermail1@test","password1","img_url1");
 INSERT INTO user (mail,password,img_url) VALUES ("mail1@test","password1","img_url1");
+INSERT INTO user (mail,password,img_url) VALUES ("customer-id","password1","img_url1");
