@@ -57,6 +57,18 @@ public class CustomerServiceTest extends TestUtility {
     assertTrue(customerService.delete(CUSTOMER_ID));
   }
 
+  @Test
+  void customerIsNotUserTest() {
+    ResponseStatusException actualException =
+        assertThrows(
+            ResponseStatusException.class,
+            () -> {
+              customerService.customerIsUser(buildCustomer(), buildUser());
+            });
+    assertReasonException(
+        actualException, HttpStatus.NOT_ACCEPTABLE, ReasonsConstant.USER_CUSTOMER_MISMATCH);
+  }
+
   private void mockDelete() {
     BDDMockito.doNothing().when(customerRepository).delete(Mockito.any());
   }
