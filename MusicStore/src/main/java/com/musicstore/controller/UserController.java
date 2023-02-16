@@ -39,9 +39,6 @@ public class UserController {
 
   @GetMapping
   public ResponseEntity<UserResponse> getById(@RequestHeader User user) {
-    // TODO: on the frontend when a user logs in and the response is positive the frontend logic
-    // component should store username & password and manage them for the next calls the user wants
-    // to do providing them to the called in the right place
     return ResponseEntity.ok(getUserResponse(userService.isAuthentic(user)));
   }
 
