@@ -10,9 +10,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 @Entity(name = Customer.TABLE_NAME)
+@Table(name = Customer.TABLE_NAME)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

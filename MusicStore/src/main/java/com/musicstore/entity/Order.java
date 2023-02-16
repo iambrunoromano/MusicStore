@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity(name = Order.TABLE_NAME)
+@Table(name = Order.TABLE_NAME)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
