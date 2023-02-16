@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-// TODO: Do refactor of naming for ids of all entities across all repo
-
 @RestController
 @Slf4j
 @RequestMapping(value = "categories")
