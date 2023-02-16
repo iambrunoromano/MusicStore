@@ -13,6 +13,12 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity(name = Cart.TABLE_NAME)
+@Table(
+    name = Cart.TABLE_NAME,
+    indexes = {
+      @Index(name = "cart_mail_index", columnList = "mail"),
+      @Index(name = "cart_order_id_index", columnList = "order_id")
+    })
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
