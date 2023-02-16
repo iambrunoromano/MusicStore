@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class Category {
-  // TODO: category logic that was in store procedure put Integero category service
   // TODO: active inactive status for all entities
   public static final String TABLE_NAME = "category";
 

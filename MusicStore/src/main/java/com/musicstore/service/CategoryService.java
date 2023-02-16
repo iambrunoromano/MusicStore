@@ -10,13 +10,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @Slf4j
 public class CategoryService {
+  // TODO: category logic that was in store procedure put into category service
 
   private final CategoryRepository categoryRepository;
   private final ProductRepository productRepository;
