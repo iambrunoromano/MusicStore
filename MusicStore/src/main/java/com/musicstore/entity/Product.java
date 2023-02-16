@@ -11,6 +11,13 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity(name = Product.TABLE_NAME)
+@Table(
+    name = Product.TABLE_NAME,
+    indexes = {
+      @Index(name = "product_producer_index", columnList = "producer"),
+      @Index(name = "product_category_index", columnList = "category"),
+      @Index(name = "product_sold_quantity_index", columnList = "sold_quantity")
+    })
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
