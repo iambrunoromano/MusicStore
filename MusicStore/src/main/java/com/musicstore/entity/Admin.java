@@ -3,6 +3,7 @@ package com.musicstore.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +14,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
-@Entity(name = Admin.TABLE_NAME)
+@Entity
+@Table(name = Admin.TABLE_NAME)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
