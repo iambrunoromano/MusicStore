@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doThrow;
 
 class CustomerControllerTest extends TestUtility {
 
@@ -33,7 +34,7 @@ class CustomerControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              customerController.getAll(UserServiceTest.buildUser());
+              customerController.getAll(buildUser());
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
@@ -44,7 +45,7 @@ class CustomerControllerTest extends TestUtility {
     mockIsAdmin();
     mockGetAll();
     ResponseEntity<List<Customer>> customerListResponseEntity =
-        customerController.getAll(UserServiceTest.buildUser());
+        customerController.getAll(buildUser());
     List<Customer> customerList = customerListResponseEntity.getBody();
     assertEquals(CustomerServiceTest.buildCustomerList(), customerList);
   }
@@ -56,7 +57,7 @@ class CustomerControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              customerController.getById(UserServiceTest.buildUser());
+              customerController.getById(buildUser());
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_AUTHENTIC);
@@ -67,8 +68,7 @@ class CustomerControllerTest extends TestUtility {
   void getByIdTest() {
     mockIsAuthentic();
     mockGetById();
-    ResponseEntity<Customer> customerResponseEntity =
-        customerController.getById(UserServiceTest.buildUser());
+    ResponseEntity<Customer> customerResponseEntity = customerController.getById(buildUser());
     Customer customer = customerResponseEntity.getBody();
     assertEquals(CustomerServiceTest.buildCustomer(), customer);
   }
@@ -80,12 +80,23 @@ class CustomerControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              customerController.create(
-                  UserServiceTest.buildUser(), CustomerServiceTest.buildCustomer());
+              customerController.create(buildUser(), buildCustomer());
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_AUTHENTIC);
-    ;
+  }
+
+  @Test
+  void createCustomerUserMismatchTest() {
+    mockCustomerIsNotUser();
+    ResponseStatusException actualException =
+        assertThrows(
+            ResponseStatusException.class,
+            () -> {
+              customerController.create(buildUser(), buildCustomer());
+            });
+    assertReasonException(
+        actualException, HttpStatus.NOT_ACCEPTABLE, ReasonsConstant.USER_CUSTOMER_MISMATCH);
   }
 
   @Test
@@ -93,9 +104,9 @@ class CustomerControllerTest extends TestUtility {
     mockIsAuthentic();
     mockSave();
     ResponseEntity<Customer> customerResponseEntity =
-        customerController.create(UserServiceTest.buildUser(), CustomerServiceTest.buildCustomer());
+        customerController.create(UserServiceTest.buildUser(), buildCustomer());
     Customer customer = customerResponseEntity.getBody();
-    assertEquals(CustomerServiceTest.buildCustomer(), customer);
+    assertEquals(buildCustomer(), customer);
   }
 
   @Test
@@ -105,30 +116,48 @@ class CustomerControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              customerController.delete(CUSTOMER_ID, UserServiceTest.buildUser());
+              customerController.delete(CUSTOMER_ID, buildUser());
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_AUTHENTIC);
-    ;
+  }
+
+  @Test
+  void deleteCustomerUserMismatchTest() {
+    mockCustomerIsNotUser();
+    ResponseStatusException actualException =
+        assertThrows(
+            ResponseStatusException.class,
+            () -> {
+              customerController.delete(CUSTOMER_ID, buildUser());
+            });
+    assertReasonException(
+        actualException, HttpStatus.NOT_ACCEPTABLE, ReasonsConstant.USER_CUSTOMER_MISMATCH);
   }
 
   private void mockGetById() {
     BDDMockito.given(customerService.getById(Mockito.anyString()))
-        .willReturn(Optional.of(CustomerServiceTest.buildCustomer()));
+        .willReturn(Optional.of(buildCustomer()));
   }
 
   private void mockGetAll() {
-    BDDMockito.given(customerService.getAll()).willReturn(CustomerServiceTest.buildCustomerList());
+    BDDMockito.given(customerService.getAll()).willReturn(buildCustomerList());
   }
 
   private void mockSave() {
-    BDDMockito.given(customerService.save(Mockito.any()))
-        .willReturn(CustomerServiceTest.buildCustomer());
+    BDDMockito.given(customerService.save(Mockito.any())).willReturn(buildCustomer());
+  }
+
+  private void mockCustomerIsNotUser() {
+    doThrow(
+            new ResponseStatusException(
+                HttpStatus.NOT_ACCEPTABLE, ReasonsConstant.USER_CUSTOMER_MISMATCH))
+        .when(customerService)
+        .customerIsUser(Mockito.any(), Mockito.any());
   }
 
   private void mockIsAuthentic() {
-    BDDMockito.given(userService.isAuthentic(Mockito.any()))
-        .willReturn(UserServiceTest.buildUser());
+    BDDMockito.given(userService.isAuthentic(Mockito.any())).willReturn(buildUser());
   }
 
   private void mockIsNotAuthentic() {
