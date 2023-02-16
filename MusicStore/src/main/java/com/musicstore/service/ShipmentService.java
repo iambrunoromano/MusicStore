@@ -31,8 +31,13 @@ public class ShipmentService {
     return shipmentRepository.findAll();
   }
 
-  public Optional<Shipment> getById(int id) {
-    return shipmentRepository.findById(id);
+  public Shipment getById(int id) {
+    Optional<Shipment> optionalShipment = shipmentRepository.findById(id);
+    if (!optionalShipment.isPresent()) {
+      log.warn("Shipment with id [{}] not found", id);
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.SHIPMENT_NOT_FOUND);
+    }
+    return optionalShipment.get();
   }
 
   public Shipment save(Order order) {

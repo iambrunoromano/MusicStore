@@ -11,9 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -158,11 +156,13 @@ class ShipmentControllerTest extends TestUtility {
 
   private void mockGetById() {
     BDDMockito.given(shipmentService.getById(Mockito.anyInt()))
-        .willReturn(Optional.of(ShipmentServiceTest.buildShipment()));
+        .willReturn(ShipmentServiceTest.buildShipment());
   }
 
   private void mockGetByIdNotFound() {
-    BDDMockito.given(shipmentService.getById(Mockito.anyInt())).willReturn(Optional.empty());
+    BDDMockito.given(shipmentService.getById(Mockito.anyInt()))
+        .willThrow(
+            new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.SHIPMENT_NOT_FOUND));
   }
 
   private void mockSave() {
