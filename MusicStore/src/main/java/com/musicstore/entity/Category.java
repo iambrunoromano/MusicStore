@@ -11,13 +11,13 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity(name = Category.TABLE_NAME)
+@Table(name = Category.TABLE_NAME)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class Category {
   // TODO: category logic that was in store procedure put Integero category service
-  // TODO: indexes annotation for all entities
   // TODO: active inactive status for all entities
   public static final String TABLE_NAME = "category";
 
