@@ -1,8 +1,6 @@
 package com.musicstore.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,6 +12,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Entity(name = User.TABLE_NAME)
+@Table(
+    name = User.TABLE_NAME,
+    indexes = {@Index(name = "product_mail_password_index", columnList = "mail,password")})
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
