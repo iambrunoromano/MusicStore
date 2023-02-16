@@ -5,7 +5,6 @@ import com.musicstore.entity.User;
 import com.musicstore.request.CartRequest;
 import com.musicstore.service.CartService;
 import com.musicstore.service.UserService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@Slf4j
 @RequestMapping(value = "carts")
 public class CartController {
 

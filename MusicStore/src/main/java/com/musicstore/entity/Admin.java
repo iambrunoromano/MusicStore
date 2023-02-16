@@ -1,18 +1,14 @@
 package com.musicstore.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity(name = Admin.TABLE_NAME)
 @Table(name = Admin.TABLE_NAME)
@@ -20,7 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Admin {
+public class Admin extends AbstractEntity {
   public static final String TABLE_NAME = "admin";
 
   @Id
@@ -35,19 +31,4 @@ public class Admin {
 
   @Column(name = "phone_number")
   private String phoneNumber;
-
-  @CreationTimestamp
-  @Column(
-      name = "insert_date",
-      updatable = false,
-      insertable = false,
-      columnDefinition = " DATETIME DEFAULT CURRENT_TIMESTAMP")
-  private LocalDateTime insertDate;
-
-  @UpdateTimestamp
-  @Column(
-      name = "update_date",
-      insertable = false,
-      columnDefinition = " DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
-  private LocalDateTime updateDate;
 }

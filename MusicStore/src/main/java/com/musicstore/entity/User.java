@@ -1,15 +1,11 @@
 package com.musicstore.entity;
 
-import javax.persistence.*;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
+import javax.persistence.*;
 
 @Entity(name = User.TABLE_NAME)
 @Table(
@@ -19,7 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class User {
+public class User extends AbstractEntity {
   public static final String TABLE_NAME = "user";
 
   @Id
@@ -31,19 +27,4 @@ public class User {
 
   @Column(name = "img_url")
   private String imgUrl;
-
-  @CreationTimestamp
-  @Column(
-      name = "insert_date",
-      updatable = false,
-      insertable = false,
-      columnDefinition = " DATETIME DEFAULT CURRENT_TIMESTAMP")
-  private LocalDateTime insertDate;
-
-  @UpdateTimestamp
-  @Column(
-      name = "update_date",
-      insertable = false,
-      columnDefinition = " DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
-  private LocalDateTime updateDate;
 }
