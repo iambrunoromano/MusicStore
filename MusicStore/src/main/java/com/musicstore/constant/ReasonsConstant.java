@@ -13,5 +13,6 @@ public class ReasonsConstant {
   public static final String ORDER_NOT_FOUND = "Order not found";
   public static final String ORDER_USER_MISMATCH = "Order User Mismatch";
   public static final String PRODUCER_NOT_FOUND = "Producer not found";
-public static final String SHIPMENT_NOT_FOUND = "Shipment not found";
+  public static final String SHIPMENT_NOT_FOUND = "Shipment not found";
+  public static final String USER_CUSTOMER_MISMATCH = "User Customer Mismatch";
 }
