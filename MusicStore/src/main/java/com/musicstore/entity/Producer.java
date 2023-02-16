@@ -7,12 +7,13 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity(name = Producer.TABLE_NAME)
+@Table(
+    name = Producer.TABLE_NAME,
+    indexes = {@Index(name = "producer_mail_index", columnList = "mail")})
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
