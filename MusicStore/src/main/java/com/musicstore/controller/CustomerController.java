@@ -45,17 +45,15 @@ public class CustomerController {
 
   @PostMapping
   public ResponseEntity<Customer> create(@RequestHeader User user, @RequestBody Customer customer) {
-    // TODO: needed here to verify that the user is posting the his own customer by asserting
-    // user.mail = customer.mail
     userService.isAuthentic(user);
+    customerService.customerIsUser(customer, user);
     return ResponseEntity.ok(customerService.save(customer));
   }
 
   @DeleteMapping(value = "/{customer-id}")
   public ResponseEntity<Void> delete(@PathVariable String customerId, @RequestHeader User user) {
     userService.isAuthentic(user);
-    // TODO: needed here to verify that the user is deleting his own customer by asserting user.mail
-    // = customer.mail
+    customerService.customerIsUser(Customer.builder().mail(customerId).build(), user);
     customerService.delete(customerId);
     return ResponseEntity.ok().build();
   }
