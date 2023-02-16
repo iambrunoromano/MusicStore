@@ -5,7 +5,6 @@ import com.musicstore.entity.Producer;
 import com.musicstore.entity.User;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.ProducerService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Optional;
 
-// TODO: logs in all controllers because we have the @Slf4j but not logging anything now
-
 @RestController
-@Slf4j
 @RequestMapping(value = "producers")
 public class ProducerController {
 

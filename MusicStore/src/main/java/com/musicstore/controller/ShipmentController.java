@@ -1,24 +1,18 @@
 package com.musicstore.controller;
 
-import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Order;
 import com.musicstore.entity.Shipment;
 import com.musicstore.entity.User;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.OrderService;
 import com.musicstore.service.ShipmentService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@Slf4j
 @RequestMapping(value = "shipments")
 public class ShipmentController {
 
@@ -42,12 +36,7 @@ public class ShipmentController {
 
   @GetMapping(value = "/{id}")
   public ResponseEntity<Shipment> getById(@PathVariable int id, @RequestBody String mail) {
-    Optional<Shipment> optionalShipment = shipmentService.getById(id);
-    if (!optionalShipment.isPresent()) {
-      log.warn("Shipment with id [{}] not found", id);
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.SHIPMENT_NOT_FOUND);
-    }
-    Shipment shipment = optionalShipment.get();
+    Shipment shipment = shipmentService.getById(id);
     orderService.getVerifiedOrder(shipment.getOrderId(), mail);
     return ResponseEntity.ok(shipment);
   }

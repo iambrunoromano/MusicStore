@@ -4,7 +4,6 @@ import com.musicstore.entity.User;
 import com.musicstore.response.UserResponse;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.UserService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@Slf4j
 @RequestMapping(value = "users")
 public class UserController {
 
