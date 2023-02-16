@@ -4,6 +4,7 @@ import com.musicstore.TestUtility;
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Cart;
 import com.musicstore.entity.Order;
+import com.musicstore.response.OrderResponse;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.CartService;
 import com.musicstore.service.OrderService;
@@ -91,16 +92,16 @@ class OrderControllerTest extends TestUtility {
   @Test
   void createTest() {
     mockCreate();
-    ResponseEntity<HashMap<String, Object>> mapResponseEntity =
+    ResponseEntity<OrderResponse> responseEntity =
         orderController.create(OrderServiceTest.MAIL, OrderServiceTest.ADDRESS);
-    HashMap<String, Object> actualMap = mapResponseEntity.getBody();
-    assertEquals(OrderServiceTest.buildOrder(), actualMap.get(OrderController.ORDER));
+    OrderResponse orderResponse = responseEntity.getBody();
+    assertEquals(buildOrder(), orderResponse.getOrder());
     List<Cart> expectedCartList = OrderServiceTest.buildCartList();
     for (Cart cart : expectedCartList) {
       cart.setBought(true);
       cart.setOrderId(OrderServiceTest.ID);
     }
-    assertEquals(expectedCartList, actualMap.get(OrderController.DETAIL));
+    assertEquals(expectedCartList, orderResponse.getCartList());
   }
 
   @Test

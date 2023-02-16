@@ -3,6 +3,7 @@ package com.musicstore.controller;
 import com.musicstore.entity.Cart;
 import com.musicstore.entity.Order;
 import com.musicstore.entity.User;
+import com.musicstore.response.OrderResponse;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.CartService;
 import com.musicstore.service.OrderService;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -46,15 +46,13 @@ public class OrderController {
   }
 
   @PostMapping(value = "/{mail}")
-  public ResponseEntity<HashMap<String, Object>> create(
+  public ResponseEntity<OrderResponse> create(
       @PathVariable String mail, @RequestBody String address) {
-    // TODO: return response instead of map
     Order order = orderService.create(mail, address);
     order = orderService.save(order);
-    HashMap<String, Object> orderMap = new HashMap<>();
-    orderMap.put(ORDER, order);
-    orderMap.put(DETAIL, getCartList(order.getId()));
-    return ResponseEntity.ok(orderMap);
+    OrderResponse response =
+        OrderResponse.builder().order(order).cartList(getCartList(order.getId())).build();
+    return ResponseEntity.ok(response);
   }
 
   @DeleteMapping(value = "/{order-id}")

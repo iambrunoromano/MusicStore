@@ -3,7 +3,7 @@ package com.musicstore.integration;
 import com.musicstore.MusicStoreApplication;
 import com.musicstore.TestUtility;
 import com.musicstore.controller.OrderController;
-import com.musicstore.entity.Cart;
+import com.musicstore.response.OrderResponse;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -54,13 +53,11 @@ public class OrderIntegrationTest extends TestUtility {
   @Order(3)
   @Sql("classpath:integration/order.sql")
   void createTest() {
-    ResponseEntity<HashMap<String, Object>> mapResponseEntity =
+    ResponseEntity<OrderResponse> orderResponseEntity =
         orderController.create(CREATE_ORDER_MAIL, CREATE_ORDER_ADDRESS);
-    HashMap<String, Object> actualMap = mapResponseEntity.getBody();
-    assertEquals(
-        CREATE_ORDER_MAIL,
-        ((com.musicstore.entity.Order) actualMap.get(OrderController.ORDER)).getMail());
-    assertEquals(1, ((List<Cart>) actualMap.get(OrderController.DETAIL)).size());
+    OrderResponse response = orderResponseEntity.getBody();
+    assertEquals(CREATE_ORDER_MAIL, response.getOrder().getMail());
+    assertEquals(1, response.getCartList().size());
   }
 
   @Test
