@@ -25,8 +25,6 @@ import java.time.LocalDateTime;
 public class Product {
   public static final String TABLE_NAME = "product";
 
-  // TODO:indexes on all entities on column repositories search on
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
