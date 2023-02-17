@@ -19,10 +19,10 @@ Please read [here](https://github.com/iambrunoromano/MusicStore/tree/main/musics
 - [x] `Backend` UnitTest with [JUnit](https://junit.org/junit5/) services and controllers
 - [x] `Backend` Integration testing
 - [x] `Backend` Search indexes, insert/update dates columns and table names on all entities
+- [x] `Backend` Controller Advice for centralized exception handling
  
 # Current tasks:
 - [ ] `Backend` Use validated Requests and Responses for Rest APIs
-- [ ] `Backend` Controller Advice for centralized exception handling
 - [ ] `Backend` TODOs
 
 # Future tasks:
