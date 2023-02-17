@@ -21,7 +21,7 @@ public class MusicStoreApplication {
   public CorsFilter corsFilter() {
     CorsConfiguration corsConfiguration = new CorsConfiguration();
     corsConfiguration.setAllowCredentials(true);
-    corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+    corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
     corsConfiguration.setAllowedHeaders(
         Arrays.asList(
             "Origin",
