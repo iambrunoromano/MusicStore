@@ -1,9 +1,10 @@
-export interface Product{
-  id : number;
-  name : string;
-  price : number;
-  quantity : number;
-  producer : string;
-  category : number;
+export interface Product {
+  id: number;
+  name: string;
+  price: number;
+  leftQuantity: number;
+  soldQuantity: number;
+  producer: string;
+  category: number;
   imgurl: string;
 }
