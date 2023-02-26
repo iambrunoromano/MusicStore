@@ -3,45 +3,43 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
-import { Body } from '../interfaces/body';
-import { WebUser } from '../interfaces/webuser';
+import { User } from '../interfaces/user';
 import { Admin } from '../interfaces/admin';
 
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn : 'root'
+  providedIn: 'root'
 })
-export class AdminService{
+export class AdminService {
   private root_url = environment.apiBaseUrl;
   private httpOptions = {
     headers: new HttpHeaders({
-      'Content-Type' : 'application/json'
+      'Content-Type': 'application/json'
     })
   }
 
-  private addressAPI: string = "admin";
+  private addressAPI: string = "admins";
 
-  constructor(private http : HttpClient){}
+  constructor(private http: HttpClient) { }
 
-  public getAll(wu: WebUser): Observable<Admin[]>{
-    return this.http.post<Admin[]>(this.root_url + this.addressAPI + '/all',wu);
+  public getAll(user: User): Observable<Admin[]> {
+    this.httpOptions.headers.append('user', JSON.stringify(user));
+    return this.http.get<Admin[]>(this.root_url + this.addressAPI + '/all', this.httpOptions);
   }
 
-  public getById(body: Body): Observable<Admin>{
-    return this.http.post<Admin>(this.root_url + this.addressAPI + '/' + body.topost.mail,body.authorized);
+  public getById(user: User, adminId: string): Observable<Admin> {
+    this.httpOptions.headers.append('user', JSON.stringify(user));
+    return this.http.get<Admin>(this.root_url + this.addressAPI + '/' + adminId, this.httpOptions);
   }
 
-  public create(body: Body): Observable<Admin>{
-    return this.http.post<Admin>(this.root_url + this.addressAPI,body);
+  public save(user: User, admin: Admin): Observable<Admin> {
+    this.httpOptions.headers.append('user', JSON.stringify(user));
+    return this.http.post<Admin>(this.root_url + this.addressAPI, admin, this.httpOptions);
   }
 
-  public update(body: Body): Observable<Admin>{
-    return this.http.put<Admin>(this.root_url + this.addressAPI + '/' + body.topost.mail,body);
-  }
-
-  public delete(body: Body): Observable<void>{
-    const options = {body: body.authorized};
-    return this.http.delete<void>(this.root_url + this.addressAPI + '/' + body.topost.mail,options);
+  public delete(user: User, adminId: string): Observable<void> {
+    this.httpOptions.headers.append('user', JSON.stringify(user));
+    return this.http.delete<void>(this.root_url + this.addressAPI + '/' + adminId, this.httpOptions);
   }
 }
