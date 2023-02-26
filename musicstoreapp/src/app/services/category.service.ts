@@ -4,47 +4,44 @@ import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
 import { Category } from '../interfaces/category';
-import { Body } from '../interfaces/body';
+import { User } from '../interfaces/user';
 
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn : 'root'
+  providedIn: 'root'
 })
-export class CategoryService{
+export class CategoryService {
   private root_url = environment.apiBaseUrl;
   private httpOptions = {
     headers: new HttpHeaders({
-      'Content-Type' : 'application/json'
+      'Content-Type': 'application/json'
     })
   }
 
-  private addressAPI: string = "category";
+  private addressAPI: string = "categories";
 
-  constructor(private http : HttpClient){}
+  constructor(private http: HttpClient) { }
 
-  public CategoriesByProducer(mail: String): Observable<Category[]>{
-    return this.http.get<Category[]>(this.root_url + this.addressAPI + '/' + mail + '/categories');
+  public getAll(): Observable<Category[]> {
+    return this.http.get<Category[]>(this.root_url + this.addressAPI + '/all', this.httpOptions);
   }
 
-  public getAll(): Observable<Category[]>{
-    return this.http.get<Category[]>(this.root_url + this.addressAPI + '/all');
+  public getById(categoryId: number): Observable<Category> {
+    return this.http.get<Category>(this.root_url + this.addressAPI + '/' + categoryId, this.httpOptions);
   }
 
-  public getById(id: number): Observable<Category>{
-    return this.http.get<Category>(this.root_url + this.addressAPI + '/' + id);
+  public update(user: User, category: Category): Observable<Category> {
+    this.httpOptions.headers.append('user', JSON.stringify(user));
+    return this.http.post<Category>(this.root_url + this.addressAPI, category, this.httpOptions);
   }
 
-  public create(body: Body): Observable<Category>{
-    return this.http.post<Category>(this.root_url + this.addressAPI, body);
+  public delete(user: User, categoryId: number): Observable<void> {
+    this.httpOptions.headers.append('user', JSON.stringify(user));
+    return this.http.delete<void>(this.root_url + this.addressAPI + '/' + categoryId, this.httpOptions);
   }
 
-  public update(body: Body): Observable<Category>{
-    return this.http.put<Category>(this.root_url + this.addressAPI + '/' + body.topost.id, body);
-  }
-
-  public delete(body: Body): Observable<void>{
-    const options = {body: body.authorized};
-    return this.http.delete<void>(this.root_url + this.addressAPI + '/' + body.topost.id,options);
+  public getByProducer(producerId: String): Observable<Category[]> {
+    return this.http.get<Category[]>(this.root_url + this.addressAPI + '/' + producerId + this.addressAPI);
   }
 }
