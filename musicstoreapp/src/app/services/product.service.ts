@@ -4,55 +4,55 @@ import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
 import { Product } from '../interfaces/product';
-import { Body } from '../interfaces/body';
+import { User } from '../interfaces/user';
 
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn : 'root'
+  providedIn: 'root'
 })
-export class ProductService{
+export class ProductService {
   private root_url = environment.apiBaseUrl;
   private httpOptions = {
     headers: new HttpHeaders({
-      'Content-Type' : 'application/json'
+      'Content-Type': 'application/json'
     })
   }
 
-  private addressAPI: string = "product";
+  private addressAPI: string = "products";
 
-  constructor(private http : HttpClient){}
+  constructor(private http: HttpClient) { }
 
-  public ProductsByCategory(id: String): Observable<Product[]>{
-    return this.http.get<Product[]>(this.root_url + this.addressAPI + '/category/' + id);
+  public getByCategory(categoryId: String): Observable<Product[]> {
+    return this.http.get<Product[]>(this.root_url + this.addressAPI + '/category/' + categoryId);
   }
 
-  public ProductsByProducer(mail: String): Observable<Product[]>{
-    return this.http.get<Product[]>(this.root_url + this.addressAPI + '/' + mail + '/products');
+  public getByProducer(mail: String): Observable<Product[]> {
+    return this.http.get<Product[]>(this.root_url + this.addressAPI + '/producer/' + mail);
   }
 
-  public bestProducts(): Observable<Product[]>{
+  public getBest(): Observable<Product[]> {
     return this.http.get<Product[]>(this.root_url + this.addressAPI + '/best');
   }
 
-  public getAll(): Observable<Product[]>{
+  public getAll(): Observable<Product[]> {
     return this.http.get<Product[]>(this.root_url + this.addressAPI + '/all');
   }
 
-  public getById(id: number): Observable<Product>{
-    return this.http.get<Product>(this.root_url + this.addressAPI + '/' + id);
+  public getById(productId: number): Observable<Product> {
+    return this.http.get<Product>(this.root_url + this.addressAPI + '/product/' + productId);
   }
 
-  public create(body: Body): Observable<Product>{
-    return this.http.post<Product>(this.root_url + this.addressAPI, body);
+  public createAsProducer(mail: string, product: Product): Observable<Product> {
+    return this.http.post<Product>(this.root_url + this.addressAPI + '/producer/' + mail, product);
   }
 
-  public update(body: Body): Observable<Product>{
-    return this.http.put<Product>(this.root_url + this.addressAPI + '/' + body.topost.id, body);
+  public createAsAdmin(user: User, product: Product): Observable<Product> {
+    return this.http.post<Product>(this.root_url + this.addressAPI + '/admin', product);
   }
 
-  public delete(body: Body): Observable<void>{
-    const options = {body: body.authorized};
-    return this.http.delete<void>(this.root_url + this.addressAPI + '/' +  body.topost.id,options);
+  public delete(user: User, productId: number): Observable<void> {
+    this.httpOptions.headers.append('user', JSON.stringify(user));
+    return this.http.delete<void>(this.root_url + this.addressAPI + productId, this.httpOptions);
   }
 }
