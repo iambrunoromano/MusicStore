@@ -71,11 +71,13 @@ public class ProductController {
     return ResponseEntity.ok(productService.save(product));
   }
 
-  @DeleteMapping(value = "/producer/{mail}")
-  public ResponseEntity<Void> delete(@PathVariable String mail, @RequestBody int productId) {
-    producerService.isProducer(mail);
+  @DeleteMapping(value = "/{product-id}")
+  public ResponseEntity<Void> delete(@RequestHeader User user, @PathVariable int productId) {
+    // TODO: check that all the non-post calls have no @RequestBody and change
+    // TODO: userService auth + fix tests
+    producerService.isProducer(user.getMail());
     Product product = productService.getById(productId);
-    if (mail == null || !mail.equals(product.getProducer())) {
+    if (user.getMail() == null || !user.getMail().equals(product.getProducer())) {
       throw new ResponseStatusException(
           HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCT_PRODUCER_MISMATCH);
     }
