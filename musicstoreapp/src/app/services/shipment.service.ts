@@ -4,44 +4,42 @@ import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
 import { Shipment } from '../interfaces/shipment';
-import { Body } from '../interfaces/body';
-import { WebUser } from '../interfaces/webuser';
+import { User } from '../interfaces/user';
 
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn : 'root'
+  providedIn: 'root'
 })
-export class ShipmentService{
+export class ShipmentService {
   private root_url = environment.apiBaseUrl;
   private httpOptions = {
     headers: new HttpHeaders({
-      'Content-Type' : 'application/json'
+      'Content-Type': 'application/json'
     })
   }
 
-  private addressAPI: string = "shipment";
+  private addressAPI: string = "shipments";
 
-  constructor(private http : HttpClient){}
+  constructor(private http: HttpClient) { }
 
-  public getAll(wu: WebUser): Observable<Shipment[]>{
-    return this.http.post<Shipment[]>(this.root_url + this.addressAPI + '/all', wu);
+  public getAll(user: User): Observable<Shipment[]> {
+    this.httpOptions.headers.append('user', JSON.stringify(user));
+    return this.http.get<Shipment[]>(this.root_url + this.addressAPI + '/all', this.httpOptions);
   }
 
-  public getById(body: Body): Observable<Shipment>{
-    return this.http.post<Shipment>(this.root_url + this.addressAPI + '/' + body.topost.id, body.authorized);
+  public getById(user: User, shipmentId: number): Observable<Shipment> {
+    this.httpOptions.headers.append('user', JSON.stringify(user));
+    return this.http.get<Shipment>(this.root_url + this.addressAPI + '/' + shipmentId, this.httpOptions);
   }
 
-  public create(body: Body): Observable<Shipment>{
-    return this.http.post<Shipment>(this.root_url + this.addressAPI, body);
+  public save(user: User, orderId: number): Observable<Shipment> {
+    this.httpOptions.headers.append('user', JSON.stringify(user));
+    return this.http.post<Shipment>(this.root_url + this.addressAPI + '/' + orderId, this.httpOptions);
   }
 
-  public update(body: Body): Observable<Shipment>{
-    return this.http.put<Shipment>(this.root_url + this.addressAPI + '/' + body.topost.id, body);
-  }
-
-  public delete(body: Body): Observable<void>{
-    const options = {body: body.authorized};
-    return this.http.delete<void>(this.root_url + this.addressAPI + '/' +  body.topost.id,options);
+  public delete(user: User, orderId: number): Observable<void> {
+    this.httpOptions.headers.append('user', JSON.stringify(user));
+    return this.http.delete<void>(this.root_url + this.addressAPI + '/' + orderId, this.httpOptions);
   }
 }
