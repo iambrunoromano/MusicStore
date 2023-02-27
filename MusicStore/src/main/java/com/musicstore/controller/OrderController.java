@@ -30,6 +30,7 @@ public class OrderController {
     this.adminService = adminService;
     this.cartService = cartService;
     this.orderService = orderService;
+    // TODO: insert userService and authenticate in all calls
   }
 
   @GetMapping(value = "/all")
@@ -39,8 +40,9 @@ public class OrderController {
   }
 
   @GetMapping(value = "/{order-id}")
-  public ResponseEntity<Order> getById(@PathVariable int orderId, @RequestBody String mail) {
-    return ResponseEntity.ok(orderService.getVerifiedOrder(orderId, mail));
+  public ResponseEntity<Order> getById(@PathVariable int orderId, @RequestHeader User user) {
+    // TODO: fix all tests
+    return ResponseEntity.ok(orderService.getVerifiedOrder(orderId, user.getMail()));
   }
 
   @PostMapping(value = "/{mail}")
