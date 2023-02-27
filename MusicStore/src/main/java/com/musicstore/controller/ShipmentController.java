@@ -35,20 +35,21 @@ public class ShipmentController {
   }
 
   @GetMapping(value = "/{id}")
-  public ResponseEntity<Shipment> getById(@PathVariable int id, @RequestBody String mail) {
+  public ResponseEntity<Shipment> getById(@PathVariable int id, @RequestHeader User user) {
+    // TODO: authenticate + fix tests
     Shipment shipment = shipmentService.getById(id);
-    orderService.getVerifiedOrder(shipment.getOrderId(), mail);
+    orderService.getVerifiedOrder(shipment.getOrderId(), user.getMail());
     return ResponseEntity.ok(shipment);
   }
 
-  @PostMapping(value = "/order-id")
+  @PostMapping(value = "/{order-id}")
   public ResponseEntity<Shipment> save(@RequestHeader User user, @PathVariable int orderId) {
     adminService.isAdmin(user);
     Order order = orderService.getOrder(orderId);
     return ResponseEntity.ok(shipmentService.save(order));
   }
 
-  @DeleteMapping(value = "/order-id")
+  @DeleteMapping(value = "/{order-id}")
   public ResponseEntity<Void> delete(@RequestHeader User user, @PathVariable int orderId) {
     adminService.isAdmin(user);
     shipmentService.delete(orderId);
