@@ -4,48 +4,42 @@ import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
 import { Producer } from '../interfaces/producer';
-import { Body } from '../interfaces/body';
-import { WebUser } from '../interfaces/webuser';
+import { User } from '../interfaces/user';
 
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn : 'root'
+  providedIn: 'root'
 })
-export class ProducerService{
+export class ProducerService {
   private root_url = environment.apiBaseUrl;
   private httpOptions = {
     headers: new HttpHeaders({
-      'Content-Type' : 'application/json'
+      'Content-Type': 'application/json'
     })
   }
 
-  private addressAPI: string = "producer";
+  private addressAPI: string = "producers";
 
-  constructor(private http : HttpClient){}
+  constructor(private http: HttpClient) { }
 
-  public bestProducers(): Observable<Producer[]>{
-    return this.http.get<Producer[]>(this.root_url + this.addressAPI + '/best');
+  public getAll(user: User): Observable<Producer[]> {
+    this.httpOptions.headers.append('user', JSON.stringify(user));
+    return this.http.get<Producer[]>(this.root_url + this.addressAPI + '/all', this.httpOptions);
   }
 
-  public getAll(wu: WebUser): Observable<Producer[]>{
-    return this.http.post<Producer[]>(this.root_url + this.addressAPI + '/all',wu);
+  public getById(user: User, producerId: string): Observable<Producer> {
+    this.httpOptions.headers.append('user', JSON.stringify(user));
+    return this.http.get<Producer>(this.root_url + this.addressAPI + '/' + producerId, this.httpOptions);
   }
 
-    public getById(body: Body): Observable<Producer>{
-      return this.http.post<Producer>(this.root_url + this.addressAPI + '/' + body.topost.mail,body.authorized);
-    }
+  public save(user: User, producer: Producer): Observable<Producer> {
+    this.httpOptions.headers.append('user', JSON.stringify(user));
+    return this.http.post<Producer>(this.root_url + this.addressAPI, producer, this.httpOptions);
+  }
 
-    public create(producer: Producer): Observable<Producer>{
-      return this.http.post<Producer>(this.root_url + this.addressAPI,producer);
-    }
-
-    public update(body: Body): Observable<Producer>{
-      return this.http.put<Producer>(this.root_url + this.addressAPI + '/' + body.topost.mail,body);
-    }
-
-    public delete(body: Body): Observable<void>{
-      const options = {body: body.authorized};
-      return this.http.delete<void>(this.root_url + this.addressAPI + '/' + body.topost.mail,options);
-    }
+  public delete(user: User, producerId: string): Observable<void> {
+    this.httpOptions.headers.append('user', JSON.stringify(user));
+    return this.http.delete<void>(this.root_url + this.addressAPI + '/' + producerId, this.httpOptions);
+  }
 }
