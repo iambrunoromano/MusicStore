@@ -4,45 +4,43 @@ import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
 import { Order } from '../interfaces/order';
-import { Body } from '../interfaces/body';
-import { WebUser } from '../interfaces/webuser';
-import { OrderReceipt } from '../interfaces/orderreceipt';
+import { OrderResponse } from '../interfaces/response/orderresponse';
+import { User } from '../interfaces/user';
 
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn : 'root'
+  providedIn: 'root'
 })
-export class OrderService{
+export class OrderService {
   private root_url = environment.apiBaseUrl;
   private httpOptions = {
     headers: new HttpHeaders({
-      'Content-Type' : 'application/json'
+      'Content-Type': 'application/json'
     })
   }
 
-  private addressAPI: string = "order";
+  private addressAPI: string = "orders";
 
-  constructor(private http : HttpClient){}
+  constructor(private http: HttpClient) { }
 
-  public getAll(wu: WebUser): Observable<Order[]>{
-    return this.http.post<Order[]>(this.root_url + this.addressAPI + '/all',wu);
+  public getAll(user: User): Observable<Order[]> {
+    this.httpOptions.headers.append('user', JSON.stringify(user));
+    return this.http.get<Order[]>(this.root_url + this.addressAPI + '/all', this.httpOptions);
   }
 
-    public getById(body: Body): Observable<Order>{
-      return this.http.post<Order>(this.root_url + this.addressAPI + '/' + body.topost.id,body.authorized);
-    }
+  public getById(user: User, orderId: number): Observable<Order> {
+    this.httpOptions.headers.append('user', JSON.stringify(user));
+    return this.http.get<Order>(this.root_url + this.addressAPI + '/' + orderId, this.httpOptions);
+  }
 
-    public create(wu: WebUser): Observable<OrderReceipt>{
-      return this.http.post<OrderReceipt>(this.root_url + this.addressAPI, wu);
-    }
+  public create(user: User, address: string): Observable<OrderResponse> {
+    this.httpOptions.headers.append('user', JSON.stringify(user));
+    return this.http.post<OrderResponse>(this.root_url + this.addressAPI, address, this.httpOptions);
+  }
 
-    public update(body: Body): Observable<Order>{
-      return this.http.put<Order>(this.root_url + this.addressAPI + '/' + body.topost.id,body);
-    }
-
-    public delete(body: Body): Observable<void>{
-      const options = {body: body.authorized};
-      return this.http.delete<void>(this.root_url + this.addressAPI + '/' + body.topost.id,options);
-    }
+  public delete(user: User, orderId: number): Observable<void> {
+    this.httpOptions.headers.append('user', JSON.stringify(user));
+    return this.http.delete<void>(this.root_url + this.addressAPI + '/' + orderId, this.httpOptions);
+  }
 }
