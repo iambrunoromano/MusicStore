@@ -3,6 +3,7 @@ package com.musicstore.integration;
 import com.musicstore.MusicStoreApplication;
 import com.musicstore.TestUtility;
 import com.musicstore.controller.OrderController;
+import com.musicstore.entity.User;
 import com.musicstore.response.OrderResponse;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -44,7 +45,7 @@ public class OrderIntegrationTest extends TestUtility {
   @Sql("classpath:integration/order.sql")
   void getByIdTest() {
     ResponseEntity<com.musicstore.entity.Order> orderResponseEntity =
-        orderController.getById(3, FIRST_ADMIN_USER.getMail());
+        orderController.getById(3, buildAdminUser());
     com.musicstore.entity.Order order = orderResponseEntity.getBody();
     assertEquals("address_1", order.getAddress());
   }
@@ -53,8 +54,10 @@ public class OrderIntegrationTest extends TestUtility {
   @Order(3)
   @Sql("classpath:integration/order.sql")
   void createTest() {
+    User authUser = buildAuthenticUser();
+    authUser.setMail(CREATE_ORDER_MAIL);
     ResponseEntity<OrderResponse> orderResponseEntity =
-        orderController.create(CREATE_ORDER_MAIL, CREATE_ORDER_ADDRESS);
+        orderController.create(authUser, CREATE_ORDER_ADDRESS);
     OrderResponse response = orderResponseEntity.getBody();
     assertEquals(CREATE_ORDER_MAIL, response.getOrder().getMail());
     assertEquals(1, response.getCartList().size());
