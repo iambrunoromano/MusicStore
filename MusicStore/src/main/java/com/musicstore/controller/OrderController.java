@@ -7,6 +7,7 @@ import com.musicstore.response.OrderResponse;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.CartService;
 import com.musicstore.service.OrderService;
+import com.musicstore.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,20 +18,21 @@ import java.util.List;
 @RequestMapping(value = "orders")
 public class OrderController {
 
-  public static final String ORDER = "order";
-  public static final String DETAIL = "detail";
-
   private final AdminService adminService;
   private final CartService cartService;
   private final OrderService orderService;
+  private final UserService userService;
 
   @Autowired
   public OrderController(
-      AdminService adminService, CartService cartService, OrderService orderService) {
+      AdminService adminService,
+      CartService cartService,
+      OrderService orderService,
+      UserService userService) {
     this.adminService = adminService;
     this.cartService = cartService;
     this.orderService = orderService;
-    // TODO: insert userService and authenticate in all calls
+    this.userService = userService;
   }
 
   @GetMapping(value = "/all")
@@ -41,14 +43,15 @@ public class OrderController {
 
   @GetMapping(value = "/{order-id}")
   public ResponseEntity<Order> getById(@PathVariable int orderId, @RequestHeader User user) {
-    // TODO: fix all tests
+    userService.isAuthentic(user);
     return ResponseEntity.ok(orderService.getVerifiedOrder(orderId, user.getMail()));
   }
 
-  @PostMapping(value = "/{mail}")
+  @PostMapping
   public ResponseEntity<OrderResponse> create(
-      @PathVariable String mail, @RequestBody String address) {
-    Order order = orderService.create(mail, address);
+      @RequestHeader User user, @RequestBody String address) {
+    userService.isAuthentic(user);
+    Order order = orderService.create(user.getMail(), address);
     order = orderService.save(order);
     OrderResponse response =
         OrderResponse.builder().order(order).cartList(getCartList(order.getId())).build();
