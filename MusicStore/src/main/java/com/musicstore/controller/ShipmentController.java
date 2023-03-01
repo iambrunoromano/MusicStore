@@ -6,6 +6,7 @@ import com.musicstore.entity.User;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.OrderService;
 import com.musicstore.service.ShipmentService;
+import com.musicstore.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,13 +20,18 @@ public class ShipmentController {
   private final AdminService adminService;
   private final OrderService orderService;
   private final ShipmentService shipmentService;
+  private final UserService userService;
 
   @Autowired
   public ShipmentController(
-      AdminService adminService, OrderService orderService, ShipmentService shipmentService) {
+      AdminService adminService,
+      OrderService orderService,
+      ShipmentService shipmentService,
+      UserService userService) {
     this.adminService = adminService;
     this.orderService = orderService;
     this.shipmentService = shipmentService;
+    this.userService = userService;
   }
 
   @GetMapping(value = "/all")
@@ -36,7 +42,7 @@ public class ShipmentController {
 
   @GetMapping(value = "/{id}")
   public ResponseEntity<Shipment> getById(@PathVariable int id, @RequestHeader User user) {
-    // TODO: authenticate + fix tests
+    userService.isAuthentic(user);
     Shipment shipment = shipmentService.getById(id);
     orderService.getVerifiedOrder(shipment.getOrderId(), user.getMail());
     return ResponseEntity.ok(shipment);
