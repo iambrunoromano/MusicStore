@@ -269,6 +269,10 @@ public class TestUtility {
     return User.builder().mail(USER_ID).password(USER_PASSWORD).build();
   }
 
+  protected User buildAuthProducerUser() {
+    return User.builder().mail(FIRST_PRODUCER_MAIL).password(USER_PASSWORD).build();
+  }
+
   protected Producer buildThirdProducer() {
     return Producer.builder()
         .mail(THIRD_PRODUCER_MAIL)
