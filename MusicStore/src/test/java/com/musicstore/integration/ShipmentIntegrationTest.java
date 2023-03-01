@@ -44,7 +44,7 @@ public class ShipmentIntegrationTest extends TestUtility {
   @Sql("classpath:integration/shipment.sql")
   void getByIdTest() {
     ResponseEntity<Shipment> shipmentResponseEntity =
-        shipmentController.getById(1, FIRST_ADMIN_USER.getMail());
+        shipmentController.getById(1, buildAdminUser());
     Shipment shipment = shipmentResponseEntity.getBody();
     assertEquals(1, shipment.getId());
   }
