@@ -86,7 +86,7 @@ public class ProductIntegrationTest extends TestUtility {
   @Sql("classpath:integration/product.sql")
   void createAsProducerTest() {
     ResponseEntity<Product> productResponseEntity =
-        productController.createAsProducer(FIRST_PRODUCER_MAIL, buildProduct());
+        productController.createAsProducer(buildAuthProducerUser(), buildProduct());
     Product product = productResponseEntity.getBody();
     product.setId(buildProduct().getId());
     product.setInsertDate(null);
@@ -111,7 +111,7 @@ public class ProductIntegrationTest extends TestUtility {
   @Order(8)
   @Sql("classpath:integration/product.sql")
   void deleteTest() {
-    productController.delete(FIRST_PRODUCER_MAIL, 1);
+    productController.delete(buildAuthProducerUser(), 1);
     ResponseEntity<List<Product>> productListResponseEntity = productController.getAll();
     List<Product> productList = productListResponseEntity.getBody();
     assertEquals(1, productList.size());
