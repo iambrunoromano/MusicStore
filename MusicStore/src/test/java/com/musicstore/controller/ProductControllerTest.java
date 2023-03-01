@@ -19,29 +19,33 @@ class ProductControllerTest extends TestUtility {
   private final AdminService adminService = Mockito.mock(AdminService.class);
   private final ProducerService producerService = Mockito.mock(ProducerService.class);
   private final ProductService productService = Mockito.mock(ProductService.class);
+  private final UserService userService = Mockito.mock(UserService.class);
 
   private ProductController productController =
-      new ProductController(adminService, producerService, productService);
+      new ProductController(adminService, producerService, productService, userService);
 
   @Test
   void createAsProducerTest() {
+    mockIsAuthentic();
     mockIsProducer();
     mockSave();
     ResponseEntity<Product> productResponseEntity =
-        productController.createAsProducer(MAIL, ProductServiceTest.buildProduct());
+        productController.createAsProducer(buildAuthenticUser(), ProductServiceTest.buildProduct());
     Product product = productResponseEntity.getBody();
     assertEquals(ProductServiceTest.buildProduct(), product);
   }
 
   @Test
   void createAsProducerNotProducerTest() {
+    mockIsAuthentic();
     mockNotProducer();
     mockSave();
     ResponseStatusException actualException =
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              productController.createAsProducer(MAIL, ProductServiceTest.buildProduct());
+              productController.createAsProducer(
+                  buildAuthenticUser(), ProductServiceTest.buildProduct());
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_PRODUCER);
@@ -79,24 +83,10 @@ class ProductControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              productController.delete(MAIL, ProductServiceTest.PRODUCT_ID);
+              productController.delete(buildAuthenticUser(), ProductServiceTest.PRODUCT_ID);
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_PRODUCER);
-  }
-
-  @Test
-  void deleteNullMailTest() {
-    mockIsProducer();
-    mockFound();
-    ResponseStatusException actualException =
-        assertThrows(
-            ResponseStatusException.class,
-            () -> {
-              productController.delete(null, ProductServiceTest.PRODUCT_ID);
-            });
-    assertReasonException(
-        actualException, HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCT_PRODUCER_MISMATCH);
   }
 
   @Test
@@ -107,7 +97,7 @@ class ProductControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              productController.delete("some-email", ProductServiceTest.PRODUCT_ID);
+              productController.delete(buildUser(), ProductServiceTest.PRODUCT_ID);
             });
     assertReasonException(
         actualException, HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCT_PRODUCER_MISMATCH);
@@ -128,6 +118,10 @@ class ProductControllerTest extends TestUtility {
         .willThrow(
             new ResponseStatusException(
                 HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_PRODUCER));
+  }
+
+  private void mockIsAuthentic() {
+    BDDMockito.given(userService.isAuthentic(Mockito.any())).willReturn(buildAuthenticUser());
   }
 
   private void mockIsProducer() {
