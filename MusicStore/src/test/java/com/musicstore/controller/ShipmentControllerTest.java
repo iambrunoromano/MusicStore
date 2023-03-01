@@ -21,8 +21,9 @@ class ShipmentControllerTest extends TestUtility {
   private AdminService adminService = Mockito.mock(AdminService.class);
   private OrderService orderService = Mockito.mock(OrderService.class);
   private ShipmentService shipmentService = Mockito.mock(ShipmentService.class);
+  private UserService userService = Mockito.mock(UserService.class);
   private ShipmentController shipmentController =
-      new ShipmentController(adminService, orderService, shipmentService);
+      new ShipmentController(adminService, orderService, shipmentService, userService);
 
   @Test
   void getAllTest() {
@@ -50,6 +51,7 @@ class ShipmentControllerTest extends TestUtility {
 
   @Test
   void getByIdTest() {
+    mockIsAuthentic();
     mockGetById();
     mockGetVerifiedOrder();
     ResponseEntity<Shipment> shipmentResponseEntity =
@@ -60,6 +62,7 @@ class ShipmentControllerTest extends TestUtility {
 
   @Test
   void getByIdNotFoundTest() {
+    mockIsAuthentic();
     mockGetByIdNotFound();
     mockGetVerifiedOrder();
     ResponseStatusException actualException =
@@ -74,6 +77,7 @@ class ShipmentControllerTest extends TestUtility {
 
   @Test
   void getByIdUserMismatchTest() {
+    mockIsAuthentic();
     mockGetById();
     mockGetVerifiedOrderNotFound();
     ResponseStatusException actualException =
@@ -144,6 +148,10 @@ class ShipmentControllerTest extends TestUtility {
     BDDMockito.given(adminService.isAdmin(Mockito.any()))
         .willThrow(
             new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN));
+  }
+
+  private void mockIsAuthentic() {
+    BDDMockito.given(userService.isAuthentic(Mockito.any())).willReturn(buildAuthenticUser());
   }
 
   private void mockIsAdmin() {
