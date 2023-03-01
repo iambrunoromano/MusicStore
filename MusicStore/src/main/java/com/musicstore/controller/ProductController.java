@@ -6,6 +6,7 @@ import com.musicstore.entity.User;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.ProducerService;
 import com.musicstore.service.ProductService;
+import com.musicstore.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +24,18 @@ public class ProductController {
   private final AdminService adminService;
   private final ProducerService producerService;
   private final ProductService productService;
+  private final UserService userService;
 
   @Autowired
   public ProductController(
-      AdminService adminService, ProducerService producerService, ProductService productService) {
+      AdminService adminService,
+      ProducerService producerService,
+      ProductService productService,
+      UserService userService) {
     this.adminService = adminService;
     this.producerService = producerService;
     this.productService = productService;
+    this.userService = userService;
   }
 
   @GetMapping(value = "/category/{category-id}")
@@ -57,16 +63,17 @@ public class ProductController {
     return ResponseEntity.ok(productService.getById(productId));
   }
 
-  @PostMapping(value = "/producer/{mail}")
+  @PostMapping(value = "/producer")
   public ResponseEntity<Product> createAsProducer(
-      @PathVariable String mail, @RequestBody Product product) {
-    producerService.isProducer(mail);
+      @RequestHeader User user, @RequestBody Product product) {
+    userService.isAuthentic(user);
+    producerService.isProducer(user.getMail());
     return ResponseEntity.ok(productService.save(product));
   }
 
   @PostMapping(value = "/admin")
   public ResponseEntity<Product> createAsAdmin(
-          @RequestHeader User user, @RequestBody Product product) {
+      @RequestHeader User user, @RequestBody Product product) {
     adminService.isAdmin(user);
     return ResponseEntity.ok(productService.save(product));
   }
@@ -74,10 +81,10 @@ public class ProductController {
   @DeleteMapping(value = "/{product-id}")
   public ResponseEntity<Void> delete(@RequestHeader User user, @PathVariable int productId) {
     // TODO: check that all the non-post calls have no @RequestBody and change
-    // TODO: userService auth + fix tests
+    userService.isAuthentic(user);
     producerService.isProducer(user.getMail());
     Product product = productService.getById(productId);
-    if (user.getMail() == null || !user.getMail().equals(product.getProducer())) {
+    if (!user.getMail().equals(product.getProducer())) {
       throw new ResponseStatusException(
           HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCT_PRODUCER_MISMATCH);
     }
