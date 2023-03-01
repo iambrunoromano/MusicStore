@@ -53,7 +53,7 @@ class ShipmentControllerTest extends TestUtility {
     mockGetById();
     mockGetVerifiedOrder();
     ResponseEntity<Shipment> shipmentResponseEntity =
-        shipmentController.getById(ShipmentServiceTest.SHIPMENT_ID, OrderServiceTest.MAIL);
+        shipmentController.getById(ShipmentServiceTest.SHIPMENT_ID, buildAuthenticUser());
     Shipment shipment = shipmentResponseEntity.getBody();
     assertEquals(ShipmentServiceTest.buildShipment(), shipment);
   }
@@ -66,7 +66,7 @@ class ShipmentControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              shipmentController.getById(ShipmentServiceTest.SHIPMENT_ID, OrderServiceTest.MAIL);
+              shipmentController.getById(ShipmentServiceTest.SHIPMENT_ID, buildAuthenticUser());
             });
     assertReasonException(
         actualException, HttpStatus.NOT_FOUND, ReasonsConstant.SHIPMENT_NOT_FOUND);
@@ -80,7 +80,7 @@ class ShipmentControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              shipmentController.getById(ShipmentServiceTest.SHIPMENT_ID, OrderServiceTest.MAIL);
+              shipmentController.getById(ShipmentServiceTest.SHIPMENT_ID, buildAuthenticUser());
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.ORDER_USER_MISMATCH);
