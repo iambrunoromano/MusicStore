@@ -1,6 +1,7 @@
 package com.musicstore.controller;
 
 import com.musicstore.entity.User;
+import com.musicstore.request.UserRequest;
 import com.musicstore.response.UserResponse;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.UserService;
@@ -25,8 +26,8 @@ public class UserController {
   }
 
   @GetMapping(value = "/all")
-  public ResponseEntity<List<UserResponse>> getAll(@RequestHeader User user) {
-    adminService.isAdmin(user);
+  public ResponseEntity<List<UserResponse>> getAll(@RequestHeader UserRequest userRequest) {
+    adminService.isAdmin(userRequest);
     List<User> userList = userService.getAll();
     List<UserResponse> userResponseList = new ArrayList<>();
     for (User foundUser : userList) {
@@ -36,19 +37,19 @@ public class UserController {
   }
 
   @GetMapping
-  public ResponseEntity<UserResponse> getById(@RequestHeader User user) {
-    return ResponseEntity.ok(getUserResponse(userService.isAuthentic(user)));
+  public ResponseEntity<UserResponse> getById(@RequestHeader UserRequest userRequest) {
+    return ResponseEntity.ok(getUserResponse(userService.isAuthentic(userRequest)));
   }
 
   @PostMapping
-  public ResponseEntity<UserResponse> save(@RequestHeader User user) {
+  public ResponseEntity<UserResponse> save(@RequestBody User user) {
     return ResponseEntity.ok(getUserResponse(userService.save(user)));
   }
 
   @DeleteMapping
-  public ResponseEntity<Void> delete(@RequestHeader User user) {
-    userService.isAuthentic(user);
-    userService.delete(user.getMail());
+  public ResponseEntity<Void> delete(@RequestHeader UserRequest userRequest) {
+    userService.isAuthentic(userRequest);
+    userService.delete(userRequest.getMail());
     return ResponseEntity.ok().build();
   }
 

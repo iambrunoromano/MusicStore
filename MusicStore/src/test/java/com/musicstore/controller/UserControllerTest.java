@@ -5,9 +5,7 @@ import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.User;
 import com.musicstore.response.UserResponse;
 import com.musicstore.service.AdminService;
-import com.musicstore.service.AdminServiceTest;
 import com.musicstore.service.UserService;
-import com.musicstore.service.UserServiceTest;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
@@ -33,7 +31,7 @@ class UserControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              userController.getAll(FIRST_ADMIN_USER);
+              userController.getAll(FIRST_ADMIN_USER_REQUEST);
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
@@ -44,7 +42,7 @@ class UserControllerTest extends TestUtility {
     mockIsAdmin();
     mockUserList();
     ResponseEntity<List<UserResponse>> userListResponseEntity =
-        userController.getAll(FIRST_ADMIN_USER);
+        userController.getAll(FIRST_ADMIN_USER_REQUEST);
     List<UserResponse> userResponseList = userListResponseEntity.getBody();
     assertEquals(buildUserResponseList(), userResponseList);
   }
@@ -53,9 +51,9 @@ class UserControllerTest extends TestUtility {
   void getByIdTest() {
     mockIsAuthentic();
     ResponseEntity<UserResponse> userResponseEntity =
-        userController.getById(UserServiceTest.buildUser());
+        userController.getById(buildUserRequest());
     UserResponse userResponse = userResponseEntity.getBody();
-    assertEquals(UserServiceTest.buildUserResponse(), userResponse);
+    assertEquals(buildUserResponse(), userResponse);
   }
 
   @Test
@@ -65,7 +63,7 @@ class UserControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              userController.getById(UserServiceTest.buildUser());
+              userController.getById(buildUserRequest());
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_AUTHENTIC);
@@ -76,9 +74,9 @@ class UserControllerTest extends TestUtility {
   void saveTest() {
     mockSave();
     ResponseEntity<UserResponse> userResponseEntity =
-        userController.save(UserServiceTest.buildUser());
+        userController.save(buildUser());
     UserResponse userResponse = userResponseEntity.getBody();
-    assertEquals(UserServiceTest.buildUserResponse(), userResponse);
+    assertEquals(buildUserResponse(), userResponse);
   }
 
   @Test
@@ -88,7 +86,7 @@ class UserControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              userController.delete(UserServiceTest.buildUser());
+              userController.delete(buildUserRequest());
             });
     assertReasonException(actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_USER);
   }
@@ -106,7 +104,7 @@ class UserControllerTest extends TestUtility {
   }
 
   private void mockIsAdmin() {
-    BDDMockito.given(adminService.isAdmin(Mockito.any())).willReturn(AdminServiceTest.buildAdmin());
+    BDDMockito.given(adminService.isAdmin(Mockito.any())).willReturn(buildAdmin());
   }
 
   private void mockUserList() {
@@ -116,7 +114,7 @@ class UserControllerTest extends TestUtility {
 
   private void mockIsAuthentic() {
     BDDMockito.given(userService.isAuthentic(Mockito.any()))
-        .willReturn(UserServiceTest.buildUser());
+        .willReturn(buildUser());
   }
 
   private void mockIsNotAuthentic() {
@@ -127,6 +125,6 @@ class UserControllerTest extends TestUtility {
   }
 
   private void mockSave() {
-    BDDMockito.given(userService.save(Mockito.any())).willReturn(UserServiceTest.buildUser());
+    BDDMockito.given(userService.save(Mockito.any())).willReturn(buildUser());
   }
 }
