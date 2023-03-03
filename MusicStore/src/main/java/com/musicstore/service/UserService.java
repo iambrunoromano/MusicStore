@@ -3,6 +3,7 @@ package com.musicstore.service;
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.User;
 import com.musicstore.repository.UserRepository;
+import com.musicstore.request.UserRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,15 +45,18 @@ public class UserService {
     userRepository.delete(optionalUser.get());
   }
 
-  public User isAuthentic(User user) {
+  public User isAuthentic(UserRequest userRequest) {
     Optional<User> optionalUser =
-        userRepository.findByMailAndPassword(user.getMail(), user.getPassword());
+        userRepository.findByMailAndPassword(userRequest.getMail(), userRequest.getPassword());
     if (!optionalUser.isPresent()) {
-      log.warn("Cannot Authenticate User with Mail [{}]", user.getMail());
+      log.warn("Cannot Authenticate User with Mail [{}]", userRequest.getMail());
       throw new ResponseStatusException(
           HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_AUTHENTIC);
     }
-    log.info("Matching user for mail [{}] and password [{}]", user.getMail(), user.getPassword());
+    log.info(
+        "Matching user for mail [{}] and password [{}]",
+        userRequest.getMail(),
+        userRequest.getPassword());
     return optionalUser.get();
   }
 }

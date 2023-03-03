@@ -42,7 +42,7 @@ public class UserServiceTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              userService.isAuthentic(buildUser());
+              userService.isAuthentic(buildUserRequest());
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_AUTHENTIC);
@@ -52,7 +52,7 @@ public class UserServiceTest extends TestUtility {
   @Test
   void isAuthenticTest() {
     mockAuthentic();
-    assertEquals(buildUser(), userService.isAuthentic(buildUser()));
+    assertEquals(buildUser(), userService.isAuthentic(buildUserRequest()));
   }
 
   private void mockNotAuthentic() {
