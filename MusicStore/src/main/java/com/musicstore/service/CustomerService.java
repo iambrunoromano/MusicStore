@@ -2,8 +2,8 @@ package com.musicstore.service;
 
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Customer;
-import com.musicstore.entity.User;
 import com.musicstore.repository.CustomerRepository;
+import com.musicstore.request.UserRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,8 +46,8 @@ public class CustomerService {
     return true;
   }
 
-  public void customerIsUser(Customer customer, User user) {
-    if (!user.getMail().equals(customer.getMail())) {
+  public void customerIsUser(Customer customer, UserRequest userRequest) {
+    if (!userRequest.getMail().equals(customer.getMail())) {
       throw new ResponseStatusException(
           HttpStatus.NOT_ACCEPTABLE, ReasonsConstant.USER_CUSTOMER_MISMATCH);
     }

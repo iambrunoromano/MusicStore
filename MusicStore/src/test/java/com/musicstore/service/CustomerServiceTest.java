@@ -63,7 +63,7 @@ public class CustomerServiceTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              customerService.customerIsUser(buildCustomer(), buildUser());
+              customerService.customerIsUser(buildCustomer(), buildUserRequest());
             });
     assertReasonException(
         actualException, HttpStatus.NOT_ACCEPTABLE, ReasonsConstant.USER_CUSTOMER_MISMATCH);
