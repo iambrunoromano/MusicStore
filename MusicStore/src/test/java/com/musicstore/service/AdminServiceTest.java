@@ -45,7 +45,7 @@ public class AdminServiceTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              adminService.isAdmin(User.builder().mail(MAIL).build());
+              adminService.isAdmin(buildUserRequest());
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_AUTHENTIC);
@@ -60,7 +60,7 @@ public class AdminServiceTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              adminService.isAdmin(User.builder().mail(MAIL).build());
+              adminService.isAdmin(buildUserRequest());
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
@@ -71,7 +71,7 @@ public class AdminServiceTest extends TestUtility {
     mockAuthenticUser();
     BDDMockito.given(adminRepository.findById(Mockito.anyString()))
         .willReturn(buildOptionalAdmin());
-    Admin actualAdmin = adminService.isAdmin(User.builder().mail(MAIL).build());
+    Admin actualAdmin = adminService.isAdmin(buildUserRequest());
     assertEquals(buildAdmin(), actualAdmin);
   }
 

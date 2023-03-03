@@ -2,8 +2,8 @@ package com.musicstore.service;
 
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Admin;
-import com.musicstore.entity.User;
 import com.musicstore.repository.AdminRepository;
+import com.musicstore.request.UserRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,9 +50,9 @@ public class AdminService {
     adminRepository.delete(optionalAdminBean.get());
   }
 
-  public Admin isAdmin(User user) {
-    userService.isAuthentic(user);
-    String adminId = user.getMail();
+  public Admin isAdmin(UserRequest userRequest) {
+    userService.isAuthentic(userRequest);
+    String adminId = userRequest.getMail();
     return getAdmin(adminId);
   }
 
