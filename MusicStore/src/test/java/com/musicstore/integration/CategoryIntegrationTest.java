@@ -55,7 +55,7 @@ public class CategoryIntegrationTest extends TestUtility {
     Category updateCategory = buildCategory();
     updateCategory.setName(NEW_NAME);
     ResponseEntity<Category> categoryResponseEntity =
-        categoryController.update(FIRST_ADMIN_USER, updateCategory);
+        categoryController.update(FIRST_ADMIN_USER_REQUEST, updateCategory);
     Category category = categoryResponseEntity.getBody();
     assertEquals(NEW_NAME, category.getName());
   }
@@ -64,7 +64,7 @@ public class CategoryIntegrationTest extends TestUtility {
   @Order(4)
   @Sql("classpath:integration/category.sql")
   public void deleteTest() {
-    ResponseEntity<Void> responseEntity = categoryController.delete(1, FIRST_ADMIN_USER);
+    ResponseEntity<Void> responseEntity = categoryController.delete(1, FIRST_ADMIN_USER_REQUEST);
     assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     ResponseEntity<List<Category>> categoryListResponseEntity = categoryController.getAll();
     List<Category> categoryList = categoryListResponseEntity.getBody();
