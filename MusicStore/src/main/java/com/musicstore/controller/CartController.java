@@ -1,8 +1,8 @@
 package com.musicstore.controller;
 
 import com.musicstore.entity.Cart;
-import com.musicstore.entity.User;
 import com.musicstore.request.CartRequest;
+import com.musicstore.request.UserRequest;
 import com.musicstore.service.CartService;
 import com.musicstore.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,23 +25,23 @@ public class CartController {
   }
 
   @GetMapping
-  public ResponseEntity<List<Cart>> getCart(@RequestHeader User user) {
-    userService.isAuthentic(user);
-    return ResponseEntity.ok(cartService.getByMail(user.getMail()));
+  public ResponseEntity<List<Cart>> getCart(@RequestHeader UserRequest userRequest) {
+    userService.isAuthentic(userRequest);
+    return ResponseEntity.ok(cartService.getByMail(userRequest.getMail()));
   }
 
   @PostMapping
   public ResponseEntity<Void> save(
-      @RequestHeader User user, @RequestBody List<CartRequest> cartRequestList) {
-    userService.isAuthentic(user);
+      @RequestHeader UserRequest userRequest, @RequestBody List<CartRequest> cartRequestList) {
+    userService.isAuthentic(userRequest);
     cartService.save(cartRequestList);
     return ResponseEntity.ok().build();
   }
 
   @DeleteMapping
-  public ResponseEntity<Void> delete(@RequestHeader User user) {
-    userService.isAuthentic(user);
-    cartService.deleteByMail(user.getMail());
+  public ResponseEntity<Void> delete(@RequestHeader UserRequest userRequest) {
+    userService.isAuthentic(userRequest);
+    cartService.deleteByMail(userRequest.getMail());
     return ResponseEntity.ok().build();
   }
 }
