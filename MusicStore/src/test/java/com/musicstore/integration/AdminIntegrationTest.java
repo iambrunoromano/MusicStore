@@ -34,7 +34,8 @@ public class AdminIntegrationTest extends TestUtility {
   @Order(1)
   @Sql("classpath:integration/admin.sql")
   public void getAllTest() {
-    ResponseEntity<List<Admin>> responseEntityAdminList = adminController.getAll(FIRST_ADMIN_USER);
+    ResponseEntity<List<Admin>> responseEntityAdminList =
+        adminController.getAll(FIRST_ADMIN_USER_REQUEST);
     List<Admin> allAdminList = responseEntityAdminList.getBody();
     assertEquals(2, allAdminList.size());
   }
@@ -44,9 +45,9 @@ public class AdminIntegrationTest extends TestUtility {
   @Sql("classpath:integration/admin.sql")
   public void getByIdTest() {
     ResponseEntity<Admin> adminResponseEntity =
-        adminController.getById(FIRST_ADMIN_USER, FIRST_ADMIN_USER.getMail());
+        adminController.getById(FIRST_ADMIN_USER_REQUEST, FIRST_ADMIN_USER_REQUEST.getMail());
     Admin foundAdmin = adminResponseEntity.getBody();
-    assertEquals(FIRST_ADMIN_USER.getMail(), foundAdmin.getMail());
+    assertEquals(FIRST_ADMIN_USER_REQUEST.getMail(), foundAdmin.getMail());
   }
 
   @Test
@@ -54,8 +55,9 @@ public class AdminIntegrationTest extends TestUtility {
   @Sql("classpath:integration/admin.sql")
   public void updateTest() {
     Admin adminToPost = buildAdmin();
-    adminToPost.setMail(FIRST_ADMIN_USER.getMail());
-    ResponseEntity<Admin> adminResponseEntity = adminController.save(FIRST_ADMIN_USER, adminToPost);
+    adminToPost.setMail(FIRST_ADMIN_USER_REQUEST.getMail());
+    ResponseEntity<Admin> adminResponseEntity =
+        adminController.save(FIRST_ADMIN_USER_REQUEST, adminToPost);
     Admin savedAdmin = adminResponseEntity.getBody();
     savedAdmin.setInsertDate(null);
     savedAdmin.setUpdateDate(null);
@@ -67,12 +69,13 @@ public class AdminIntegrationTest extends TestUtility {
   @Sql("classpath:integration/admin.sql")
   public void deleteTest() {
     ResponseEntity<Void> responseEntity =
-        adminController.delete(SECOND_ADMIN_USER, FIRST_ADMIN_USER.getMail());
+        adminController.delete(SECOND_ADMIN_USER_REQUEST, FIRST_ADMIN_USER_REQUEST.getMail());
     assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-    ResponseEntity<List<Admin>> responseEntityAdminList = adminController.getAll(SECOND_ADMIN_USER);
+    ResponseEntity<List<Admin>> responseEntityAdminList =
+        adminController.getAll(SECOND_ADMIN_USER_REQUEST);
     List<Admin> allAdminList = responseEntityAdminList.getBody();
     assertEquals(1, allAdminList.size());
     Admin leftAdmin = allAdminList.get(0);
-    assertEquals(SECOND_ADMIN_USER.getMail(), leftAdmin.getMail());
+    assertEquals(SECOND_ADMIN_USER_REQUEST.getMail(), leftAdmin.getMail());
   }
 }
