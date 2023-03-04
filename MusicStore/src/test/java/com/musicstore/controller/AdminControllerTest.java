@@ -30,7 +30,7 @@ public class AdminControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              adminController.getAll(FIRST_ADMIN_USER);
+              adminController.getAll(FIRST_ADMIN_USER_REQUEST);
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
@@ -39,7 +39,7 @@ public class AdminControllerTest extends TestUtility {
   @Test
   void getAllAuthorizedTest() {
     List<Admin> adminList = mockAdminList();
-    assertEquals(ResponseEntity.ok(adminList), adminController.getAll(FIRST_ADMIN_USER));
+    assertEquals(ResponseEntity.ok(adminList), adminController.getAll(FIRST_ADMIN_USER_REQUEST));
   }
 
   @Test
@@ -49,7 +49,7 @@ public class AdminControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              adminController.getById(FIRST_ADMIN_USER, MAIL);
+              adminController.getById(FIRST_ADMIN_USER_REQUEST, MAIL);
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
@@ -59,7 +59,7 @@ public class AdminControllerTest extends TestUtility {
   void getByIdAuthorizedTest() {
     Admin admin = mockAdmin();
     mockGetAdmin();
-    assertEquals(ResponseEntity.ok(admin), adminController.getById(FIRST_ADMIN_USER, MAIL));
+    assertEquals(ResponseEntity.ok(admin), adminController.getById(FIRST_ADMIN_USER_REQUEST, MAIL));
   }
 
   @Test
@@ -69,7 +69,7 @@ public class AdminControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              adminController.save(FIRST_ADMIN_USER, AdminServiceTest.buildAdmin());
+              adminController.save(FIRST_ADMIN_USER_REQUEST, AdminServiceTest.buildAdmin());
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
@@ -81,7 +81,7 @@ public class AdminControllerTest extends TestUtility {
     BDDMockito.given(adminService.save(Mockito.any())).willReturn(AdminServiceTest.buildAdmin());
     assertEquals(
         ResponseEntity.ok(admin),
-        adminController.save(FIRST_ADMIN_USER, AdminServiceTest.buildAdmin()));
+        adminController.save(FIRST_ADMIN_USER_REQUEST, AdminServiceTest.buildAdmin()));
   }
 
   @Test
@@ -91,7 +91,7 @@ public class AdminControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              adminController.delete(FIRST_ADMIN_USER, MAIL);
+              adminController.delete(FIRST_ADMIN_USER_REQUEST, MAIL);
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);

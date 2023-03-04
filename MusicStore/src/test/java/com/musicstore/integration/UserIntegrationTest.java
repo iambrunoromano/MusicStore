@@ -34,7 +34,7 @@ public class UserIntegrationTest extends TestUtility {
   @Sql("classpath:integration/user.sql")
   void getAllTest() {
     ResponseEntity<List<UserResponse>> userResponseListResponseEntity =
-        userController.getAll(FIRST_ADMIN_USER);
+        userController.getAll(FIRST_ADMIN_USER_REQUEST);
     List<UserResponse> userResponseList = userResponseListResponseEntity.getBody();
     assertEquals(3, userResponseList.size());
   }
@@ -44,7 +44,7 @@ public class UserIntegrationTest extends TestUtility {
   @Sql("classpath:integration/user.sql")
   void getByIdTest() {
     ResponseEntity<UserResponse> userResponseEntity =
-        userController.getById(genericBuildUser(FIRST_USER_ID, FIRST_USER_PASSWORD));
+        userController.getById(genericBuildUserRequest(FIRST_USER_ID, FIRST_USER_PASSWORD));
     UserResponse userResponse = userResponseEntity.getBody();
     assertEquals(FIRST_USER_ID, userResponse.getMail());
   }
@@ -63,9 +63,9 @@ public class UserIntegrationTest extends TestUtility {
   @Order(4)
   @Sql("classpath:integration/user.sql")
   void deleteTest() {
-    userController.delete(genericBuildUser(FIRST_USER_ID, FIRST_USER_PASSWORD));
+    userController.delete(genericBuildUserRequest(FIRST_USER_ID, FIRST_USER_PASSWORD));
     ResponseEntity<List<UserResponse>> userResponseListResponseEntity =
-        userController.getAll(FIRST_ADMIN_USER);
+        userController.getAll(FIRST_ADMIN_USER_REQUEST);
     List<UserResponse> userResponseList = userResponseListResponseEntity.getBody();
     assertEquals(2, userResponseList.size());
     UserResponse firstUserResponse = userResponseList.get(0);
