@@ -1,7 +1,7 @@
 package com.musicstore.controller;
 
 import com.musicstore.entity.Category;
-import com.musicstore.entity.User;
+import com.musicstore.request.UserRequest;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,14 +38,15 @@ public class CategoryController {
 
   @PostMapping
   public ResponseEntity<Category> update(
-          @RequestHeader User user, @RequestBody Category category) {
-    adminService.isAdmin(user);
+      @RequestHeader UserRequest userRequest, @RequestBody Category category) {
+    adminService.isAdmin(userRequest);
     return ResponseEntity.ok(categoryService.save(category));
   }
 
   @DeleteMapping(value = "/{category-id}")
-  public ResponseEntity<Void> delete(@PathVariable int categoryId, @RequestHeader User user) {
-    adminService.isAdmin(user);
+  public ResponseEntity<Void> delete(
+      @PathVariable int categoryId, @RequestHeader UserRequest userRequest) {
+    adminService.isAdmin(userRequest);
     categoryService.delete(categoryId);
     return ResponseEntity.ok().build();
   }
