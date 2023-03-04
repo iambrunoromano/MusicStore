@@ -1,7 +1,7 @@
 package com.musicstore.controller;
 
 import com.musicstore.entity.Customer;
-import com.musicstore.entity.User;
+import com.musicstore.request.UserRequest;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.CustomerService;
 import com.musicstore.service.UserService;
@@ -29,29 +29,31 @@ public class CustomerController {
   }
 
   @GetMapping(value = "/all")
-  public ResponseEntity<List<Customer>> getAll(@RequestHeader User user) {
-    adminService.isAdmin(user);
+  public ResponseEntity<List<Customer>> getAll(@RequestHeader UserRequest userRequest) {
+    adminService.isAdmin(userRequest);
     return ResponseEntity.ok(customerService.getAll());
   }
 
   @GetMapping
-  public ResponseEntity<Customer> getById(@RequestHeader User user) {
-    userService.isAuthentic(user);
-    Optional<Customer> optionalCustomer = customerService.getById(user.getMail());
+  public ResponseEntity<Customer> getById(@RequestHeader UserRequest userRequest) {
+    userService.isAuthentic(userRequest);
+    Optional<Customer> optionalCustomer = customerService.getById(userRequest.getMail());
     return ResponseEntity.ok(optionalCustomer.get());
   }
 
   @PostMapping
-  public ResponseEntity<Customer> create(@RequestHeader User user, @RequestBody Customer customer) {
-    userService.isAuthentic(user);
-    customerService.customerIsUser(customer, user);
+  public ResponseEntity<Customer> create(
+      @RequestHeader UserRequest userRequest, @RequestBody Customer customer) {
+    userService.isAuthentic(userRequest);
+    customerService.customerIsUser(customer, userRequest);
     return ResponseEntity.ok(customerService.save(customer));
   }
 
   @DeleteMapping(value = "/{customer-id}")
-  public ResponseEntity<Void> delete(@PathVariable String customerId, @RequestHeader User user) {
-    userService.isAuthentic(user);
-    customerService.customerIsUser(Customer.builder().mail(customerId).build(), user);
+  public ResponseEntity<Void> delete(
+      @PathVariable String customerId, @RequestHeader UserRequest userRequest) {
+    userService.isAuthentic(userRequest);
+    customerService.customerIsUser(Customer.builder().mail(customerId).build(), userRequest);
     customerService.delete(customerId);
     return ResponseEntity.ok().build();
   }
