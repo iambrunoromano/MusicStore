@@ -34,7 +34,7 @@ class CustomerControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              customerController.getAll(buildUser());
+              customerController.getAll(buildUserRequest());
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
@@ -45,7 +45,7 @@ class CustomerControllerTest extends TestUtility {
     mockIsAdmin();
     mockGetAll();
     ResponseEntity<List<Customer>> customerListResponseEntity =
-        customerController.getAll(buildUser());
+        customerController.getAll(buildUserRequest());
     List<Customer> customerList = customerListResponseEntity.getBody();
     assertEquals(CustomerServiceTest.buildCustomerList(), customerList);
   }
@@ -57,7 +57,7 @@ class CustomerControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              customerController.getById(buildUser());
+              customerController.getById(buildUserRequest());
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_AUTHENTIC);
@@ -68,7 +68,7 @@ class CustomerControllerTest extends TestUtility {
   void getByIdTest() {
     mockIsAuthentic();
     mockGetById();
-    ResponseEntity<Customer> customerResponseEntity = customerController.getById(buildUser());
+    ResponseEntity<Customer> customerResponseEntity = customerController.getById(buildUserRequest());
     Customer customer = customerResponseEntity.getBody();
     assertEquals(CustomerServiceTest.buildCustomer(), customer);
   }
@@ -80,7 +80,7 @@ class CustomerControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              customerController.create(buildUser(), buildCustomer());
+              customerController.create(buildUserRequest(), buildCustomer());
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_AUTHENTIC);
@@ -93,7 +93,7 @@ class CustomerControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              customerController.create(buildUser(), buildCustomer());
+              customerController.create(buildUserRequest(), buildCustomer());
             });
     assertReasonException(
         actualException, HttpStatus.NOT_ACCEPTABLE, ReasonsConstant.USER_CUSTOMER_MISMATCH);
@@ -104,7 +104,7 @@ class CustomerControllerTest extends TestUtility {
     mockIsAuthentic();
     mockSave();
     ResponseEntity<Customer> customerResponseEntity =
-        customerController.create(UserServiceTest.buildUser(), buildCustomer());
+        customerController.create(UserServiceTest.buildUserRequest(), buildCustomer());
     Customer customer = customerResponseEntity.getBody();
     assertEquals(buildCustomer(), customer);
   }
@@ -116,7 +116,7 @@ class CustomerControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              customerController.delete(CUSTOMER_ID, buildUser());
+              customerController.delete(CUSTOMER_ID, buildUserRequest());
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_AUTHENTIC);
@@ -129,7 +129,7 @@ class CustomerControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              customerController.delete(CUSTOMER_ID, buildUser());
+              customerController.delete(CUSTOMER_ID, buildUserRequest());
             });
     assertReasonException(
         actualException, HttpStatus.NOT_ACCEPTABLE, ReasonsConstant.USER_CUSTOMER_MISMATCH);
