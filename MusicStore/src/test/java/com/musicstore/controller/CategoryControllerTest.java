@@ -3,7 +3,7 @@ package com.musicstore.controller;
 import com.musicstore.TestUtility;
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Category;
-import com.musicstore.entity.User;
+import com.musicstore.request.UserRequest;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.AdminServiceTest;
 import com.musicstore.service.CategoryService;
@@ -52,7 +52,7 @@ class CategoryControllerTest extends TestUtility {
     mockIsAdmin();
     mockSave();
     ResponseEntity<Category> actualCategory =
-        categoryController.update(FIRST_ADMIN_USER, CategoryServiceTest.buildCategory());
+        categoryController.update(FIRST_ADMIN_USER_REQUEST, CategoryServiceTest.buildCategory());
     assertCategory(actualCategory.getBody());
   }
 
@@ -63,7 +63,7 @@ class CategoryControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              categoryController.update(FIRST_ADMIN_USER, new Category());
+              categoryController.update(FIRST_ADMIN_USER_REQUEST, new Category());
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
@@ -72,12 +72,12 @@ class CategoryControllerTest extends TestUtility {
   @Test
   void deleteByNotAdminTest() {
     mockNotAdmin();
-    User user = User.builder().mail("mail").build();
+    UserRequest userRequest = UserRequest.builder().mail("mail").build();
     ResponseStatusException actualException =
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              categoryController.delete(CategoryServiceTest.ID, user);
+              categoryController.delete(CategoryServiceTest.ID, userRequest);
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
