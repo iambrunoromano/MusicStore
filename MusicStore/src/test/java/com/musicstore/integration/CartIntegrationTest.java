@@ -4,7 +4,7 @@ import com.musicstore.MusicStoreApplication;
 import com.musicstore.TestUtility;
 import com.musicstore.controller.CartController;
 import com.musicstore.entity.Cart;
-import com.musicstore.entity.User;
+import com.musicstore.request.UserRequest;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,7 +35,7 @@ public class CartIntegrationTest extends TestUtility {
   @Order(1)
   @Sql("classpath:integration/cart.sql")
   public void getCartTest() {
-    User authUser = genericBuildUser(FIRST_USER_ID, FIRST_USER_PASSWORD);
+    UserRequest authUser = genericBuildUserRequest(FIRST_USER_ID, FIRST_USER_PASSWORD);
     ResponseEntity<List<Cart>> cartListResponseEntity = cartController.getCart(authUser);
     List<Cart> cartList = cartListResponseEntity.getBody();
     assertEquals(1, cartList.size());
@@ -45,7 +45,7 @@ public class CartIntegrationTest extends TestUtility {
   @Order(2)
   @Sql("classpath:integration/cart.sql")
   public void saveTest() {
-    User authUser = genericBuildUser(SECOND_USER_MAIL, SECOND_USER_PASSWORD);
+    UserRequest authUser = genericBuildUserRequest(SECOND_USER_MAIL, SECOND_USER_PASSWORD);
     ResponseEntity<Void> responseEntity = cartController.save(authUser, buildCartRequestList());
     assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     ResponseEntity<List<Cart>> cartListResponseEntity = cartController.getCart(authUser);
@@ -57,7 +57,7 @@ public class CartIntegrationTest extends TestUtility {
   @Order(3)
   @Sql("classpath:integration/cart.sql")
   public void deleteTest() {
-    User authUser = genericBuildUser(FIRST_USER_ID, FIRST_USER_PASSWORD);
+    UserRequest authUser = genericBuildUserRequest(FIRST_USER_ID, FIRST_USER_PASSWORD);
     ResponseEntity<Void> responseEntity = cartController.delete(authUser);
     assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     ResponseEntity<List<Cart>> cartListResponseEntity = cartController.getCart(authUser);
