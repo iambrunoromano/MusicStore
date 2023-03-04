@@ -38,7 +38,7 @@ public class CustomerIntegrationTest extends TestUtility {
   @Sql("classpath:integration/customer.sql")
   void getAllTest() {
     ResponseEntity<List<Customer>> customerListResponseEntity =
-        customerController.getAll(buildAdminUser());
+        customerController.getAll(buildAdminUserRequest());
     List<Customer> customerList = customerListResponseEntity.getBody();
     assertEquals(2, customerList.size());
   }
@@ -48,7 +48,7 @@ public class CustomerIntegrationTest extends TestUtility {
   @Sql("classpath:integration/customer.sql")
   void getByIdTest() {
     ResponseEntity<Customer> customerResponseEntity =
-        customerController.getById(buildAuthenticUser());
+        customerController.getById(buildAuthenticUserRequest());
     Customer customer = customerResponseEntity.getBody();
     assertEquals(USER_ID, customer.getMail());
   }
@@ -58,7 +58,8 @@ public class CustomerIntegrationTest extends TestUtility {
   @Sql("classpath:integration/customer.sql")
   void createTest() {
     ResponseEntity<Customer> customerResponseEntity =
-        customerController.create(genericBuildUser(CUSTOMER_ID, USER_PASSWORD), buildCustomer());
+        customerController.create(
+            genericBuildUserRequest(CUSTOMER_ID, USER_PASSWORD), buildCustomer());
     Customer customer = customerResponseEntity.getBody();
     customer.setInsertDate(null);
     customer.setUpdateDate(null);
@@ -69,13 +70,14 @@ public class CustomerIntegrationTest extends TestUtility {
   @Order(4)
   @Sql("classpath:integration/customer.sql")
   void deleteTest() {
-    ResponseEntity<Void> responseEntity = customerController.delete(USER_ID, buildAuthenticUser());
+    ResponseEntity<Void> responseEntity =
+        customerController.delete(USER_ID, buildAuthenticUserRequest());
     assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     ResponseStatusException actualException =
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              customerController.getById(buildAuthenticUser());
+              customerController.getById(buildAuthenticUserRequest());
             });
     assertReasonException(
         actualException, HttpStatus.NOT_FOUND, ReasonsConstant.CUSTOMER_NOT_FOUND);
