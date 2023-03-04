@@ -27,7 +27,7 @@ class CartControllerTest extends TestUtility {
   void getCartTest() {
     mockIsUser();
     mockGetCartByMail();
-    ResponseEntity<List<Cart>> cartListResponseEntity = cartController.getCart(buildUser());
+    ResponseEntity<List<Cart>> cartListResponseEntity = cartController.getCart(buildUserRequest());
     List<Cart> cartList = cartListResponseEntity.getBody();
     for (Integer i = START_LIST; i < END_LIST; i++) {
       assertCart(cartList.get(i), i);
@@ -42,7 +42,7 @@ class CartControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              cartController.getCart(buildUser());
+              cartController.getCart(buildUserRequest());
             });
     assertReasonException(actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_USER);
   }
@@ -54,7 +54,7 @@ class CartControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              cartController.getCart(buildUser());
+              cartController.getCart(buildUserRequest());
             });
     assertReasonException(actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_USER);
   }
@@ -67,7 +67,7 @@ class CartControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              cartController.getCart(buildUser());
+              cartController.getCart(buildUserRequest());
             });
     assertReasonException(actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_USER);
   }
