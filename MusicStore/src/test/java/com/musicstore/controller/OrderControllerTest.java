@@ -55,7 +55,7 @@ class OrderControllerTest extends TestUtility {
   void getByIdTest() {
     mockGetVerifiedOrder();
     ResponseEntity<Order> orderResponseEntity =
-        orderController.getById(OrderServiceTest.ID, buildUserRequest());
+        orderController.getById(OrderServiceTest.ID, buildAuthenticUserRequest());
     Order order = orderResponseEntity.getBody();
     assertEquals(OrderServiceTest.buildOrder(), order);
   }
@@ -67,7 +67,7 @@ class OrderControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              orderController.getById(OrderServiceTest.ID, buildUserRequest());
+              orderController.getById(OrderServiceTest.ID, buildAuthenticUserRequest());
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.ORDER_NOT_FOUND);
@@ -80,7 +80,7 @@ class OrderControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              orderController.getById(OrderServiceTest.ID, buildUserRequest());
+              orderController.getById(OrderServiceTest.ID, buildAuthenticUserRequest());
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.ORDER_USER_MISMATCH);
@@ -90,7 +90,7 @@ class OrderControllerTest extends TestUtility {
   void createTest() {
     mockCreate();
     ResponseEntity<OrderResponse> responseEntity =
-        orderController.create(buildUserRequest(), OrderServiceTest.ADDRESS);
+        orderController.create(buildAuthenticUserRequest(), OrderServiceTest.ADDRESS);
     OrderResponse orderResponse = responseEntity.getBody();
     assertEquals(buildOrder(), orderResponse.getOrder());
     List<Cart> expectedCartList = OrderServiceTest.buildCartList();
@@ -108,7 +108,7 @@ class OrderControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              orderController.create(buildUserRequest(), OrderServiceTest.ADDRESS);
+              orderController.create(buildAuthenticUserRequest(), OrderServiceTest.ADDRESS);
             });
     assertReasonException(actualException, HttpStatus.NOT_FOUND, ReasonsConstant.CART_NOT_FOUND);
   }
