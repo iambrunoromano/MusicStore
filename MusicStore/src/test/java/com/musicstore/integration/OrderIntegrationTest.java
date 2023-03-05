@@ -3,7 +3,7 @@ package com.musicstore.integration;
 import com.musicstore.MusicStoreApplication;
 import com.musicstore.TestUtility;
 import com.musicstore.controller.OrderController;
-import com.musicstore.entity.User;
+import com.musicstore.request.UserRequest;
 import com.musicstore.response.OrderResponse;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ public class OrderIntegrationTest extends TestUtility {
   @Sql("classpath:integration/order.sql")
   void getAllTest() {
     ResponseEntity<List<com.musicstore.entity.Order>> orderListResponseEntity =
-        orderController.getAll(FIRST_ADMIN_USER);
+        orderController.getAll(FIRST_ADMIN_USER_REQUEST);
     List<com.musicstore.entity.Order> orderList = orderListResponseEntity.getBody();
     assertEquals(2, orderList.size());
   }
@@ -45,7 +45,7 @@ public class OrderIntegrationTest extends TestUtility {
   @Sql("classpath:integration/order.sql")
   void getByIdTest() {
     ResponseEntity<com.musicstore.entity.Order> orderResponseEntity =
-        orderController.getById(3, buildAdminUser());
+        orderController.getById(3, buildAdminUserRequest());
     com.musicstore.entity.Order order = orderResponseEntity.getBody();
     assertEquals("address_1", order.getAddress());
   }
@@ -54,10 +54,10 @@ public class OrderIntegrationTest extends TestUtility {
   @Order(3)
   @Sql("classpath:integration/order.sql")
   void createTest() {
-    User authUser = buildAuthenticUser();
-    authUser.setMail(CREATE_ORDER_MAIL);
+    UserRequest authenticUserRequest = buildAuthenticUserRequest();
+    authenticUserRequest.setMail(CREATE_ORDER_MAIL);
     ResponseEntity<OrderResponse> orderResponseEntity =
-        orderController.create(authUser, CREATE_ORDER_ADDRESS);
+        orderController.create(authenticUserRequest, CREATE_ORDER_ADDRESS);
     OrderResponse response = orderResponseEntity.getBody();
     assertEquals(CREATE_ORDER_MAIL, response.getOrder().getMail());
     assertEquals(1, response.getCartList().size());
@@ -67,9 +67,9 @@ public class OrderIntegrationTest extends TestUtility {
   @Order(4)
   @Sql("classpath:integration/order.sql")
   void deleteTest() {
-    orderController.delete(3, FIRST_ADMIN_USER);
+    orderController.delete(3, FIRST_ADMIN_USER_REQUEST);
     ResponseEntity<List<com.musicstore.entity.Order>> orderListResponseEntity =
-        orderController.getAll(FIRST_ADMIN_USER);
+        orderController.getAll(FIRST_ADMIN_USER_REQUEST);
     List<com.musicstore.entity.Order> orderList = orderListResponseEntity.getBody();
     assertEquals(1, orderList.size());
     com.musicstore.entity.Order leftOrder = orderList.get(0);
