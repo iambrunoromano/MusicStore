@@ -2,7 +2,7 @@ package com.musicstore.controller;
 
 import com.musicstore.entity.Cart;
 import com.musicstore.entity.Order;
-import com.musicstore.entity.User;
+import com.musicstore.request.UserRequest;
 import com.musicstore.response.OrderResponse;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.CartService;
@@ -36,22 +36,23 @@ public class OrderController {
   }
 
   @GetMapping(value = "/all")
-  public ResponseEntity<List<Order>> getAll(@RequestHeader User user) {
-    adminService.isAdmin(user);
+  public ResponseEntity<List<Order>> getAll(@RequestHeader UserRequest userRequest) {
+    adminService.isAdmin(userRequest);
     return ResponseEntity.ok(orderService.getAll());
   }
 
   @GetMapping(value = "/{order-id}")
-  public ResponseEntity<Order> getById(@PathVariable int orderId, @RequestHeader User user) {
-    userService.isAuthentic(user);
-    return ResponseEntity.ok(orderService.getVerifiedOrder(orderId, user.getMail()));
+  public ResponseEntity<Order> getById(
+      @PathVariable int orderId, @RequestHeader UserRequest userRequest) {
+    userService.isAuthentic(userRequest);
+    return ResponseEntity.ok(orderService.getVerifiedOrder(orderId, userRequest.getMail()));
   }
 
   @PostMapping
   public ResponseEntity<OrderResponse> create(
-      @RequestHeader User user, @RequestBody String address) {
-    userService.isAuthentic(user);
-    Order order = orderService.create(user.getMail(), address);
+      @RequestHeader UserRequest userRequest, @RequestBody String address) {
+    userService.isAuthentic(userRequest);
+    Order order = orderService.create(userRequest.getMail(), address);
     order = orderService.save(order);
     OrderResponse response =
         OrderResponse.builder().order(order).cartList(getCartList(order.getId())).build();
@@ -59,8 +60,9 @@ public class OrderController {
   }
 
   @DeleteMapping(value = "/{order-id}")
-  public ResponseEntity<Void> delete(@PathVariable int orderId, @RequestHeader User user) {
-    adminService.isAdmin(user);
+  public ResponseEntity<Void> delete(
+      @PathVariable int orderId, @RequestHeader UserRequest userRequest) {
+    adminService.isAdmin(userRequest);
     orderService.delete(orderId);
     return ResponseEntity.ok().build();
   }
