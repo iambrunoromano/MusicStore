@@ -2,7 +2,7 @@ package com.musicstore.controller;
 
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Producer;
-import com.musicstore.entity.User;
+import com.musicstore.request.UserRequest;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.ProducerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +28,15 @@ public class ProducerController {
   }
 
   @GetMapping(value = "/all")
-  public ResponseEntity<List<Producer>> getAll(@RequestHeader User user) {
-    adminService.isAdmin(user);
+  public ResponseEntity<List<Producer>> getAll(@RequestHeader UserRequest userRequest) {
+    adminService.isAdmin(userRequest);
     return ResponseEntity.ok(producerService.getAll());
   }
 
   @GetMapping(value = "/{mail}")
-  public ResponseEntity<Producer> getByName(@RequestHeader User user, @PathVariable String mail) {
-    adminService.isAdmin(user);
+  public ResponseEntity<Producer> getByName(
+      @RequestHeader UserRequest userRequest, @PathVariable String mail) {
+    adminService.isAdmin(userRequest);
     Optional<Producer> optionalProducer = producerService.getByMail(mail);
     if (!optionalProducer.isPresent()) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCER_NOT_FOUND);
@@ -44,14 +45,16 @@ public class ProducerController {
   }
 
   @PostMapping
-  public ResponseEntity<Producer> save(@RequestHeader User user, @RequestBody Producer producer) {
-    adminService.isAdmin(user);
+  public ResponseEntity<Producer> save(
+      @RequestHeader UserRequest userRequest, @RequestBody Producer producer) {
+    adminService.isAdmin(userRequest);
     return ResponseEntity.ok(producerService.save(producer));
   }
 
   @DeleteMapping(value = "/{mail}")
-  public ResponseEntity<Void> delete(@RequestHeader User user, @PathVariable String mail) {
-    adminService.isAdmin(user);
+  public ResponseEntity<Void> delete(
+      @RequestHeader UserRequest userRequest, @PathVariable String mail) {
+    adminService.isAdmin(userRequest);
     producerService.delete(mail);
     return ResponseEntity.ok().build();
   }
