@@ -2,7 +2,7 @@ package com.musicstore.controller;
 
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Product;
-import com.musicstore.entity.User;
+import com.musicstore.request.UserRequest;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.ProducerService;
 import com.musicstore.service.ProductService;
@@ -65,26 +65,27 @@ public class ProductController {
 
   @PostMapping(value = "/producer")
   public ResponseEntity<Product> createAsProducer(
-      @RequestHeader User user, @RequestBody Product product) {
-    userService.isAuthentic(user);
-    producerService.isProducer(user.getMail());
+      @RequestHeader UserRequest userRequest, @RequestBody Product product) {
+    userService.isAuthentic(userRequest);
+    producerService.isProducer(userRequest.getMail());
     return ResponseEntity.ok(productService.save(product));
   }
 
   @PostMapping(value = "/admin")
   public ResponseEntity<Product> createAsAdmin(
-      @RequestHeader User user, @RequestBody Product product) {
-    adminService.isAdmin(user);
+      @RequestHeader UserRequest userRequest, @RequestBody Product product) {
+    adminService.isAdmin(userRequest);
     return ResponseEntity.ok(productService.save(product));
   }
 
   @DeleteMapping(value = "/{product-id}")
-  public ResponseEntity<Void> delete(@RequestHeader User user, @PathVariable int productId) {
+  public ResponseEntity<Void> delete(
+      @RequestHeader UserRequest userRequest, @PathVariable int productId) {
     // TODO: check that all the non-post calls have no @RequestBody and change
-    userService.isAuthentic(user);
-    producerService.isProducer(user.getMail());
+    userService.isAuthentic(userRequest);
+    producerService.isProducer(userRequest.getMail());
     Product product = productService.getById(productId);
-    if (!user.getMail().equals(product.getProducer())) {
+    if (!userRequest.getMail().equals(product.getProducer())) {
       throw new ResponseStatusException(
           HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCT_PRODUCER_MISMATCH);
     }
