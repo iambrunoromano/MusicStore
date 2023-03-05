@@ -30,7 +30,8 @@ class ProductControllerTest extends TestUtility {
     mockIsProducer();
     mockSave();
     ResponseEntity<Product> productResponseEntity =
-        productController.createAsProducer(buildAuthenticUser(), ProductServiceTest.buildProduct());
+        productController.createAsProducer(
+            buildAuthenticUserRequest(), ProductServiceTest.buildProduct());
     Product product = productResponseEntity.getBody();
     assertEquals(ProductServiceTest.buildProduct(), product);
   }
@@ -45,7 +46,7 @@ class ProductControllerTest extends TestUtility {
             ResponseStatusException.class,
             () -> {
               productController.createAsProducer(
-                  buildAuthenticUser(), ProductServiceTest.buildProduct());
+                  buildAuthenticUserRequest(), ProductServiceTest.buildProduct());
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_PRODUCER);
@@ -56,7 +57,8 @@ class ProductControllerTest extends TestUtility {
     mockIsAdmin();
     mockSave();
     ResponseEntity<Product> productResponseEntity =
-        productController.createAsAdmin(FIRST_ADMIN_USER, ProductServiceTest.buildProduct());
+        productController.createAsAdmin(
+            FIRST_ADMIN_USER_REQUEST, ProductServiceTest.buildProduct());
     Product product = productResponseEntity.getBody();
     assertEquals(ProductServiceTest.buildProduct(), product);
   }
@@ -69,7 +71,8 @@ class ProductControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              productController.createAsAdmin(FIRST_ADMIN_USER, ProductServiceTest.buildProduct());
+              productController.createAsAdmin(
+                  FIRST_ADMIN_USER_REQUEST, ProductServiceTest.buildProduct());
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
@@ -83,7 +86,7 @@ class ProductControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              productController.delete(buildAuthenticUser(), ProductServiceTest.PRODUCT_ID);
+              productController.delete(buildAuthenticUserRequest(), ProductServiceTest.PRODUCT_ID);
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_PRODUCER);
@@ -97,7 +100,7 @@ class ProductControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              productController.delete(buildUser(), ProductServiceTest.PRODUCT_ID);
+              productController.delete(buildUserRequest(), ProductServiceTest.PRODUCT_ID);
             });
     assertReasonException(
         actualException, HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCT_PRODUCER_MISMATCH);
@@ -121,7 +124,8 @@ class ProductControllerTest extends TestUtility {
   }
 
   private void mockIsAuthentic() {
-    BDDMockito.given(userService.isAuthentic(Mockito.any())).willReturn(buildAuthenticUser());
+    BDDMockito.given(userService.isAuthentic(Mockito.any()))
+        .willReturn(genericBuildUser(USER_ID, USER_PASSWORD));
   }
 
   private void mockIsProducer() {
