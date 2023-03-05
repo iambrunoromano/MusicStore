@@ -35,7 +35,7 @@ public class ProducerIntegrationTest extends TestUtility {
   @Sql("classpath:integration/producer.sql")
   void getAllTest() {
     ResponseEntity<List<Producer>> producerListResponseEntity =
-        producerController.getAll(FIRST_ADMIN_USER);
+        producerController.getAll(FIRST_ADMIN_USER_REQUEST);
     List<Producer> producerList = producerListResponseEntity.getBody();
     assertEquals(2, producerList.size());
   }
@@ -45,7 +45,7 @@ public class ProducerIntegrationTest extends TestUtility {
   @Sql("classpath:integration/producer.sql")
   void getByNameTest() {
     ResponseEntity<Producer> producerResponseEntity =
-        producerController.getByName(FIRST_ADMIN_USER, FIRST_PRODUCER_MAIL);
+        producerController.getByName(FIRST_ADMIN_USER_REQUEST, FIRST_PRODUCER_MAIL);
     Producer producer = producerResponseEntity.getBody();
     assertEquals(FIRST_PRODUCER_NAME, producer.getName());
   }
@@ -55,7 +55,7 @@ public class ProducerIntegrationTest extends TestUtility {
   @Sql("classpath:integration/producer.sql")
   void saveTest() {
     ResponseEntity<Producer> producerResponseEntity =
-        producerController.save(FIRST_ADMIN_USER, buildThirdProducer());
+        producerController.save(FIRST_ADMIN_USER_REQUEST, buildThirdProducer());
     Producer producer = producerResponseEntity.getBody();
     producer.setInsertDate(null);
     producer.setUpdateDate(null);
@@ -67,10 +67,10 @@ public class ProducerIntegrationTest extends TestUtility {
   @Sql("classpath:integration/producer.sql")
   void deleteTest() {
     ResponseEntity<Void> responseEntity =
-        producerController.delete(FIRST_ADMIN_USER, FIRST_PRODUCER_MAIL);
+        producerController.delete(FIRST_ADMIN_USER_REQUEST, FIRST_PRODUCER_MAIL);
     assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     ResponseEntity<List<Producer>> producerListResponseEntity =
-        producerController.getAll(FIRST_ADMIN_USER);
+        producerController.getAll(FIRST_ADMIN_USER_REQUEST);
     List<Producer> producerList = producerListResponseEntity.getBody();
     assertEquals(1, producerList.size());
     Producer leftProducer = producerList.get(0);
