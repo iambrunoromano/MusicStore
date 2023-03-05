@@ -32,7 +32,7 @@ class ProducerControllerTest extends TestUtility {
     mockIsAdmin();
     mockGetAll();
     ResponseEntity<List<Producer>> producerListResponseEntity =
-        producerController.getAll(FIRST_ADMIN_USER);
+        producerController.getAll(FIRST_ADMIN_USER_REQUEST);
     List<Producer> producerList = producerListResponseEntity.getBody();
     assertEquals(buildProducerList(), producerList);
   }
@@ -44,7 +44,7 @@ class ProducerControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              producerController.getAll(FIRST_ADMIN_USER);
+              producerController.getAll(FIRST_ADMIN_USER_REQUEST);
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
@@ -55,7 +55,7 @@ class ProducerControllerTest extends TestUtility {
     mockIsAdmin();
     mockGetByMailFound();
     ResponseEntity<Producer> producerResponseEntity =
-        producerController.getByName(FIRST_ADMIN_USER, ProducerServiceTest.MAIL);
+        producerController.getByName(FIRST_ADMIN_USER_REQUEST, ProducerServiceTest.MAIL);
     Producer producer = producerResponseEntity.getBody();
     assertEquals(ProducerServiceTest.buildProducer(), producer);
   }
@@ -67,7 +67,7 @@ class ProducerControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              producerController.getByName(FIRST_ADMIN_USER, ProducerServiceTest.MAIL);
+              producerController.getByName(FIRST_ADMIN_USER_REQUEST, ProducerServiceTest.MAIL);
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
@@ -81,7 +81,7 @@ class ProducerControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              producerController.getByName(FIRST_ADMIN_USER, ProducerServiceTest.MAIL);
+              producerController.getByName(FIRST_ADMIN_USER_REQUEST, ProducerServiceTest.MAIL);
             });
     assertReasonException(
         actualException, HttpStatus.NOT_FOUND, ReasonsConstant.PRODUCER_NOT_FOUND);
@@ -92,7 +92,7 @@ class ProducerControllerTest extends TestUtility {
     mockIsAdmin();
     mockSave();
     ResponseEntity<Producer> producerResponseEntity =
-        producerController.save(FIRST_ADMIN_USER, ProducerServiceTest.buildProducer());
+        producerController.save(FIRST_ADMIN_USER_REQUEST, ProducerServiceTest.buildProducer());
     Producer producer = producerResponseEntity.getBody();
     assertEquals(ProducerServiceTest.buildProducer(), producer);
   }
@@ -104,7 +104,8 @@ class ProducerControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              producerController.save(FIRST_ADMIN_USER, ProducerServiceTest.buildProducer());
+              producerController.save(
+                  FIRST_ADMIN_USER_REQUEST, ProducerServiceTest.buildProducer());
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
@@ -117,7 +118,7 @@ class ProducerControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              producerController.delete(FIRST_ADMIN_USER, ProducerServiceTest.MAIL);
+              producerController.delete(FIRST_ADMIN_USER_REQUEST, ProducerServiceTest.MAIL);
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
