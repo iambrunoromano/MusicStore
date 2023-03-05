@@ -13,8 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,7 +32,8 @@ class OrderControllerTest extends TestUtility {
   void getAllTest() {
     mockIsAdmin();
     mockGetAll();
-    ResponseEntity<List<Order>> orderListResponseEntity = orderController.getAll(FIRST_ADMIN_USER);
+    ResponseEntity<List<Order>> orderListResponseEntity =
+        orderController.getAll(FIRST_ADMIN_USER_REQUEST);
     List<Order> orderList = orderListResponseEntity.getBody();
     assertEquals(buildOrderList(), orderList);
   }
@@ -46,7 +45,7 @@ class OrderControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              orderController.getAll(FIRST_ADMIN_USER);
+              orderController.getAll(FIRST_ADMIN_USER_REQUEST);
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
@@ -56,7 +55,7 @@ class OrderControllerTest extends TestUtility {
   void getByIdTest() {
     mockGetVerifiedOrder();
     ResponseEntity<Order> orderResponseEntity =
-        orderController.getById(OrderServiceTest.ID, buildAuthenticUser());
+        orderController.getById(OrderServiceTest.ID, buildUserRequest());
     Order order = orderResponseEntity.getBody();
     assertEquals(OrderServiceTest.buildOrder(), order);
   }
@@ -68,7 +67,7 @@ class OrderControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              orderController.getById(OrderServiceTest.ID, buildAuthenticUser());
+              orderController.getById(OrderServiceTest.ID, buildUserRequest());
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.ORDER_NOT_FOUND);
@@ -81,7 +80,7 @@ class OrderControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              orderController.getById(OrderServiceTest.ID, buildAuthenticUser());
+              orderController.getById(OrderServiceTest.ID, buildUserRequest());
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.ORDER_USER_MISMATCH);
@@ -91,7 +90,7 @@ class OrderControllerTest extends TestUtility {
   void createTest() {
     mockCreate();
     ResponseEntity<OrderResponse> responseEntity =
-        orderController.create(buildAuthenticUser(), OrderServiceTest.ADDRESS);
+        orderController.create(buildUserRequest(), OrderServiceTest.ADDRESS);
     OrderResponse orderResponse = responseEntity.getBody();
     assertEquals(buildOrder(), orderResponse.getOrder());
     List<Cart> expectedCartList = OrderServiceTest.buildCartList();
@@ -109,7 +108,7 @@ class OrderControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              orderController.create(buildAuthenticUser(), OrderServiceTest.ADDRESS);
+              orderController.create(buildUserRequest(), OrderServiceTest.ADDRESS);
             });
     assertReasonException(actualException, HttpStatus.NOT_FOUND, ReasonsConstant.CART_NOT_FOUND);
   }
@@ -121,7 +120,7 @@ class OrderControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              orderController.delete(OrderServiceTest.ID, FIRST_ADMIN_USER);
+              orderController.delete(OrderServiceTest.ID, FIRST_ADMIN_USER_REQUEST);
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
@@ -134,7 +133,7 @@ class OrderControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              orderController.delete(OrderServiceTest.ID, FIRST_ADMIN_USER);
+              orderController.delete(OrderServiceTest.ID, FIRST_ADMIN_USER_REQUEST);
             });
     assertReasonException(actualException, HttpStatus.NOT_FOUND, ReasonsConstant.ORDER_NOT_FOUND);
   }
