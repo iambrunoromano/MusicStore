@@ -2,7 +2,7 @@ package com.musicstore.controller;
 
 import com.musicstore.entity.Order;
 import com.musicstore.entity.Shipment;
-import com.musicstore.entity.User;
+import com.musicstore.request.UserRequest;
 import com.musicstore.service.AdminService;
 import com.musicstore.service.OrderService;
 import com.musicstore.service.ShipmentService;
@@ -35,29 +35,32 @@ public class ShipmentController {
   }
 
   @GetMapping(value = "/all")
-  public ResponseEntity<List<Shipment>> getAll(@RequestHeader User user) {
-    adminService.isAdmin(user);
+  public ResponseEntity<List<Shipment>> getAll(@RequestHeader UserRequest userRequest) {
+    adminService.isAdmin(userRequest);
     return ResponseEntity.ok(shipmentService.getAll());
   }
 
   @GetMapping(value = "/{id}")
-  public ResponseEntity<Shipment> getById(@PathVariable int id, @RequestHeader User user) {
-    userService.isAuthentic(user);
+  public ResponseEntity<Shipment> getById(
+      @PathVariable int id, @RequestHeader UserRequest userRequest) {
+    userService.isAuthentic(userRequest);
     Shipment shipment = shipmentService.getById(id);
-    orderService.getVerifiedOrder(shipment.getOrderId(), user.getMail());
+    orderService.getVerifiedOrder(shipment.getOrderId(), userRequest.getMail());
     return ResponseEntity.ok(shipment);
   }
 
   @PostMapping(value = "/{order-id}")
-  public ResponseEntity<Shipment> save(@RequestHeader User user, @PathVariable int orderId) {
-    adminService.isAdmin(user);
+  public ResponseEntity<Shipment> save(
+      @RequestHeader UserRequest userRequest, @PathVariable int orderId) {
+    adminService.isAdmin(userRequest);
     Order order = orderService.getOrder(orderId);
     return ResponseEntity.ok(shipmentService.save(order));
   }
 
   @DeleteMapping(value = "/{order-id}")
-  public ResponseEntity<Void> delete(@RequestHeader User user, @PathVariable int orderId) {
-    adminService.isAdmin(user);
+  public ResponseEntity<Void> delete(
+      @RequestHeader UserRequest userRequest, @PathVariable int orderId) {
+    adminService.isAdmin(userRequest);
     shipmentService.delete(orderId);
     return ResponseEntity.ok().build();
   }
