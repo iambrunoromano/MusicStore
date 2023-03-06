@@ -30,7 +30,7 @@ class ShipmentControllerTest extends TestUtility {
     mockIsAdmin();
     mockGetAll();
     ResponseEntity<List<Shipment>> shipmentListResponseEntity =
-        shipmentController.getAll(FIRST_ADMIN_USER);
+        shipmentController.getAll(FIRST_ADMIN_USER_REQUEST);
     List<Shipment> shipmentList = shipmentListResponseEntity.getBody();
     assertEquals(buildShipmentList(), shipmentList);
   }
@@ -43,7 +43,7 @@ class ShipmentControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              shipmentController.getAll(FIRST_ADMIN_USER);
+              shipmentController.getAll(FIRST_ADMIN_USER_REQUEST);
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
@@ -55,7 +55,7 @@ class ShipmentControllerTest extends TestUtility {
     mockGetById();
     mockGetVerifiedOrder();
     ResponseEntity<Shipment> shipmentResponseEntity =
-        shipmentController.getById(ShipmentServiceTest.SHIPMENT_ID, buildAuthenticUser());
+        shipmentController.getById(ShipmentServiceTest.SHIPMENT_ID, buildAuthenticUserRequest());
     Shipment shipment = shipmentResponseEntity.getBody();
     assertEquals(ShipmentServiceTest.buildShipment(), shipment);
   }
@@ -69,7 +69,8 @@ class ShipmentControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              shipmentController.getById(ShipmentServiceTest.SHIPMENT_ID, buildAuthenticUser());
+              shipmentController.getById(
+                  ShipmentServiceTest.SHIPMENT_ID, buildAuthenticUserRequest());
             });
     assertReasonException(
         actualException, HttpStatus.NOT_FOUND, ReasonsConstant.SHIPMENT_NOT_FOUND);
@@ -84,7 +85,8 @@ class ShipmentControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              shipmentController.getById(ShipmentServiceTest.SHIPMENT_ID, buildAuthenticUser());
+              shipmentController.getById(
+                  ShipmentServiceTest.SHIPMENT_ID, buildAuthenticUserRequest());
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.ORDER_USER_MISMATCH);
@@ -96,7 +98,7 @@ class ShipmentControllerTest extends TestUtility {
     mockGetOrder();
     mockSave();
     ResponseEntity<Shipment> shipmentResponseEntity =
-        shipmentController.save(FIRST_ADMIN_USER, OrderServiceTest.ID);
+        shipmentController.save(FIRST_ADMIN_USER_REQUEST, OrderServiceTest.ID);
     Shipment shipment = shipmentResponseEntity.getBody();
     assertEquals(ShipmentServiceTest.buildShipment(), shipment);
   }
@@ -110,7 +112,7 @@ class ShipmentControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              shipmentController.save(FIRST_ADMIN_USER, OrderServiceTest.ID);
+              shipmentController.save(FIRST_ADMIN_USER_REQUEST, OrderServiceTest.ID);
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
@@ -125,7 +127,7 @@ class ShipmentControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              shipmentController.save(FIRST_ADMIN_USER, OrderServiceTest.ID);
+              shipmentController.save(FIRST_ADMIN_USER_REQUEST, OrderServiceTest.ID);
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.ORDER_NOT_FOUND);
@@ -138,7 +140,7 @@ class ShipmentControllerTest extends TestUtility {
         assertThrows(
             ResponseStatusException.class,
             () -> {
-              shipmentController.delete(FIRST_ADMIN_USER, ShipmentServiceTest.SHIPMENT_ID);
+              shipmentController.delete(FIRST_ADMIN_USER_REQUEST, ShipmentServiceTest.SHIPMENT_ID);
             });
     assertReasonException(
         actualException, HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_ADMIN);
@@ -151,7 +153,8 @@ class ShipmentControllerTest extends TestUtility {
   }
 
   private void mockIsAuthentic() {
-    BDDMockito.given(userService.isAuthentic(Mockito.any())).willReturn(buildAuthenticUser());
+    BDDMockito.given(userService.isAuthentic(Mockito.any()))
+        .willReturn(genericBuildUser(USER_ID, USER_PASSWORD));
   }
 
   private void mockIsAdmin() {
