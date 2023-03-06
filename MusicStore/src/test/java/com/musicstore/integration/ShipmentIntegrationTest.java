@@ -34,7 +34,7 @@ public class ShipmentIntegrationTest extends TestUtility {
   @Sql("classpath:integration/shipment.sql")
   void getAllTest() {
     ResponseEntity<List<Shipment>> shipmentListResponseEntity =
-        shipmentController.getAll(FIRST_ADMIN_USER);
+        shipmentController.getAll(FIRST_ADMIN_USER_REQUEST);
     List<Shipment> shipmentList = shipmentListResponseEntity.getBody();
     assertEquals(2, shipmentList.size());
   }
@@ -44,7 +44,7 @@ public class ShipmentIntegrationTest extends TestUtility {
   @Sql("classpath:integration/shipment.sql")
   void getByIdTest() {
     ResponseEntity<Shipment> shipmentResponseEntity =
-        shipmentController.getById(1, buildAdminUser());
+        shipmentController.getById(1, buildAdminUserRequest());
     Shipment shipment = shipmentResponseEntity.getBody();
     assertEquals(1, shipment.getId());
   }
@@ -53,7 +53,8 @@ public class ShipmentIntegrationTest extends TestUtility {
   @Order(3)
   @Sql("classpath:integration/shipment.sql")
   void saveTest() {
-    ResponseEntity<Shipment> shipmentResponseEntity = shipmentController.save(FIRST_ADMIN_USER, 2);
+    ResponseEntity<Shipment> shipmentResponseEntity =
+        shipmentController.save(FIRST_ADMIN_USER_REQUEST, 2);
     Shipment shipment = shipmentResponseEntity.getBody();
     assertEquals(2, shipment.getOrderId());
   }
@@ -62,9 +63,9 @@ public class ShipmentIntegrationTest extends TestUtility {
   @Order(4)
   @Sql("classpath:integration/shipment.sql")
   void deleteTest() {
-    shipmentController.delete(FIRST_ADMIN_USER, 1);
+    shipmentController.delete(FIRST_ADMIN_USER_REQUEST, 1);
     ResponseEntity<List<Shipment>> shipmentListResponseEntity =
-        shipmentController.getAll(FIRST_ADMIN_USER);
+        shipmentController.getAll(FIRST_ADMIN_USER_REQUEST);
     List<Shipment> shipmentList = shipmentListResponseEntity.getBody();
     assertEquals(1, shipmentList.size());
     Shipment leftShipment = shipmentList.get(0);
