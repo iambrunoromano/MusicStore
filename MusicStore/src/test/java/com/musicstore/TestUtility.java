@@ -2,8 +2,12 @@ package com.musicstore;
 
 import com.musicstore.entity.*;
 import com.musicstore.request.CartRequest;
+import com.musicstore.request.UserRequest;
 import com.musicstore.response.UserResponse;
-import com.musicstore.service.*;
+import com.musicstore.service.OrderServiceTest;
+import com.musicstore.service.ProducerServiceTest;
+import com.musicstore.service.ProductServiceTest;
+import com.musicstore.service.ShipmentServiceTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -56,11 +60,11 @@ public class TestUtility {
 
   protected static final String PASSWORD = "password";
 
-  protected static final User FIRST_ADMIN_USER =
-      User.builder().mail("mail1@test").password("password1").build();
+  protected static final UserRequest FIRST_ADMIN_USER_REQUEST =
+      UserRequest.builder().mail("mail1@test").password("password1").build();
 
-  protected static final User SECOND_ADMIN_USER =
-      User.builder().mail("mail2@test").password("password2").build();
+  protected static final UserRequest SECOND_ADMIN_USER_REQUEST =
+      UserRequest.builder().mail("mail2@test").password("password2").build();
 
   protected static final Integer START_LIST = 0;
   protected static final Integer END_LIST = 2;
@@ -196,6 +200,10 @@ public class TestUtility {
     return User.builder().mail(MAIL).password(PASSWORD).imgUrl(IMG_URL).build();
   }
 
+  protected static UserRequest buildUserRequest() {
+    return UserRequest.builder().mail(MAIL).password(PASSWORD).build();
+  }
+
   protected static UserResponse buildUserResponse() {
     return UserResponse.builder().mail(MAIL).imgUrl(IMG_URL).build();
   }
@@ -238,20 +246,24 @@ public class TestUtility {
 
   protected List<User> buildUserList() {
     List<User> userList = new ArrayList<>();
-    userList.add(UserServiceTest.buildUser());
-    userList.add(UserServiceTest.buildUser());
+    userList.add(buildUser());
+    userList.add(buildUser());
     return userList;
   }
 
   protected List<UserResponse> buildUserResponseList() {
     List<UserResponse> userResponseList = new ArrayList<>();
-    userResponseList.add(UserServiceTest.buildUserResponse());
-    userResponseList.add(UserServiceTest.buildUserResponse());
+    userResponseList.add(buildUserResponse());
+    userResponseList.add(buildUserResponse());
     return userResponseList;
   }
 
   protected static User genericBuildUser(String userId, String userPassword) {
     return User.builder().mail(userId).password(userPassword).build();
+  }
+
+  protected static UserRequest genericBuildUserRequest(String userId, String userPassword) {
+    return UserRequest.builder().mail(userId).password(userPassword).build();
   }
 
   protected List<CartRequest> buildCartRequestList() {
@@ -261,16 +273,16 @@ public class TestUtility {
     return cartRequestList;
   }
 
-  protected User buildAdminUser() {
-    return User.builder().mail(FIRST_ADMIN_ID).password(USER_PASSWORD).build();
+  protected UserRequest buildAdminUserRequest() {
+    return UserRequest.builder().mail(FIRST_ADMIN_ID).password(USER_PASSWORD).build();
   }
 
-  protected User buildAuthenticUser() {
-    return User.builder().mail(USER_ID).password(USER_PASSWORD).build();
+  protected UserRequest buildAuthenticUserRequest() {
+    return UserRequest.builder().mail(USER_ID).password(USER_PASSWORD).build();
   }
 
-  protected User buildAuthProducerUser() {
-    return User.builder().mail(FIRST_PRODUCER_MAIL).password(USER_PASSWORD).build();
+  protected UserRequest buildAuthProducerUserRequest() {
+    return UserRequest.builder().mail(FIRST_PRODUCER_MAIL).password(USER_PASSWORD).build();
   }
 
   protected Producer buildThirdProducer() {
