@@ -41,13 +41,6 @@ BEGIN
 	SELECT * FROM product_bean WHERE producer=producerMail;
 END //
 DELIMITER ;
--------------------------------CategoriesByProducer------------------------
-DELIMITER //
-CREATE PROCEDURE CategoriesByProducer(IN producerMail VARCHAR(255))
-BEGIN
-	SELECT *  FROM category_bean WHERE id IN (SELECT DISTINCT(category) FROM product_bean WHERE producer=producerMail);
-END //
-DELIMITER ;
 -------------------------------ProductsByCart------------------------------
 DELIMITER //
 CREATE PROCEDURE ProductsByCart(IN user_mail VARCHAR(255))
