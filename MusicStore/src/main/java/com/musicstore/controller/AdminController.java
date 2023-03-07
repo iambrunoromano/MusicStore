@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @RestController
@@ -28,7 +30,7 @@ public class AdminController {
 
   @GetMapping(value = "/{admin-id}")
   public ResponseEntity<Admin> getById(
-      @RequestHeader UserRequest userRequest, @PathVariable String adminId) {
+      @RequestHeader UserRequest userRequest, @PathVariable @Email @NotBlank String adminId) {
     adminService.isAdmin(userRequest);
     return ResponseEntity.ok(adminService.getAdmin(adminId));
   }
@@ -42,7 +44,7 @@ public class AdminController {
 
   @DeleteMapping(value = "/{admin-id}")
   public ResponseEntity<Void> delete(
-      @RequestHeader UserRequest userRequest, @PathVariable String adminId) {
+      @RequestHeader UserRequest userRequest, @PathVariable @Email @NotBlank String adminId) {
     adminService.isAdmin(userRequest);
     adminService.delete(adminId);
     return ResponseEntity.ok().build();
