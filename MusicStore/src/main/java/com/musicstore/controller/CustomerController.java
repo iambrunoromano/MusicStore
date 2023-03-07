@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,7 +53,7 @@ public class CustomerController {
 
   @DeleteMapping(value = "/{customer-id}")
   public ResponseEntity<Void> delete(
-      @PathVariable String customerId, @RequestHeader UserRequest userRequest) {
+      @PathVariable @Email @NotBlank String customerId, @RequestHeader UserRequest userRequest) {
     userService.isAuthentic(userRequest);
     customerService.customerIsUser(Customer.builder().mail(customerId).build(), userRequest);
     customerService.delete(customerId);
