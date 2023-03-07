@@ -20,9 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CategoryServiceTest extends TestUtility {
 
   private final CategoryRepository categoryRepository = Mockito.mock(CategoryRepository.class);
-  private final ProductRepository productRepository = Mockito.mock(ProductRepository.class);
-  private final CategoryService categoryService =
-      new CategoryService(categoryRepository, productRepository);
+  private final CategoryService categoryService = new CategoryService(categoryRepository);
 
   @Test
   void deleteFoundTest() {
