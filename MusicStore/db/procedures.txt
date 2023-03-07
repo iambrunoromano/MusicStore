@@ -34,13 +34,6 @@ END //
 DELIMITER ;	
 -------------------------------ShowProcedures------------------------
 SHOW PROCEDURE STATUS WHERE Db = 'musicstore';
--------------------------------ProductsByProducer------------------------
-DELIMITER //
-CREATE PROCEDURE ProductsByProducer(IN producerMail VARCHAR(255))
-BEGIN
-	SELECT * FROM product_bean WHERE producer=producerMail;
-END //
-DELIMITER ;
 -------------------------------ProductsByCart------------------------------
 DELIMITER //
 CREATE PROCEDURE ProductsByCart(IN user_mail VARCHAR(255))
