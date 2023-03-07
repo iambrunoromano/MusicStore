@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +37,7 @@ public class ProducerController {
 
   @GetMapping(value = "/{mail}")
   public ResponseEntity<Producer> getByName(
-      @RequestHeader UserRequest userRequest, @PathVariable String mail) {
+      @RequestHeader UserRequest userRequest, @PathVariable @Email @NotBlank String mail) {
     adminService.isAdmin(userRequest);
     Optional<Producer> optionalProducer = producerService.getByMail(mail);
     if (!optionalProducer.isPresent()) {
@@ -53,7 +55,7 @@ public class ProducerController {
 
   @DeleteMapping(value = "/{mail}")
   public ResponseEntity<Void> delete(
-      @RequestHeader UserRequest userRequest, @PathVariable String mail) {
+      @RequestHeader UserRequest userRequest, @PathVariable @Email @NotBlank String mail) {
     adminService.isAdmin(userRequest);
     producerService.delete(mail);
     return ResponseEntity.ok().build();
