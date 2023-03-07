@@ -5,12 +5,3 @@ BEGIN
 	select mail, name, address  from producer_bean as pb inner join (select producerId, sum(soldQuantity) as sumsQ from soldprod group by producerId) as ex on pb.mail = ex.producerId order by sumsQ desc;
 END //
 DELIMITER ;
--------------------------------ShowProcedures------------------------
-SHOW PROCEDURE STATUS WHERE Db = 'musicstore';
--------------------------------ProductsByCart------------------------------
-DELIMITER //
-CREATE PROCEDURE ProductsByCart(IN user_mail VARCHAR(255))
-BEGIN
-	SELECT pb.id, pb.name, pb.price, subq.quantity, pb.producer, pb.category, pb.imgurl FROM product_bean AS pb INNER JOIN (SELECT product_id,quantity FROM cart_bean WHERE mail=user_mail) AS subq ON pb.id=subq.product_id;
-END //
-DELIMITER ;
