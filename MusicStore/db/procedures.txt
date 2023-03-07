@@ -5,26 +5,6 @@ BEGIN
 	select mail, name, address  from producer_bean as pb inner join (select producerId, sum(soldQuantity) as sumsQ from soldprod group by producerId) as ex on pb.mail = ex.producerId order by sumsQ desc;
 END //
 DELIMITER ;
--------------------------------CartToOrder------------------------
-DELIMITER //
-CREATE PROCEDURE CartToOrder(IN user_mail VARCHAR(255))
-BEGIN
-	DECLARE itemsprice NUMERIC(8,2) DEFAULT 0.0;
-	DECLARE lastorder INT DEFAULT 0;
-	DECLARE mailCart INT DEFAULT 0;
-	DECLARE product_idCart INT DEFAULT 0;
-	CREATE TEMPORARY TABLE cartQuantity(id INT, quantity INT);
-	select sum(pb.price*subq.quantity) into itemsprice from product_bean as pb inner join (select * from cart_bean where mail=user_mail) as subq on pb.id=subq.product_id;
-	INSERT INTO cartQuantity SELECT pb.id, subq.quantity FROM product_bean AS pb INNER JOIN (select * from cart_bean where mail=user_mail) AS subq ON pb.id = subq.product_id; 
-	UPDATE product_bean AS pb, cartQuantity AS cq SET pb.quantity = pb.quantity - cq.quantity WHERE pb.id = cq.id;
-	DROP TABLE cartQuantity;
-	INSERT INTO order_bean(mail, date, total) VALUES (user_mail, now(), itemsprice);
-	SELECT max(id) into lastorder from order_bean;
-	INSERT INTO boughtitems SELECT mail,product_id,lastorder,quantity, (select price from product_bean as pb where pb.id=product_id) FROM cart_bean WHERE mail=user_mail;
-	DELETE FROM cart_bean WHERE mail=user_mail;
-	SELECT * FROM boughtitems WHERE orderId=lastorder;
-END //
-DELIMITER ;	
 -------------------------------ShowProcedures------------------------
 SHOW PROCEDURE STATUS WHERE Db = 'musicstore';
 -------------------------------ProductsByCart------------------------------
