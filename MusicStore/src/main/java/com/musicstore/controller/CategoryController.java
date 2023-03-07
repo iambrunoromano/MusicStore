@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,7 +54,7 @@ public class CategoryController {
   }
 
   @GetMapping("/{producer-id}/categories")
-  public ResponseEntity<List<Category>> getByProducer(@PathVariable String producerId) {
+  public ResponseEntity<List<Category>> getByProducer(@PathVariable @Email @NotBlank String producerId) {
     return ResponseEntity.ok(categoryService.getByProducer(producerId));
   }
 }
