@@ -81,7 +81,6 @@ public class ProductController {
   @DeleteMapping(value = "/{product-id}")
   public ResponseEntity<Void> delete(
       @RequestHeader UserRequest userRequest, @PathVariable int productId) {
-    // TODO: check that all the non-post calls have no @RequestBody and change
     userService.isAuthentic(userRequest);
     producerService.isProducer(userRequest.getMail());
     Product product = productService.getById(productId);
