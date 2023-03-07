@@ -48,10 +48,3 @@ BEGIN
 	SELECT pb.id, pb.name, pb.price, subq.quantity, pb.producer, pb.category, pb.imgurl FROM product_bean AS pb INNER JOIN (SELECT product_id,quantity FROM cart_bean WHERE mail=user_mail) AS subq ON pb.id=subq.product_id;
 END //
 DELIMITER ;
--------------------------------ProductsByCategory------------------------------
-DELIMITER //
-CREATE PROCEDURE ProductsByCategory(IN categoryId INT)
-BEGIN
-	SELECT * FROM product_bean WHERE category=categoryId;
-END //
-DELIMITER ;
