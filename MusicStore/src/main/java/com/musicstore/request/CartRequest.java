@@ -3,11 +3,14 @@ package com.musicstore.request;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 @Data
 @Builder
 public class CartRequest {
-  // TODO: add all fields validation
   private int productId;
   private int quantity;
+  @Email @NotBlank
   private String mail;
 }
