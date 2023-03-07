@@ -13,9 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
-
-// TODO: all request parameters need to be not nullable/empty and validated in all controllers
 
 @RestController
 @RequestMapping(value = "products")
@@ -44,7 +44,7 @@ public class ProductController {
   }
 
   @GetMapping(value = "/producer/{mail}")
-  public ResponseEntity<List<Product>> getByProducer(@PathVariable String mail) {
+  public ResponseEntity<List<Product>> getByProducer(@PathVariable @Email @NotBlank String mail) {
     return ResponseEntity.ok(productService.getByProducer(mail));
   }
 
