@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +34,11 @@ public class ProducerController {
   public ResponseEntity<List<Producer>> getAll(@RequestHeader UserRequest userRequest) {
     adminService.isAdmin(userRequest);
     return ResponseEntity.ok(producerService.getAll());
+  }
+
+  @GetMapping(value = "/best/{limit}")
+  public ResponseEntity<List<Producer>> getBest(@PathVariable @NotNull Integer limit) {
+    return ResponseEntity.ok(producerService.getBest(limit));
   }
 
   @GetMapping(value = "/{mail}")
