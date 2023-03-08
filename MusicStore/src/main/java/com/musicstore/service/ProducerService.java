@@ -2,25 +2,30 @@ package com.musicstore.service;
 
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.entity.Producer;
+import com.musicstore.entity.Product;
 import com.musicstore.repository.ProducerRepository;
+import com.musicstore.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class ProducerService {
 
   private final ProducerRepository producerRepository;
+  private final ProductRepository productRepository;
 
   @Autowired
-  public ProducerService(ProducerRepository producerRepository) {
+  public ProducerService(
+      ProducerRepository producerRepository, ProductRepository productRepository) {
     this.producerRepository = producerRepository;
+    this.productRepository = productRepository;
   }
 
   public List<Producer> getAll() {
@@ -55,14 +60,49 @@ public class ProducerService {
     throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, ReasonsConstant.NOT_PRODUCER);
   }
 
-  public List<Producer> getBestProducers(int firstNProducers) {
-    // TODO: implement logic (BestProducers stored procedure)
-    // 1. Create method in product repository to extract producerId list of product grouped by
-    // producerId summing sold quantity
-    // 2. Get producer info for each producerId and fill the List<Producer> up to firstNProducers
-    // 3. Return list
+  public List<Producer> getBest(Integer firstNProducers) {
+    HashMap<String, Integer> producerSoldMap = getProducerSoldMap();
+    List<String> producerIdList = findNBestProducers(producerSoldMap, firstNProducers);
+    List<Producer> producerList = new ArrayList<>();
+    for (String producerId : producerIdList) {
+      Optional<Producer> optionalProducer = producerRepository.findByMail(producerId);
+      if (optionalProducer.isPresent()) {
+        producerList.add(optionalProducer.get());
+      }
+    }
     // TODO: unit test
     // TODO: add method on ProducerController
-    return null;
+    return producerList;
+  }
+
+  public HashMap<String, Integer> getProducerSoldMap() {
+    List<Product> productList = productRepository.findAll();
+    HashMap<String, Integer> producerSoldMap = new HashMap<>();
+    for (Product product : productList) {
+      Integer producerSoldRecord;
+      if (producerSoldMap.get(product.getProducer()) == null) {
+        producerSoldRecord = product.getSoldQuantity();
+      } else {
+        producerSoldRecord = producerSoldMap.get(product.getProducer()) + product.getSoldQuantity();
+      }
+      producerSoldMap.put(product.getProducer(), producerSoldRecord);
+    }
+    return producerSoldMap;
+  }
+
+  public List<String> findNBestProducers(
+      HashMap<String, Integer> producerSoldMap, Integer firstNProducers) {
+    Integer max = 0;
+    LinkedList<String> producerIdList = new LinkedList<>();
+    for (Map.Entry<String, Integer> producerSoldEntry : producerSoldMap.entrySet()) {
+      Integer producerSoldQuantity = producerSoldEntry.getValue();
+      if (producerSoldQuantity > max) {
+        max = producerSoldQuantity;
+        producerIdList.addFirst(producerSoldEntry.getKey());
+      } else {
+        producerIdList.add(producerSoldEntry.getKey());
+      }
+    }
+    return producerIdList.stream().limit(firstNProducers.longValue()).collect(Collectors.toList());
   }
 }
