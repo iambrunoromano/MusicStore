@@ -43,6 +43,15 @@ public class ProducerIntegrationTest extends TestUtility {
   @Test
   @Order(2)
   @Sql("classpath:integration/producer.sql")
+  void getBestTest() {
+    ResponseEntity<List<Producer>> producerListResponseEntity = producerController.getBest(1);
+    List<Producer> producerList = producerListResponseEntity.getBody();
+    assertEquals(SECOND_PRODUCER_MAIL, producerList.get(0).getMail());
+  }
+
+  @Test
+  @Order(3)
+  @Sql("classpath:integration/producer.sql")
   void getByNameTest() {
     ResponseEntity<Producer> producerResponseEntity =
         producerController.getByName(FIRST_ADMIN_USER_REQUEST, FIRST_PRODUCER_MAIL);
@@ -51,7 +60,7 @@ public class ProducerIntegrationTest extends TestUtility {
   }
 
   @Test
-  @Order(3)
+  @Order(4)
   @Sql("classpath:integration/producer.sql")
   void saveTest() {
     ResponseEntity<Producer> producerResponseEntity =
@@ -63,7 +72,7 @@ public class ProducerIntegrationTest extends TestUtility {
   }
 
   @Test
-  @Order(4)
+  @Order(5)
   @Sql("classpath:integration/producer.sql")
   void deleteTest() {
     ResponseEntity<Void> responseEntity =
