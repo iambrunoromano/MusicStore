@@ -3,6 +3,7 @@ package com.musicstore.service;
 import com.musicstore.TestUtility;
 import com.musicstore.constant.ReasonsConstant;
 import com.musicstore.repository.ProducerRepository;
+import com.musicstore.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
@@ -17,7 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class ProducerServiceTest extends TestUtility {
 
   private ProducerRepository producerRepository = Mockito.mock(ProducerRepository.class);
-  private ProducerService producerService = new ProducerService(producerRepository);
+  private ProductRepository productRepository = Mockito.mock(ProductRepository.class);
+  private ProducerService producerService =
+      new ProducerService(producerRepository, productRepository);
 
   @Test
   void deleteNotFoundTest() {
