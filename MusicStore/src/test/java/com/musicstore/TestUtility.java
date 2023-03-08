@@ -15,6 +15,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,9 +90,12 @@ public class TestUtility {
   protected static final String CREATE_ORDER_ADDRESS = "address_3";
 
   protected static final String FIRST_PRODUCER_MAIL = "producermail1@test";
+  protected static final Integer FIRST_PRODUCER_SOLD = 10;
   protected static final String FIRST_PRODUCER_NAME = "producer_name1";
   protected static final String SECOND_PRODUCER_MAIL = "producermail2@test";
+  protected static final Integer SECOND_PRODUCER_SOLD = 20;
   protected static final String THIRD_PRODUCER_MAIL = "producermail3@test";
+  protected static final Integer THIRD_PRODUCER_SOLD = 30;
   protected static final String THIRD_PRODUCER_NAME = "producer_name3";
   protected static final String THIRD_PRODUCER_ADDRESS = "producer_address3";
 
@@ -291,5 +295,31 @@ public class TestUtility {
         .name(THIRD_PRODUCER_NAME)
         .address(THIRD_PRODUCER_ADDRESS)
         .build();
+  }
+
+  protected HashMap<String, Integer> buildProducerSoldMap() {
+    HashMap<String, Integer> producerSoldMap = new HashMap<>();
+    producerSoldMap.put(FIRST_PRODUCER_MAIL, FIRST_PRODUCER_SOLD);
+    producerSoldMap.put(SECOND_PRODUCER_MAIL, SECOND_PRODUCER_SOLD);
+    producerSoldMap.put(THIRD_PRODUCER_MAIL, THIRD_PRODUCER_SOLD);
+    return producerSoldMap;
+  }
+
+  protected List<String> buildNBestProducers() {
+    List<String> producerList = new ArrayList<>();
+    producerList.add(THIRD_PRODUCER_MAIL);
+    producerList.add(SECOND_PRODUCER_MAIL);
+    return producerList;
+  }
+
+  protected List<Product> buildProductList() {
+    List<Product> productList = new ArrayList<>();
+    productList.add(Product.builder().producer(FIRST_PRODUCER_MAIL).soldQuantity(7).build());
+    productList.add(Product.builder().producer(FIRST_PRODUCER_MAIL).soldQuantity(3).build());
+    productList.add(Product.builder().producer(SECOND_PRODUCER_MAIL).soldQuantity(14).build());
+    productList.add(Product.builder().producer(SECOND_PRODUCER_MAIL).soldQuantity(6).build());
+    productList.add(Product.builder().producer(THIRD_PRODUCER_MAIL).soldQuantity(21).build());
+    productList.add(Product.builder().producer(THIRD_PRODUCER_MAIL).soldQuantity(9).build());
+    return productList;
   }
 }
