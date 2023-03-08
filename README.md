@@ -20,10 +20,7 @@ Please read [here](https://github.com/iambrunoromano/MusicStore/tree/main/musics
 - [x] `Backend` Integration testing
 - [x] `Backend` Search indexes, insert/update dates columns and table names on all entities
 - [x] `Backend` Controller Advice for centralized exception handling
- 
-# Current tasks:
-- [ ] `Backend` Use validated Requests and Responses for Rest APIs
-- [ ] `Backend` TODOs
+- [x] `Backend` Use validated Requests and Responses for Rest APIs
 
 # Future tasks:
 - [ ] `Frontend` Admin Login
