@@ -70,8 +70,6 @@ public class ProducerService {
         producerList.add(optionalProducer.get());
       }
     }
-    // TODO: unit test
-    // TODO: add method on ProducerController
     return producerList;
   }
 
