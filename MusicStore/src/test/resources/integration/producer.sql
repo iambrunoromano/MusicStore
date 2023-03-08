@@ -5,3 +5,6 @@ INSERT INTO user (mail,password,img_url) VALUES ("mail1@test","password1","img_u
 TRUNCATE TABLE producer;
 INSERT INTO producer (mail,name,address) VALUES ("producermail1@test","producer_name1","producer_address1");
 INSERT INTO producer (mail,name,address) VALUES ("producermail2@test","producer_name2","producer_address2");
+TRUNCATE TABLE product;
+INSERT INTO product (id,name,price,left_quantity,sold_quantity,producer,category,img_url) VALUES (1,"product_1",1.0,1,1,"producermail1@test",1,"img_url_1");
+INSERT INTO product (id,name,price,left_quantity,sold_quantity,producer,category,img_url) VALUES (2,"product_2",1.0,1,2,"producermail2@test",2,"img_url_2");
