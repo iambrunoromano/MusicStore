@@ -1,7 +1,4 @@
-import { Component,OnInit } from '@angular/core';
-
-import { LogStatus } from './interfaces/logstatus';
-import { WebUser } from './interfaces/webuser';
+import { Component, OnInit } from '@angular/core';
 
 import { DataService } from './services/data.service';
 
@@ -10,15 +7,11 @@ import { DataService } from './services/data.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
 
-  public userData = <WebUser>{ };
-  public logStatus = <LogStatus>{ };
 
-  constructor(private dataService: DataService){}
+  constructor(private dataService: DataService) { }
 
   ngOnInit() {
-    this.userData = this.dataService.getUserData();
-    this.logStatus = this.dataService.getLogStatus();
   }
 }
