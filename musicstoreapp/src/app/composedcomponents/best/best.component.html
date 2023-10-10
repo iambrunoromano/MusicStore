@@ -5,15 +5,12 @@
       <div class="slider-container">
         <div class="card" id="product" *ngFor = "let item of products">
           <img src={{item.imgurl}} class="card__image" alt="" />
-          <button (click)="addtocart(item)">
-            <a>Add to cart</a>
-          </button>
           <p>{{item.name}}</p>
           <p>{{item.price}} €</p>
           <p>Order : </p>
           <select id="quantity-selector">
             <option value="1" selected="selected">1</option>
-            <option *ngFor="let i of quantityArray(item.quantity)" value="i">{{i}}</option>
+            <option *ngFor="let i of quantityArray(item.leftQuantity)" value="i">{{i}}</option>
           </select>
           <p>Producer : {{item.producer}}</p>
           <p>Category : {{item.category}}</p>
@@ -43,16 +40,11 @@
           <img src={{item.imgurl}} class="card__image" alt="" />
           <p>{{item.name}}</p>
           <p>{{item.price}} €</p>
-          <p>Ordered : {{item.quantity}}</p>
+          <p>Ordered : {{item.leftQuantity}}</p>
           <p>Producer : {{item.producer}}</p>
           <p>Category : {{item.category}}</p>
         </div>
       </div>
-    </div>
-    <div class="button-container">
-      <button id="order-button" (click)="gotoorder()">
-        <a>Place Your Order</a>
-      </button>
     </div>
   </div>
 </div>
