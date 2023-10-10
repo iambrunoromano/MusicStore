@@ -4,10 +4,7 @@ import { Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { Product } from '../../interfaces/product';
-import { OrderReceipt } from '../../interfaces/orderreceipt';
-import { CartToOrder } from '../../interfaces/carttoorder';
 import { ProductService } from '../../services/product.service';
-import { DataService } from '../../services/data.service';
 
 import { Router } from '@angular/router';
 
@@ -22,12 +19,9 @@ import { Router } from '@angular/router';
 export class AllproductsComponent implements OnInit {
 
   public products: Product[] = [];
-  public orderedProducts: CartToOrder[] = [];
-  public lastOrder = <OrderReceipt>{};
   public chosencategory: String = '';
 
   constructor(private productService : ProductService,
-              private dataService : DataService,
               private router: Router) {
     this.getProducts();
   }
@@ -55,7 +49,7 @@ export class AllproductsComponent implements OnInit {
   }
 
   public ProductsByCategory(id: String): void{
-    this.productService.ProductsByCategory(id).subscribe(
+    this.productService.getByCategory(id).subscribe(
       (response: Product[]) => {
         this.products = response;
       },
