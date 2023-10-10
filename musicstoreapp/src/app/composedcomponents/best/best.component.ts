@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { WebUser } from '../../interfaces/webuser';
+import { Auth } from '../../interfaces/utility/auth';
+import { Cart } from '../../interfaces/cart';
 import { Product } from '../../interfaces/product';
 import { ProductService } from '../../services/product.service';
 import { Producer } from '../../interfaces/producer';
@@ -41,9 +42,9 @@ export class BestComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.logged = this.dataService.getLogStatus().logstatus;
+    this.logged = this.dataService.getLogStatus().loggedIn;
     if(this.logged){
-      this.getCart(this.dataService.getUserData());
+      this.getCart(this.dataService.getAuth());
     }
   }
 
@@ -56,7 +57,7 @@ export class BestComponent implements OnInit {
   }
 
   public getBestProducts(): void{
-    this.productService.bestProducts().subscribe(
+    this.productService.getBest().subscribe(
       (response: Product[]) => {
         this.products = response;
       },
@@ -67,7 +68,7 @@ export class BestComponent implements OnInit {
   }
 
   public getBestProducers(): void{
-    this.producerService.bestProducers().subscribe(
+    this.producerService.getBest(10).subscribe(
       (response: Producer[]) => {
         this.producers = response;
       },
@@ -77,26 +78,14 @@ export class BestComponent implements OnInit {
     );
   }
 
-  public getCart(wu: WebUser): void{
-    this.cartService.ProductsByCart(wu).subscribe(
-      (response: Product[]) => {
-        this.productsCart = response;
+  public getCart(auth: Auth): void{
+    this.cartService.getCart(auth).subscribe(
+      (response: Cart[]) => {
+        response.forEach(cart => this.productService.getById(cart.productId).subscribe(product => this.productsCart.push(product)));
       },
       (error : HttpErrorResponse) => {
         alert(error.message);
       }
     );
   }
-
-  public addtocart(product: Product): void{
-    product.quantity = <number><unknown>(<HTMLSelectElement>document.getElementById("quantity-selector"))?.value;
-    this.dataService.addtocart(product);
-    this.getCart(this.dataService.getUserData());
-    this.router.navigate(['']);
-  }
-
-  public gotoorder(): void{
-    this.dataService.gotoorder();
-  }
-
 }
