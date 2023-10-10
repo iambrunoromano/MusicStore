@@ -18,8 +18,8 @@
           <a routerLink = "/search">Search</a>
         </li>
         <div class="dropdown">
-          <a *ngIf="this.logStatus.logstatus" routerLink = "/login">Logout</a>
-          <a *ngIf="!this.logStatus.logstatus" routerLink = "/login">Login</a>
+          <a *ngIf="this.logStatus.loggedIn" routerLink = "/login">Logout</a>
+          <a *ngIf="!this.logStatus.loggedIn" routerLink = "/login">Login</a>
         </div>
       </ul>
     </nav>
