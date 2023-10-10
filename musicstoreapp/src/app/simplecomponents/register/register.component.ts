@@ -50,7 +50,7 @@ export class RegisterComponent implements OnInit {
     let selectedOption: string = (<HTMLSelectElement>document.getElementById("customer-producer-selector"))?.value;
     this.userService.save(user).subscribe(
       (response: UserResponse) => {
-        this.dataService.setUserData(response.mail, user.password);
+        this.dataService.setAuth(response.mail, user.password);
         this.dataService.setLogStatus(true);
         if (selectedOption == "customer") {
           let customer: Customer = {
