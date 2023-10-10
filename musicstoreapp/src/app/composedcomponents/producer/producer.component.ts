@@ -11,6 +11,7 @@ import { Category } from '../../interfaces/category';
 import { CategoryService } from '../../services/category.service';
 
 import { Router } from '@angular/router';
+import { DataService } from 'src/app/services/data.service';
 
 @Injectable({
   providedIn : 'root'
@@ -25,22 +26,23 @@ export class ProducerComponent implements OnInit {
   public products: Product[] = [];
   public categories: Category[] = [];
   public producer = <Producer>{};
-  public mail: String = "";
+  public mail: string = "";
 
   constructor(private productService : ProductService,
               private categoryService : CategoryService,
               private producerService : ProducerService,
+              private dataService : DataService,
               private router: Router) {}
 
   ngOnInit(): void {
     this.mail = this.router.url.replace('producer/','');
-    /*this.getProducerById(this.mail);*/
+    this.getProducerById(this.mail);
     this.getProducts(this.mail);
     this.getCategories(this.mail);
   }
 
-  /*public getProducerById(mail: String): void{
-    this.producerService.getById(this.mail).subscribe(
+  public getProducerById(mail: string): void{
+    this.producerService.getById(this.dataService.getAuth(), mail).subscribe(
       (response: Producer) => {
         this.producer = response;
       },
@@ -48,10 +50,10 @@ export class ProducerComponent implements OnInit {
         alert(error.message);
       }
     );
-  }*/
+  }
 
   public getProducts(mail: String): void{
-    this.productService.ProductsByProducer(mail).subscribe(
+    this.productService.getByProducer(mail).subscribe(
       (response: Product[]) => {
         this.products = response;
       },
@@ -62,7 +64,7 @@ export class ProducerComponent implements OnInit {
   }
 
   public getCategories(mail: String): void{
-    this.categoryService.CategoriesByProducer(mail).subscribe(
+    this.categoryService.getByProducer(mail).subscribe(
       (response: Category[]) => {
         this.categories = response;
       },
