@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
 import { Shipment } from '../interfaces/shipment';
-import { User } from '../interfaces/user';
+import { Auth } from '../interfaces/utility/auth';
 
 import { environment } from 'src/environments/environment';
 
@@ -23,23 +23,23 @@ export class ShipmentService {
 
   constructor(private http: HttpClient) { }
 
-  public getAll(user: User): Observable<Shipment[]> {
-    this.httpOptions.headers.append('user', JSON.stringify(user));
+  public getAll(auth: Auth): Observable<Shipment[]> {
+    this.httpOptions.headers.append('userRequest', JSON.stringify(auth));
     return this.http.get<Shipment[]>(this.root_url + this.addressAPI + '/all', this.httpOptions);
   }
 
-  public getById(user: User, shipmentId: number): Observable<Shipment> {
-    this.httpOptions.headers.append('user', JSON.stringify(user));
+  public getById(auth: Auth, shipmentId: number): Observable<Shipment> {
+    this.httpOptions.headers.append('userRequest', JSON.stringify(auth));
     return this.http.get<Shipment>(this.root_url + this.addressAPI + '/' + shipmentId, this.httpOptions);
   }
 
-  public save(user: User, orderId: number): Observable<Shipment> {
-    this.httpOptions.headers.append('user', JSON.stringify(user));
+  public save(auth: Auth, orderId: number): Observable<Shipment> {
+    this.httpOptions.headers.append('userRequest', JSON.stringify(auth));
     return this.http.post<Shipment>(this.root_url + this.addressAPI + '/' + orderId, this.httpOptions);
   }
 
-  public delete(user: User, orderId: number): Observable<void> {
-    this.httpOptions.headers.append('user', JSON.stringify(user));
+  public delete(auth: Auth, orderId: number): Observable<void> {
+    this.httpOptions.headers.append('userRequest', JSON.stringify(auth));
     return this.http.delete<void>(this.root_url + this.addressAPI + '/' + orderId, this.httpOptions);
   }
 }

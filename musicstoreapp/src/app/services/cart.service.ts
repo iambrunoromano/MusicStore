@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
-import { User } from '../interfaces/user';
+import { Auth } from '../interfaces/utility/auth';
 import { Cart } from '../interfaces/cart';
 import { CartRequest } from '../interfaces/cartrequest';
 
@@ -24,18 +24,18 @@ export class CartService {
 
   constructor(private http: HttpClient) { }
 
-  public getCart(user: User): Observable<Cart[]> {
-    this.httpOptions.headers.append('user', JSON.stringify(user));
+  public getCart(auth: Auth): Observable<Cart[]> {
+    this.httpOptions.headers.append('userRequest', JSON.stringify(auth));
     return this.http.get<Cart[]>(this.root_url + this.addressAPI, this.httpOptions);
   }
 
-  public save(user: User, cartRequest: CartRequest): Observable<void> {
-    this.httpOptions.headers.append('user', JSON.stringify(user));
+  public save(auth: Auth, cartRequest: CartRequest): Observable<void> {
+    this.httpOptions.headers.append('userRequest', JSON.stringify(auth));
     return this.http.post<void>(this.root_url + this.addressAPI, cartRequest, this.httpOptions);
   }
 
-  public delete(user: User): Observable<void> {
-    this.httpOptions.headers.append('user', JSON.stringify(user));
+  public delete(auth: Auth): Observable<void> {
+    this.httpOptions.headers.append('userRequest', JSON.stringify(auth));
     return this.http.delete<void>(this.root_url + this.addressAPI, this.httpOptions);
   }
 }

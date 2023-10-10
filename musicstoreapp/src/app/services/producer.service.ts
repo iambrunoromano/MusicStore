@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
 import { Producer } from '../interfaces/producer';
-import { User } from '../interfaces/user';
+import { Auth } from '../interfaces/utility/auth';
 
 import { environment } from 'src/environments/environment';
 
@@ -23,23 +23,23 @@ export class ProducerService {
 
   constructor(private http: HttpClient) { }
 
-  public getAll(user: User): Observable<Producer[]> {
-    this.httpOptions.headers.append('user', JSON.stringify(user));
+  public getAll(auth: Auth): Observable<Producer[]> {
+    this.httpOptions.headers.append('userRequest', JSON.stringify(auth));
     return this.http.get<Producer[]>(this.root_url + this.addressAPI + '/all', this.httpOptions);
   }
 
-  public getById(user: User, producerId: string): Observable<Producer> {
-    this.httpOptions.headers.append('user', JSON.stringify(user));
+  public getById(auth: Auth, producerId: string): Observable<Producer> {
+    this.httpOptions.headers.append('userRequest', JSON.stringify(auth));
     return this.http.get<Producer>(this.root_url + this.addressAPI + '/' + producerId, this.httpOptions);
   }
 
-  public save(user: User, producer: Producer): Observable<Producer> {
-    this.httpOptions.headers.append('user', JSON.stringify(user));
+  public save(auth: Auth, producer: Producer): Observable<Producer> {
+    this.httpOptions.headers.append('userRequest', JSON.stringify(auth));
     return this.http.post<Producer>(this.root_url + this.addressAPI, producer, this.httpOptions);
   }
 
-  public delete(user: User, producerId: string): Observable<void> {
-    this.httpOptions.headers.append('user', JSON.stringify(user));
+  public delete(auth: Auth, producerId: string): Observable<void> {
+    this.httpOptions.headers.append('userRequest', JSON.stringify(auth));
     return this.http.delete<void>(this.root_url + this.addressAPI + '/' + producerId, this.httpOptions);
   }
 }

@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
 import { Customer } from '../interfaces/customer';
-import { User } from '../interfaces/user';
+import { Auth } from '../interfaces/utility/auth';
 
 import { environment } from 'src/environments/environment';
 
@@ -23,23 +23,23 @@ export class CustomerService {
 
   constructor(private http: HttpClient) { }
 
-  public getAll(user: User): Observable<Customer[]> {
-    this.httpOptions.headers.append('user', JSON.stringify(user));
+  public getAll(auth: Auth): Observable<Customer[]> {
+    this.httpOptions.headers.append('userRequest', JSON.stringify(auth));
     return this.http.get<Customer[]>(this.root_url + this.addressAPI + '/all', this.httpOptions);
   }
 
-  public getById(user: User): Observable<Customer> {
-    this.httpOptions.headers.append('user', JSON.stringify(user));
+  public getById(auth: Auth): Observable<Customer> {
+    this.httpOptions.headers.append('userRequest', JSON.stringify(auth));
     return this.http.get<Customer>(this.root_url + this.addressAPI, this.httpOptions);
   }
 
-  public create(user: User, customer: Customer): Observable<Customer> {
-    this.httpOptions.headers.append('user', JSON.stringify(user));
+  public create(auth: Auth, customer: Customer): Observable<Customer> {
+    this.httpOptions.headers.append('userRequest', JSON.stringify(auth));
     return this.http.post<Customer>(this.root_url + this.addressAPI, customer, this.httpOptions);
   }
 
-  public delete(user: User, customerId: number): Observable<void> {
-    this.httpOptions.headers.append('user', JSON.stringify(user));
+  public delete(auth: Auth, customerId: number): Observable<void> {
+    this.httpOptions.headers.append('userRequest', JSON.stringify(auth));
     return this.http.delete<void>(this.root_url + this.addressAPI + '/' + customerId, this.httpOptions);
   }
 }

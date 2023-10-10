@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
 import { Product } from '../interfaces/product';
-import { User } from '../interfaces/user';
+import { Auth } from '../interfaces/utility/auth';
 
 import { environment } from 'src/environments/environment';
 
@@ -47,12 +47,12 @@ export class ProductService {
     return this.http.post<Product>(this.root_url + this.addressAPI + '/producer/' + mail, product);
   }
 
-  public createAsAdmin(user: User, product: Product): Observable<Product> {
+  public createAsAdmin(product: Product): Observable<Product> {
     return this.http.post<Product>(this.root_url + this.addressAPI + '/admin', product);
   }
 
-  public delete(user: User, productId: number): Observable<void> {
-    this.httpOptions.headers.append('user', JSON.stringify(user));
+  public delete(auth: Auth, productId: number): Observable<void> {
+    this.httpOptions.headers.append('userRequest', JSON.stringify(auth));
     return this.http.delete<void>(this.root_url + this.addressAPI + productId, this.httpOptions);
   }
 }

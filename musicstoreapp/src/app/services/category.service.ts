@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
 import { Category } from '../interfaces/category';
-import { User } from '../interfaces/user';
+import { Auth } from '../interfaces/utility/auth';
 
 import { environment } from 'src/environments/environment';
 
@@ -31,13 +31,13 @@ export class CategoryService {
     return this.http.get<Category>(this.root_url + this.addressAPI + '/' + categoryId, this.httpOptions);
   }
 
-  public update(user: User, category: Category): Observable<Category> {
-    this.httpOptions.headers.append('user', JSON.stringify(user));
+  public update(auth: Auth, category: Category): Observable<Category> {
+    this.httpOptions.headers.append('userRequest', JSON.stringify(auth));
     return this.http.post<Category>(this.root_url + this.addressAPI, category, this.httpOptions);
   }
 
-  public delete(user: User, categoryId: number): Observable<void> {
-    this.httpOptions.headers.append('user', JSON.stringify(user));
+  public delete(auth: Auth, categoryId: number): Observable<void> {
+    this.httpOptions.headers.append('userRequest', JSON.stringify(auth));
     return this.http.delete<void>(this.root_url + this.addressAPI + '/' + categoryId, this.httpOptions);
   }
 
