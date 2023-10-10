@@ -1,20 +1,7 @@
 <div class="main-section">
   <div class="title">Ordered Details</div>
-  <p class="order-detail">Order Id: {{lastOrder.order.id}}</p>
-  <p class="order-detail">Ordered by: {{lastOrder.order.mail}}</p>
-  <p class="order-detail">Order Date: {{lastOrder.order.date}}</p>
-  <p class="order-detail">Total: {{lastOrder.order.total}}</p>
-  <div class="title">Products Ordered</div>
-  <div class="horizontal-slider">
-    <div class="slider-container">
-      <div class="card" id="product" *ngFor = "let item of products">
-        <img src={{item.imgurl}} class="card__image" alt="" />
-        <p>{{item.name}}</p>
-        <p>{{item.price}} €</p>
-        <p>Stock : {{item.quantity}}</p>
-        <p>Producer : {{item.producer}}</p>
-        <p>Category : {{item.category}}</p>
-      </div>
-    </div>
-  </div>
+  <p class="order-detail">Order Id: {{lastOrder.id}}</p>
+  <p class="order-detail">Ordered by: {{lastOrder.mail}}</p>
+  <p class="order-detail">Order Date: {{lastOrder.date}}</p>
+  <p class="order-detail">Total: {{lastOrder.total}}</p>
 </div>
