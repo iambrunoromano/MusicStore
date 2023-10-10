@@ -7,10 +7,10 @@ import { SearchComponent } from './composedcomponents/search/search.component';
 import { BestComponent } from './composedcomponents/best/best.component';
 import { ProducerComponent } from './composedcomponents/producer/producer.component';
 
-import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './simplecomponents/login/login.component';
 import { RegisterComponent } from './simplecomponents/register/register.component';
 import { OrderComponent } from './simplecomponents/order/order.component';
+import { ErrorComponent } from './simplecomponents/error/error.component';
 
 const routes: Routes = [
   {path: '', component: BestComponent},
@@ -22,6 +22,7 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'producer/:mail', component: ProducerComponent},
+  {path: '**', component: ErrorComponent},
 ];
 
 @NgModule({
