@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Injectable } from '@angular/core';
 
-import { HttpErrorResponse } from '@angular/common/http';
-
 import { Product } from '../../interfaces/product';
-import { OrderReceipt } from '../../interfaces/orderreceipt';
-import { CartToOrder } from '../../interfaces/carttoorder';
+import { Order } from '../../interfaces/order';
+import { Auth } from '../../interfaces/utility/auth';
 
 import { ProductService } from '../../services/product.service';
 import { DataService } from '../../services/data.service';
+import { OrderService } from 'src/app/services/order.service';
 
 
 @Injectable({
@@ -21,36 +20,22 @@ import { DataService } from '../../services/data.service';
 })
 export class OrderComponent implements OnInit {
 
-  public products: Product[] = [];
-  public orderedProducts: CartToOrder[] = [];
-  public lastOrder = <OrderReceipt>{};
+  public allOrders: Order[] = [];
+  public lastOrder = <Order>{ };
+  public lastProductsOrdered: Product[] = [];
+  private auth = <Auth>{ };
 
   constructor(private productService : ProductService,
-              private dataService : DataService) { }
+              private orderService: OrderService,
+              private dataService: DataService) { }
 
   ngOnInit(): void {
     this.init();
+    this.auth = this.dataService.getAuth();
   }
 
   private init(): void{
-    this.lastOrder = this.dataService.getLastOrder();
-    this.orderedProducts = this.lastOrder.boughtitems;
-    this.ProductsByOrder(this.orderedProducts);
-  }
-
-  public ProductsByOrder(carttoorder: CartToOrder[]): void{
-    for (const [ind, item] of Object.entries(carttoorder)){
-      this.productService.getById(item.productId).subscribe(
-        (response: Product) => {
-          let orderedProduct : Product = response;
-          orderedProduct.price = item.price; /*You want to know how much you spent on that products, not how much it costs now*/
-          orderedProduct.quantity = item.quantity; /*You want to know how many products you ordered, not how many are in stock*/
-          this.products.push(orderedProduct);
-        },
-        (error : HttpErrorResponse) => {
-          alert(error.message);
-        }
-      );
-    }
+    this.orderService.getAll(this.auth).subscribe(orders => this.allOrders = orders);
+    this.lastOrder = this.allOrders[this.allOrders.length - 1];
   }
 }
