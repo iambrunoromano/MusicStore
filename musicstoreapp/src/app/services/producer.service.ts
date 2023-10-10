@@ -42,4 +42,8 @@ export class ProducerService {
     this.httpOptions.headers.append('userRequest', JSON.stringify(auth));
     return this.http.delete<void>(this.root_url + this.addressAPI + '/' + producerId, this.httpOptions);
   }
+
+  public getBest(limit: number): Observable<Producer[]> {
+    return this.http.get<Producer[]>(this.root_url + this.addressAPI + '/best/' + limit, this.httpOptions);
+  }
 }
