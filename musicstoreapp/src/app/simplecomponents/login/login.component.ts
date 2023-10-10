@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataService.setLogStatus(false);
-    this.dataService.setUserData('', '');
+    this.dataService.setAuth('', '');
   }
 
   public login(): void {
@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
     };
     this.userService.getById(user).subscribe(
       (response: UserResponse) => {
-        this.dataService.setUserData(response.mail, user.password);
+        this.dataService.setAuth(response.mail, user.password);
         this.dataService.setLogStatus(true);
         this.router.navigate(['/']);
       },
