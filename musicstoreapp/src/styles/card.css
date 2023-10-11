@@ -55,3 +55,10 @@
   font-size: 100;
   font-family: "Noto Sans";
 }
+
+#quantity-selector {
+  background-color: lightgrey;
+  border-radius: 10px;
+  font-size: 25px;
+  box-shadow: 0 0 7px black;
+}
