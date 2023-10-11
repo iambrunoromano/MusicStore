@@ -8,6 +8,7 @@ import { User } from '../../interfaces/user';
 import { UserResponse } from '../../interfaces/response/userresponse';
 import { UserService } from '../../services/user.service';
 import { DataService } from '../../services/data.service';
+import { Auth } from 'src/app/interfaces/utility/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -29,14 +30,13 @@ export class LoginComponent implements OnInit {
   }
 
   public login(): void {
-    let user: User = {
+    let auth: Auth = {
       mail: (<HTMLInputElement>document.getElementById("username"))?.value,
-      password: (<HTMLInputElement>document.getElementById("password"))?.value,
-      imgurl: ''
+      password: (<HTMLInputElement>document.getElementById("password"))?.value
     };
-    this.userService.getById(user).subscribe(
+    this.userService.getById(auth).subscribe(
       (response: UserResponse) => {
-        this.dataService.setAuth(response.mail, user.password);
+        this.dataService.setAuth(response.mail, auth.password);
         this.dataService.setLogStatus(true);
         this.router.navigate(['/']);
       },
