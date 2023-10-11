@@ -32,7 +32,7 @@ public class CategoryController {
     return ResponseEntity.ok(categoryService.getAll());
   }
 
-  @GetMapping(value = "/{category-id}")
+  @GetMapping(value = "/{categoryId}")
   public ResponseEntity<Category> getById(@PathVariable int categoryId) {
     Optional<Category> category = categoryService.getById(categoryId);
     return ResponseEntity.ok(category.get());
@@ -45,7 +45,7 @@ public class CategoryController {
     return ResponseEntity.ok(categoryService.save(category));
   }
 
-  @DeleteMapping(value = "/{category-id}")
+  @DeleteMapping(value = "/{categoryId}")
   public ResponseEntity<Void> delete(
       @PathVariable int categoryId, @RequestHeader UserRequest userRequest) {
     adminService.isAdmin(userRequest);
@@ -53,7 +53,7 @@ public class CategoryController {
     return ResponseEntity.ok().build();
   }
 
-  @GetMapping("/{producer-id}/categories")
+  @GetMapping("/{producerId}/categories")
   public ResponseEntity<List<Category>> getByProducer(@PathVariable @Email @NotBlank String producerId) {
     return ResponseEntity.ok(categoryService.getByProducer(producerId));
   }

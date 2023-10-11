@@ -38,7 +38,7 @@ public class ProductController {
     this.userService = userService;
   }
 
-  @GetMapping(value = "/category/{category-id}")
+  @GetMapping(value = "/category/{categoryId}")
   public ResponseEntity<List<Product>> getByCategory(@PathVariable int categoryId) {
     return ResponseEntity.ok(productService.getByCategory(categoryId));
   }
@@ -58,7 +58,7 @@ public class ProductController {
     return ResponseEntity.ok(productService.getAll());
   }
 
-  @GetMapping(value = "/product/{product-id}")
+  @GetMapping(value = "/product/{productId}")
   public ResponseEntity<Product> getById(@PathVariable int productId) {
     return ResponseEntity.ok(productService.getById(productId));
   }
@@ -78,7 +78,7 @@ public class ProductController {
     return ResponseEntity.ok(productService.save(product));
   }
 
-  @DeleteMapping(value = "/{product-id}")
+  @DeleteMapping(value = "/{productId}")
   public ResponseEntity<Void> delete(
       @RequestHeader UserRequest userRequest, @PathVariable int productId) {
     userService.isAuthentic(userRequest);

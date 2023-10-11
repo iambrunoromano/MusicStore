@@ -28,7 +28,7 @@ public class AdminController {
     return ResponseEntity.ok(adminService.getAll());
   }
 
-  @GetMapping(value = "/{admin-id}")
+  @GetMapping(value = "/{adminId}")
   public ResponseEntity<Admin> getById(
       @RequestHeader UserRequest userRequest, @PathVariable @Email @NotBlank String adminId) {
     adminService.isAdmin(userRequest);
@@ -42,7 +42,7 @@ public class AdminController {
     return ResponseEntity.ok(adminService.save(newAdmin));
   }
 
-  @DeleteMapping(value = "/{admin-id}")
+  @DeleteMapping(value = "/{adminId}")
   public ResponseEntity<Void> delete(
       @RequestHeader UserRequest userRequest, @PathVariable @Email @NotBlank String adminId) {
     adminService.isAdmin(userRequest);

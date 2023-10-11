@@ -51,7 +51,7 @@ public class CustomerController {
     return ResponseEntity.ok(customerService.save(customer));
   }
 
-  @DeleteMapping(value = "/{customer-id}")
+  @DeleteMapping(value = "/{customerId}")
   public ResponseEntity<Void> delete(
       @PathVariable @Email @NotBlank String customerId, @RequestHeader UserRequest userRequest) {
     userService.isAuthentic(userRequest);

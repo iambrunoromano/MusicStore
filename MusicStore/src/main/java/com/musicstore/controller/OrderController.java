@@ -41,7 +41,7 @@ public class OrderController {
     return ResponseEntity.ok(orderService.getAll());
   }
 
-  @GetMapping(value = "/{order-id}")
+  @GetMapping(value = "/{orderId}")
   public ResponseEntity<Order> getById(
       @PathVariable int orderId, @RequestHeader UserRequest userRequest) {
     userService.isAuthentic(userRequest);
@@ -59,7 +59,7 @@ public class OrderController {
     return ResponseEntity.ok(response);
   }
 
-  @DeleteMapping(value = "/{order-id}")
+  @DeleteMapping(value = "/{orderId}")
   public ResponseEntity<Void> delete(
       @PathVariable int orderId, @RequestHeader UserRequest userRequest) {
     adminService.isAdmin(userRequest);

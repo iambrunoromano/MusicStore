@@ -40,16 +40,16 @@ public class ShipmentController {
     return ResponseEntity.ok(shipmentService.getAll());
   }
 
-  @GetMapping(value = "/{id}")
+  @GetMapping(value = "/{shipmentId}")
   public ResponseEntity<Shipment> getById(
-      @PathVariable int id, @RequestHeader UserRequest userRequest) {
+      @PathVariable int shipmentId, @RequestHeader UserRequest userRequest) {
     userService.isAuthentic(userRequest);
-    Shipment shipment = shipmentService.getById(id);
+    Shipment shipment = shipmentService.getById(shipmentId);
     orderService.getVerifiedOrder(shipment.getOrderId(), userRequest.getMail());
     return ResponseEntity.ok(shipment);
   }
 
-  @PostMapping(value = "/{order-id}")
+  @PostMapping(value = "/{orderId}")
   public ResponseEntity<Shipment> save(
       @RequestHeader UserRequest userRequest, @PathVariable int orderId) {
     adminService.isAdmin(userRequest);
@@ -57,7 +57,7 @@ public class ShipmentController {
     return ResponseEntity.ok(shipmentService.save(order));
   }
 
-  @DeleteMapping(value = "/{order-id}")
+  @DeleteMapping(value = "/{orderId}")
   public ResponseEntity<Void> delete(
       @RequestHeader UserRequest userRequest, @PathVariable int orderId) {
     adminService.isAdmin(userRequest);
