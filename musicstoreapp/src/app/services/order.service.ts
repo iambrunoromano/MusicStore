@@ -1,46 +1,38 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { HttpHeaders } from '@angular/common/http';
 
 import { Order } from '../interfaces/order';
 import { OrderResponse } from '../interfaces/response/orderresponse';
 import { Auth } from '../interfaces/utility/auth';
 
 import { environment } from 'src/environments/environment';
+import { UtilityService } from './utility.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
   private root_url = environment.apiBaseUrl;
-  private httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json'
-    })
-  }
 
   private addressAPI: string = "orders";
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+    private utilityService: UtilityService) { }
 
   public getAll(auth: Auth,): Observable<Order[]> {
-    this.httpOptions.headers.append('userRequest', JSON.stringify(auth));
-    return this.http.get<Order[]>(this.root_url + this.addressAPI + '/all', this.httpOptions);
+    return this.http.get<Order[]>(this.root_url + this.addressAPI + '/all', { headers: this.utilityService.cloneHeader(auth) })
   }
 
   public getById(auth: Auth, orderId: number): Observable<Order> {
-    this.httpOptions.headers.append('userRequest', JSON.stringify(auth));
-    return this.http.get<Order>(this.root_url + this.addressAPI + '/' + orderId, this.httpOptions);
+    return this.http.get<Order>(this.root_url + this.addressAPI + '/' + orderId, { headers: this.utilityService.cloneHeader(auth) })
   }
 
   public create(auth: Auth, address: string): Observable<OrderResponse> {
-    this.httpOptions.headers.append('userRequest', JSON.stringify(auth));
-    return this.http.post<OrderResponse>(this.root_url + this.addressAPI, address, this.httpOptions);
+    return this.http.post<OrderResponse>(this.root_url + this.addressAPI, address, { headers: this.utilityService.cloneHeader(auth) })
   }
 
   public delete(auth: Auth, orderId: number): Observable<void> {
-    this.httpOptions.headers.append('userRequest', JSON.stringify(auth));
-    return this.http.delete<void>(this.root_url + this.addressAPI + '/' + orderId, this.httpOptions);
+    return this.http.delete<void>(this.root_url + this.addressAPI + '/' + orderId, { headers: this.utilityService.cloneHeader(auth) })
   }
 }
