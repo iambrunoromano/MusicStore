@@ -8,6 +8,8 @@ button{
 button a{
   font-size: 150%;
   margin: auto auto;
+  overflow: hidden;
+  width: 100%;
 }
 
 button:hover{
