@@ -39,3 +39,12 @@
   margin-top: 10px;
   width:100%;
 }
+
+.card p{
+  font-family: "Noto Sans";
+  color: grey;
+}
+
+.card:hover p{
+  color: white;
+}
