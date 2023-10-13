@@ -19,6 +19,7 @@ import { AllcategoriesComponent } from './composedcomponents/allcategories/allca
 import { SearchComponent } from './composedcomponents/search/search.component';
 import { BestComponent } from './composedcomponents/best/best.component';
 import { ProducerComponent } from './composedcomponents/producer/producer.component';
+import { AllcartsComponent } from './composedcomponents/allcarts/allcarts.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { ProducerComponent } from './composedcomponents/producer/producer.compon
     SearchComponent,
     BestComponent,
     ProducerComponent,
-    OrderComponent
+    OrderComponent,
+    AllcartsComponent
   ],
   imports: [
     BrowserModule,
