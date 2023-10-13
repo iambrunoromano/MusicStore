@@ -3,27 +3,37 @@
 <head>
   <title>MusicStore</title>
 </head>
-<body>
-  <header>
-    <nav>
-      <li><a class="brand" href=""> MusicStore </a></li>
-      <ul>
-        <div class="dropdown">
+<header>
+  <div class="navigationbar">
+    <li><a href=""> MusicStore </a></li>
+    <ul class="list">
+      <div id="right">
+        <div>
           <a routerLink = "/categories">Categories</a>
         </div>
-        <div class="dropdown">
+        <div>
           <a routerLink = "/products">Products</a>
         </div>
-        <li>
+        <div>
+          <a routerLink = "/cart">Cart</a>
+        </div>
+        <div>
+          <a routerLink = "/order">Order</a>
+        </div>
+        <div>
+          <a routerLink = "/shipment">Shipment</a>
+        </div>
+        <div>
           <a routerLink = "/search">Search</a>
-        </li>
-        <div class="dropdown">
+        </div>
+        <div id="login">
           <a *ngIf="this.logStatus.loggedIn" routerLink = "/login">Logout</a>
           <a *ngIf="!this.logStatus.loggedIn" routerLink = "/login">Login</a>
         </div>
-      </ul>
-    </nav>
-  </header>
+      </div>
+    </ul>
+  </div>
+</header>
   <router-outlet></router-outlet>
   <footer>
     <div class="container">
@@ -52,5 +62,4 @@
 
     </div>
   </footer>
-  </body>
 </html>
