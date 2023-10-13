@@ -21,9 +21,9 @@ Please read [here](https://github.com/iambrunoromano/MusicStore/tree/main/musics
 - [x] `Backend` Search indexes, insert/update dates columns and table names on all entities
 - [x] `Backend` Controller Advice for centralized exception handling
 - [x] `Backend` Use validated Requests and Responses for Rest APIs
+- [x] `Frontend` Admin Login
 
 # Future tasks:
-- [ ] `Frontend` Admin Login
 - [ ] `Frontend` Admin managment for:
   - [ ] Users
   - [ ] Customer
