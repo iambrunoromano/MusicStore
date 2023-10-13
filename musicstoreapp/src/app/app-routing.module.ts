@@ -11,11 +11,15 @@ import { LoginComponent } from './simplecomponents/login/login.component';
 import { RegisterComponent } from './simplecomponents/register/register.component';
 import { OrderComponent } from './simplecomponents/order/order.component';
 import { ErrorComponent } from './simplecomponents/error/error.component';
+import { AllcartsComponent } from './composedcomponents/allcarts/allcarts.component';
 
 const routes: Routes = [
   {path: '', component: BestComponent},
   {path: 'products', component: AllproductsComponent},
   {path: 'categories', component: AllcategoriesComponent},
+  {path: 'cart', component: AllcartsComponent},
+  {path: 'order', component: AllproductsComponent},
+  {path: 'shipment', component: AllproductsComponent},
   {path: 'category/:id', component: AllproductsComponent},
   {path: 'order', component: OrderComponent},
   {path: 'search', component: SearchComponent},
